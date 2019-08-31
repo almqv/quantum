@@ -6,14 +6,20 @@
 --   \_\ /_/    \_\_|_| |_| |_|_|\___|\___|_| |_| /_/  
 
 --- This is used for debugging :D
+local prefix
+if CLIENT then prefix = "[Quantum] : " else prefix = "" end
 
-function GM.Debug( txt )
-    if( txt ) then MsgC(  Color( 100, 100, 100 ), "[Debug] " .. txt .. "\n" ) else MsgC( Color( 100, 100, 100 ), "[Debug]" .. "\n" ) end
+function Quantum.Debug( txt )
+    if( txt ) then 
+        MsgC( Color( 200, 200, 200 ), prefix .. "[Debug] " .. txt .. "\n" )
+    else 
+        MsgC( Color( 200, 200, 200 ), prefix .. "[Debug]\n" ) 
+    end
 end
 
-function GM.Error( txt )
+function Quantum.Error( txt )
     if( txt ) then 
-        MsgC( Color( 255, 10, 10 ), "[ERROR] " .. txt .. "\n" ) 
+        MsgC( Color( 255, 10, 10 ), prefix .. "[ERROR] " .. txt .. "\n"  ) 
     else 
         return 
     end

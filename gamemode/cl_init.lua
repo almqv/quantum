@@ -5,21 +5,29 @@
 --  \ \   / ____ \| | | | | | | |  __/ (__| | | |  / / 
 --   \_\ /_/    \_\_|_| |_| |_|_|\___|\___|_| |_| /_/  
 
-include( "shared.lua" )
+if CLIENT then
+    include( "shared.lua" )
+    Quantum.Client = {}
 
-GM.Client = {}
+    -- Add all core files
 
--- Add all core files
+    function Quantum.Client.Load()
+        local fol = GM.FolderName .. "/gamemode/core/"
 
-function GM.Client.Load()
-    local fol = GM.FolderName .. "/gamemode/core/"
+        -- Shared files
+        local shFiles = file.Find( fol .. "/sh_*.lua", "LUA" )
+        for _, file in pairs( shFiles ) do
+            include( fol .. file )
+        end
 
-    -- CLient files
-    local clFiles = file.Find( fol .. "/client/cl_*.lua", "LUA" )
-    for _, file in pairs( clFiles ) do
-        include( fol .. "client/" .. file )
+        -- CLient files
+        local clFiles = file.Find( fol .. "/client/cl_*.lua", "LUA" )
+        for _, file in pairs( clFiles ) do
+            include( fol .. "client/" .. file )
+        end
+
+        Quantum.Debug( "Loaded all files." )
     end
 
+    Quantum.Client.Load() 
 end
-
-GM.Client.Load() 

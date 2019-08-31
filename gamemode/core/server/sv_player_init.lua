@@ -11,7 +11,7 @@ function GM:PlayerSpawn( ply )
     if( !ply:GetModel() || !ply:GetModel() == "" ) then
         ply:SetupHands()
     else
-        self.Debug( tostring(ply) .. " doesn't have a valid model." )
+        Quantum.Error( tostring(ply) .. " doesn't have a valid model. Unable to set up hands!" )
     end
-    self.Debug( tostring( ply ) .. " spawned." )
+    Quantum.Debug( tostring( ply ) .. " spawned." )
 end

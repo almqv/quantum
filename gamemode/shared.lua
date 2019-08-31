@@ -10,15 +10,4 @@ GM.Author = "AlmTech"
 GM.Email = "elias@almtech.se"
 GM.Website = "N/A"
 
-GM.Shared = {}
-
-function GM.Shared.Load()
-    local fol = GM.FolderName .. "/gamemode/core/"
-
-    local shFiles = file.Find( fol .. "/sh_*.lua", "LUA" )
-    for _, file in pairs( shFiles ) do
-        include( fol .. file )
-    end
-end
-
-GM.Shared.Load()
+Quantum = {}
