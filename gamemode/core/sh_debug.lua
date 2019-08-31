@@ -5,11 +5,10 @@
 --  \ \   / ____ \| | | | | | | |  __/ (__| | | |  / / 
 --   \_\ /_/    \_\_|_| |_| |_|_|\___|\___|_| |_| /_/  
 
---- This is used for debugging :D
 local prefix
 if CLIENT then prefix = "[Quantum] : " else prefix = "" end -- A little advertisement for the players
 
-function Quantum.Debug( txt )
+function Quantum.Debug( txt ) -- Very usefull for debugging 
     if( txt ) then 
         MsgC( Color( 200, 200, 200 ), prefix .. "[Debug] " .. txt .. "\n" )
     else 
