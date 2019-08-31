@@ -1,0 +1,7 @@
+"electron"
+{
+	"base"		"base"
+	"title"		"DarkRP"
+	"maps"		"^rp_"
+	"menusystem"	"1"
+}
