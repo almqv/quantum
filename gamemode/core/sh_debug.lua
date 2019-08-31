@@ -7,7 +7,7 @@
 
 --- This is used for debugging :D
 local prefix
-if CLIENT then prefix = "[Quantum] : " else prefix = "" end
+if CLIENT then prefix = "[Quantum] : " else prefix = "" end -- A little advertisement for the players
 
 function Quantum.Debug( txt )
     if( txt ) then 
