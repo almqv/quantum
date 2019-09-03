@@ -21,7 +21,8 @@ if SERVER then
         -- Shared files
         local shFiles = file.Find( fol .. "/sh_*.lua", "LUA" )
         for _, file in pairs( shFiles ) do
-            AddCSLuaFile( fol .. file )
+			AddCSLuaFile( fol .. file )
+			include( fol .. file )
         end
 
         -- CLient files
