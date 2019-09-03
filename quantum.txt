@@ -1,7 +1,7 @@
 "quantum"
 {
 	"base"		"base"
-	"title"		"DarkRP"
+	"title"		"Quantum Framework"
 	"maps"		"^rp_"
 	"menusystem"	"1"
 }

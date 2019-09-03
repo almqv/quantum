@@ -22,7 +22,6 @@ if SERVER then
         local shFiles = file.Find( fol .. "/sh_*.lua", "LUA" )
         for _, file in pairs( shFiles ) do
             AddCSLuaFile( fol .. file )
-            include( fol .. file )
         end
 
         -- CLient files

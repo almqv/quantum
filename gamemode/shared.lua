@@ -11,3 +11,13 @@ GM.Email = "elias@almtech.se"
 GM.Website = "N/A"
 
 Quantum = {}
+
+Quantum.Shared = {}
+Quantum.Shared.Init = function()
+    local shFiles = file.Find( fol .. "/sh_*.lua", "LUA" )
+    for _, file in pairs( shFiles ) do
+        include( fol .. file )
+    end
+end
+
+Quantum.Shared.Init()
