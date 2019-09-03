@@ -5,7 +5,7 @@
 --  \ \   / ____ \| | | | | | | |  __/ (__| | | |  / / 
 --   \_\ /_/    \_\_|_| |_| |_|_|\___|\___|_| |_| /_/  
 
-GM.Name = "DarkRP"
+GM.Name = "Quantum Framework"
 GM.Author = "AlmTech"
 GM.Email = "elias@almtech.se"
 GM.Website = "N/A"

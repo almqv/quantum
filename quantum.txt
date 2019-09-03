@@ -1,4 +1,4 @@
-"electron"
+"quantum"
 {
 	"base"		"base"
 	"title"		"DarkRP"
