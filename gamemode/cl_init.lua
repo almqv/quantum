@@ -21,8 +21,6 @@ if CLIENT then
 			include( fol .. file )
 		end
 
-		Quantum.Shared.Init()
-
         -- CLient files
         local clFiles = file.Find( fol .. "/client/cl_*.lua", "LUA" )
         for _, file in pairs( clFiles ) do
