@@ -8,6 +8,7 @@
 if CLIENT then
     include( "shared.lua" )
     Quantum.Client = {}
+    Quantum.Client.ResolutionScale = ScrW() / 1080
 
     -- Add all core files
 
@@ -18,7 +19,7 @@ if CLIENT then
 		-- Shared files
 		local shFiles = file.Find( fol .. "/sh_*.lua", "LUA" )
 		for _, file in pairs( shFiles ) do
-			include( fol .. file )
+            include( fol .. file )
 		end
 
         -- CLient files
