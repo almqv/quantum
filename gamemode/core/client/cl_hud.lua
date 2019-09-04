@@ -49,16 +49,18 @@ function GM:HUDPaint()
 end
 
 hook.Add( "RenderScreenspaceEffects", "Quantum_HUD_RenderLowHealth", function() 
-	DrawColorModify( {
-		[ "$pp_colour_addr" ] = 0,
-		[ "$pp_colour_addg" ] = 0,
-		[ "$pp_colour_addb" ] = 0,
-		[ "$pp_colour_brightness" ] = Lerp( LocalPlayer():Health() / LocalPlayer():GetMaxHealth(), -0.75, 0 ),
-		[ "$pp_colour_contrast" ] = Lerp( LocalPlayer():Health() / LocalPlayer():GetMaxHealth(), 0.6, 1 ),
-		[ "$pp_colour_colour" ] = Lerp( LocalPlayer():Health() / LocalPlayer():GetMaxHealth(), 0.2, 1 ),
-		[ "$pp_colour_mulr" ] = 0,
-		[ "$pp_colour_mulg" ] = 0,
-		[ "$pp_colour_mulb" ] = 0
-	} )
-	if( LocalPlayer():Health() / LocalPlayer():GetMaxHealth() <= 0.15 ) then DrawMotionBlur( 0.4, 0.8, 0.1 ) end
+	if( LocalPlayer():Health() / LocalPlayer():GetMaxHealth() <= 0.15 ) then 
+		DrawMotionBlur( 0.4, 0.8, 0.1 ) 
+		DrawColorModify( {
+			[ "$pp_colour_addr" ] = 0,
+			[ "$pp_colour_addg" ] = 0,
+			[ "$pp_colour_addb" ] = 0,
+			[ "$pp_colour_brightness" ] = Lerp( LocalPlayer():Health() / LocalPlayer():GetMaxHealth(), -0.75, 0 ),
+			[ "$pp_colour_contrast" ] = Lerp( LocalPlayer():Health() / LocalPlayer():GetMaxHealth(), 0.6, 1 ),
+			[ "$pp_colour_colour" ] = Lerp( LocalPlayer():Health() / LocalPlayer():GetMaxHealth(), 0.2, 1 ),
+			[ "$pp_colour_mulr" ] = 0,
+			[ "$pp_colour_mulg" ] = 0,
+			[ "$pp_colour_mulb" ] = 0
+		} )
+	end
 end)
