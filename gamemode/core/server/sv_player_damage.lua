@@ -17,10 +17,11 @@ local damagescales = {
 
 function GM:ScalePlayerDamage( pl, hitgroup, dmginfo ) -- This is used for getting shot etc
     if( damagescales[hitgroup] ~= nil ) then dmginfo:ScaleDamage( damagescales[hitgroup] ) end
-    Quantum.Debug( tostring(pl) .. " got damaged (" .. tostring(hitgroup) .. " : " .. tostring(dmginfo) )
+    Quantum.Debug( tostring(pl) .. " got damaged (" .. tostring(hitgroup) .. " : " .. tostring(dmginfo) .. " )" )
 end
 
 function GM:GetFallDamage( pl, vel )
+    Quantum.Debug( tostring(pl) .. " got damaged ( Fall Damage : " .. tostring( math.Round( vel / 8 ) ) .. " )" )
     return vel / 8 -- Makes the player take more "realistic" fall damage
 end
 
