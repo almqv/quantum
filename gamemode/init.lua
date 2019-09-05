@@ -12,6 +12,7 @@ if SERVER then
     include( "shared.lua" )
 
     Quantum.Server = {}
+    include( "settings/sv_settings.lua" ) -- include the settings
 
     -- Add all core files
 
