@@ -58,7 +58,7 @@ function GM:HUDPaint()
 end
 
 hook.Add( "RenderScreenspaceEffects", "Quantum_HUD_RenderLowHealth", function() 
-	if( LocalPlayer():Health() / LocalPlayer():GetMaxHealth() <= 0.20 ) then 
+	if( LocalPlayer():Health() / LocalPlayer():GetMaxHealth() <= 0.25 ) then 
 		DrawMotionBlur( 0.4, 0.8, 0.1 ) 
 		DrawColorModify( {
 			[ "$pp_colour_addr" ] = 0,
