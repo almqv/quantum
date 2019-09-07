@@ -10,11 +10,11 @@
 Quantum.Server.Settings.VoiceChatRange = 400
 
 Quantum.Server.Settings.DamageScale = { -- The scale of the damage for each hitgroup
-    [HITGROUP_HEAD] = 4,
-    [HITGROUP_CHEST] = 2,
-    [HITGROUP_STOMACH] = 1.5,
-    [HITGROUP_LEFTARM] = 0.8,
-    [HITGROUP_RIGHTARM] = 0.8,
+    [HITGROUP_HEAD] = 10,
+    [HITGROUP_CHEST] = 4,
+    [HITGROUP_STOMACH] = 2,
+    [HITGROUP_LEFTARM] = 1,
+    [HITGROUP_RIGHTARM] = 1,
     [HITGROUP_LEFTLEG] = 1,
     [HITGROUP_RIGHTLEG] = 1
 }

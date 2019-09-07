@@ -17,7 +17,7 @@ local damagescales = {
 
 function GM:ScalePlayerDamage( pl, hitgroup, dmginfo ) -- This is used for getting shot etc
     if( damagescales[hitgroup] ~= nil ) then dmginfo:ScaleDamage( damagescales[hitgroup] ) end
-    Quantum.Debug( tostring(pl) .. " got damaged (" .. tostring(hitgroup) .. " : " .. tostring( math.Round( dmginfo:GetDamage() ) ) .. " )" )
+    Quantum.Debug( tostring(pl) .. " got damaged ( " .. tostring(hitgroup) .. " : " .. tostring( math.Round( dmginfo:GetDamage() ) ) .. " )" )
 end
 
 function GM:GetFallDamage( pl, vel )
@@ -50,4 +50,8 @@ hook.Add( "EntityTakeDamage", "Quantum_PlayerDamage_SoundEffect", function( pl, 
         end)
 
     end
+end)
+
+hook.Add( "PlayerDeath", "Quantum_PlayerDamage_RemoveIdleSounds", function( pl ) 
+    if( timer.Exists( "Quantum_PlayerHurtSounds_" .. tostring( pl ) ) ) then timer.Remove( "Quantum_PlayerHurtSounds_" .. tostring( pl ) ) end
 end)
