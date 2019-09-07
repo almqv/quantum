@@ -7,6 +7,10 @@
 
 local ply = FindMetaTable( "Player" )
 
+function GM:PlayerInitialSpawn( ply )
+    ply.isloaded = true -- REMOVE THIS WHEN MYSQL DB IS ADDED
+end
+
 function GM:PlayerSpawn( ply )
 
     ply:SetModel( "models/player/Group03/male_04.mdl" )
