@@ -9,7 +9,16 @@
 
 Quantum.Server.Settings.VoiceChatRange = 400
 
-Quantum.Server.Settings.DamageScale = { -- The scale of the damage for each hitgroup
+Quantum.Server.Settings.SpawnLocations = {
+
+    ["rp_truenorth_v1a_livin"] = {
+        ["Hospital"] = { pos = Vector( 13583, 13189, 128 ), ang = Angle( 1, 115, 0 ) },
+        ["Lake"] = { pos = Vector( 10812, -8319, 5388 ), ang = Angle( 5, -40, 0 ) }
+    }
+
+}
+
+Quantum.Server.Settings.DamageScale = { -- The scale of the damage for each hitgroup 
     [HITGROUP_HEAD] = 10,
     [HITGROUP_CHEST] = 4,
     [HITGROUP_STOMACH] = 2,
