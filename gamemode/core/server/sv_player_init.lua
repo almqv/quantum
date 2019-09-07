@@ -11,7 +11,7 @@ function GM:PlayerSpawn( ply )
 
     ply:SetModel( "models/player/Group03/male_04.mdl" )
 
-    if( !ply:GetModel() || !ply:GetModel() == "" ) then
+    if( ply:GetModel() ~= nil ) then
         ply:SetupHands()
     else
         Quantum.Error( tostring(ply) .. " doesn't have a valid model. Unable to set up hands!" )
