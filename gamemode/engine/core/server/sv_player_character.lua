@@ -22,6 +22,7 @@ function Quantum.Server.Char.CreateCharTable( args )
             combat = 0,
             science = 0
         },
+        training = args.training || {},
         licenses = args.licenses || {},
         titles = args.titles || {}
     }

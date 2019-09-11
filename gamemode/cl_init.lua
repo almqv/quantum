@@ -10,22 +10,49 @@ if CLIENT then
     Quantum.Client = {}
     Quantum.Client.ResolutionScale = ScrW() / 1080
 
-    -- Add all core files
+    local function loadCoreFiles()
+        local fol = GM.FolderName .. "/gamemode/engine/core/"
 
-    function Quantum.Client.Load()
-		local fol = GM.FolderName .. "/gamemode/engine/core/"
-		
-		-- Shared files
-		local shFiles = file.Find( fol .. "/sh_*.lua", "LUA" )
-		for _, file in pairs( shFiles ) do
-            include( fol .. file )
-		end
+        local shFiles = file.Find( fol .. "/sh_*.lua", "LUA" )
+        for _, file in pairs( shFiles ) do
+			include( fol .. file )
+        end
 
-        -- CLient files
         local clFiles = file.Find( fol .. "/client/cl_*.lua", "LUA" )
         for _, file in pairs( clFiles ) do
             include( fol .. "client/" .. file )
         end
+    end
+
+    local function loadLibFiles()
+        local fol = GM.FolderName .. "/gamemode/engine/lib/"
+
+        local shFiles = file.Find( fol .. "/sh_*.lua", "LUA" )
+        for _, file in pairs( shFiles ) do
+			AddCSLuaFile( fol .. file )
+			include( fol .. file )
+        end
+
+        local clFiles = file.Find( fol .. "/client/cl_*.lua", "LUA" )
+        for _, file in pairs( clFiles ) do
+            include( fol .. "client/" .. file )
+        end
+    end
+
+    local function loadAllDermaMenus()
+        local fol = GM.FolderName .. "/gamemode/engine/derma/"
+        local clFiles = file.Find( fol .. "/cl_*.lua", "LUA" )
+        for _, file in pairs( clFiles ) do
+            include( fol .. "/" .. file )
+        end
+    end
+
+    function Quantum.Client.Load()
+		local fol = GM.FolderName .. "/gamemode/engine/core/"
+		
+        loadCoreFiles()
+        loadLibFiles()
+        loadAllDermaMenus()
 
         Quantum.Debug( "Loaded all files." )
     end

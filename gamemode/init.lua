@@ -15,8 +15,8 @@ if SERVER then
     Quantum.Server = {}
     include( "settings/sv_settings.lua" ) -- include the settings
 
-    -- Add all core files
-    function Quantum.Server.Load()
+
+    local function loadCoreFiles()
         local fol = GM.FolderName .. "/gamemode/engine/core/"
 
         -- Shared files
@@ -36,7 +36,45 @@ if SERVER then
         local cFiles = file.Find( fol .. "/server/sv_*.lua", "LUA" )
         for _, file in pairs( cFiles ) do
             include( fol .. "server/" .. file )
-        end     
+        end   
+    end
+
+    local function loadLibFiles()
+        local fol = GM.FolderName .. "/gamemode/engine/lib/"
+
+        -- Shared files
+        local shFiles = file.Find( fol .. "/sh_*.lua", "LUA" )
+        for _, file in pairs( shFiles ) do
+			AddCSLuaFile( fol .. file )
+			include( fol .. file )
+        end
+
+        -- CLient files
+        local clFiles = file.Find( fol .. "/client/cl_*.lua", "LUA" )
+        for _, file in pairs( clFiles ) do
+            AddCSLuaFile( fol .. "client/" .. file )
+        end
+
+        -- Server files
+        local cFiles = file.Find( fol .. "/server/sv_*.lua", "LUA" )
+        for _, file in pairs( cFiles ) do
+            include( fol .. "server/" .. file )
+        end  
+    end
+
+    local function addAllDermaMenus()
+        local fol = GM.FolderName .. "/gamemode/engine/derma/"
+        local clFiles = file.Find( fol .. "/cl_*.lua", "LUA" )
+        for _, file in pairs( clFiles ) do
+            AddCSLuaFile( fol .. "/" .. file )
+        end
+    end
+    
+    function Quantum.Server.Load()
+        -- Add all of the base files
+        loadCoreFiles()
+        loadLibFiles()
+        addAllDermaMenus()
     end
 
     Quantum.Server.Load() 
