@@ -13,6 +13,7 @@ function Quantum.Server.Char.CreateCharTable( args )
         name = args.name || "UNKNOWN",
         model = args.model || "models/player.mdl",
         money = args.money || Quantum.Server.Settings.StarterMoney,
+        inventory = args.inventory || {}, -- create new inventory
         jobs = args.jobs || {
             [1] = { title = "Hobo", level = -1 },
         },

@@ -11,6 +11,12 @@ Quantum.Server.Settings.VoiceChatRange = 400
 
 Quantum.Server.Settings.StarterMoney = 0
 
+Quantum.Server.Settings.Inventory = {
+    Height = 5,
+    Width = 5
+}
+
+--- Features to be added ---
 Quantum.Server.Settings.MaxJobLevel = 250
 Quantum.Server.Settings.MaxJobSlots = 2
 Quantum.Server.Settings.MaxSkillLevel = 100
