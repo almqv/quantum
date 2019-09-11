@@ -9,6 +9,10 @@
 
 Quantum.Server.Settings.VoiceChatRange = 400
 
+Quantum.Server.Settings.MaxJobLevel = 250
+Quantum.Server.Settings.MaxJobSlots = 2
+Quantum.Server.Settings.MaxSkillLevel = 100
+
 Quantum.Server.Settings.SpawnLocations = {
 
     ["rp_truenorth_v1a_livin"] = {

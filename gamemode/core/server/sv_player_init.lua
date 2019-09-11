@@ -5,6 +5,8 @@
 --  \ \   / ____ \| | | | | | | |  __/ (__| | | |  / / 
 --   \_\ /_/    \_\_|_| |_| |_|_|\___|\___|_| |_| /_/  
 
+Quantum.Server.Player = {}
+
 local ply = FindMetaTable( "Player" )
 
 function GM:PlayerInitialSpawn( ply )
