@@ -14,7 +14,6 @@ hook.Add( "HUDShouldDraw", "Quantum_RemoveDefualtHUD", function( hudid )
 	return enabledHUDs[hudid] ~= nil
 end)
 
-
 local scale = Quantum.Client.ResolutionScale
 local barW, barH = 250 * scale, 10 * scale
 local radius = 1 * scale

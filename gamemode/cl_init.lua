@@ -13,7 +13,7 @@ if CLIENT then
     -- Add all core files
 
     function Quantum.Client.Load()
-		local fol = GM.FolderName .. "/gamemode/core/"
+		local fol = GM.FolderName .. "/gamemode/engine/core/"
 		
 		-- Shared files
 		local shFiles = file.Find( fol .. "/sh_*.lua", "LUA" )
