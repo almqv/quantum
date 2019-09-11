@@ -9,6 +9,8 @@
 
 Quantum.Server.Settings.VoiceChatRange = 400
 
+Quantum.Server.Settings.StarterMoney = 0
+
 Quantum.Server.Settings.MaxJobLevel = 250
 Quantum.Server.Settings.MaxJobSlots = 2
 Quantum.Server.Settings.MaxSkillLevel = 100
@@ -20,6 +22,14 @@ Quantum.Server.Settings.SpawnLocations = {
         ["Lake"] = { pos = Vector( 10812, -8319, 5388 ), ang = Angle( 5, -40, 0 ) }
     }
 
+}
+
+Quantum.Server.Settings.Licenses = {
+    Driving = { title = "Driving License", desc = "This permits you to operate and pilot any motorized vehicle in a public area.", cost = 1000 }
+}
+
+Quantum.Server.Settings.Titles = {
+    dev = "Developer,"
 }
 
 Quantum.Server.Settings.DamageScale = { -- The scale of the damage for each hitgroup 

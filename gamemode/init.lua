@@ -6,6 +6,7 @@
 --   \_\ /_/    \_\_|_| |_| |_|_|\___|\___|_| |_| /_/  
 
 if SERVER then
+    AddCSLuaFile( "engine/sh_debug.lua" )
     AddCSLuaFile( "cl_init.lua" )
     AddCSLuaFile( "shared.lua" )
 
@@ -15,9 +16,8 @@ if SERVER then
     include( "settings/sv_settings.lua" ) -- include the settings
 
     -- Add all core files
-
     function Quantum.Server.Load()
-        local fol = GM.FolderName .. "/gamemode/core/"
+        local fol = GM.FolderName .. "/gamemode/engine/core/"
 
         -- Shared files
         local shFiles = file.Find( fol .. "/sh_*.lua", "LUA" )

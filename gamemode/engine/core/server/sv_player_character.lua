@@ -22,6 +22,8 @@ function Quantum.Server.Char.CreateCharTable( args )
             combat = 0,
             science = 0
         },
+        licenses = args.licenses || {},
+        titles = args.titles || {}
     }
 end
 
@@ -37,8 +39,8 @@ end
 
 function Quantum.Server.Char.Remove( pl, index )
     local id = pl:SteamID() .. ":" .. index
-    if( Quantum.Server.Char.Players[id] ~= nil ) then
-        Quantum.Server.Char.Players[id] = nil
+    if( Quantum.Server.Char.Players[ id ] ~= nil ) then
+        Quantum.Server.Char.Players[ id ] = nil
         Quantum.Debug( "Removed character (" .. id .. ")" )
     end
 end

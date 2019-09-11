@@ -15,7 +15,6 @@ if CLIENT then
     function Quantum.Client.Load()
 		local fol = GM.FolderName .. "/gamemode/core/"
 		
-
 		-- Shared files
 		local shFiles = file.Find( fol .. "/sh_*.lua", "LUA" )
 		for _, file in pairs( shFiles ) do
