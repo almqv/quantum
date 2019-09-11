@@ -8,12 +8,14 @@
 Quantum.Server.Char = {}
 Quantum.Server.Char.Players = {}
 
-function Quantum.Server.Char.CreateCharTable( args )
+local function CreateCharTable( args )
     return {
         name = args.name || "UNKNOWN",
+        maxhealth = Quantum.Server.Settings.MaxHealth,
+        health = math.Clamp( args.health, 0, Quantum.Server.Settings.MaxHealth ) || Quantum.Server.Settings.MaxHealth,
         model = args.model || "models/player.mdl",
         money = args.money || Quantum.Server.Settings.StarterMoney,
-        inventory = args.inventory || {}, -- create new inventory
+        inventory = args.inventory || {}, -- create new inventory later
         jobs = args.jobs || {
             [1] = { title = "Hobo", level = -1 },
         },
@@ -29,10 +31,12 @@ function Quantum.Server.Char.CreateCharTable( args )
     }
 end
 
-function Quantum.Server.Char.Create( pl, index, tbl )
+function Quantum.Server.Char.Load( pl, index, tbl )
     local id = pl:SteamID() .. ":" .. index
     if( Quantum.Server.Char.Players[ id ] ~= nil ) then
-        Quantum.Server.Char.Players[ id ] = tbl
+        Quantum.Server.Char.Players[ id ] = CreateCharTable( tbl ) -- create the character
+        Quantum.Server.Inventory.Create( Quantum.Server.Char.Players[ id ] ) -- give the character a inventory
+
         Quantum.Debug( "Created character (" .. id .. ")" )
     else
         Quantum.Error( "Tried to duplicate character! Index already used. (" .. id .. ")" )
@@ -50,4 +54,22 @@ end
 function Quantum.Server.Char.GetCurrentCharacter( pl )
     if( pl.character == nil ) then Quantum.Error( tostring( pl ) .. " doesn't have a character! Unable to get current character table." ) end
     return pl.character
+end
+
+local function setupCharacter( pl, char )
+    pl:SetMaxHealth( char.maxhealth )
+    pl:SetHealth( char.health )
+    pl:SetModel( char.model )
+end
+
+function Quantum.Server.Char.SetCurrentCharacter( pl, index )
+    local id = pl:SteamID() .. ":" .. index
+    if( Quantum.Server.Char.Players[ id ] ) then 
+        pl.character = Quantum.Server.Char.Players[ id ]
+        setupCharacter( pl, pl.character )
+        return pl.character
+    else
+        Quantum.Error( "Unable to set " .. tostring(pl) .. " character. Character not found!" )
+        return nil
+    end
 end

@@ -9,6 +9,8 @@
 
 Quantum.Server.Settings.VoiceChatRange = 400
 
+Quantum.Server.Settings.MaxHealth = 100
+
 Quantum.Server.Settings.StarterMoney = 0
 
 Quantum.Server.Settings.Inventory = {
