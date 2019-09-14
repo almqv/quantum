@@ -9,7 +9,22 @@ local function char_derma()
     local sw, sh = ScrW(), ScrH()
     if( !f ) then
         local f = vgui.Create( "DFrame" )
-        f:SetTitle( "Character Derma" )
+        f:SetTitle( "Character Menu" )
         f:SetSize( sw, sh )
+
+        local txt = vgui.Create( "DTextEntry" )
+        txt:SetText( "Enter name here" )
+        txt:SizeToContents()
+        txt:SetPos( 100, 100 )
+
+        local b = vgui.Create( "DButton" )
+        b:SetText( "Create char" )
+        b:SizeToContents()
+        b.DoClick = function()
+            net.Start( "quantum_menu_button_net" )
+                net.WriteString( "createchar" )
+                net.WriteTable( { name = txt:GetValue() } )
+            net.SendToServer()
+        end
     end
 end

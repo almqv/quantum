@@ -16,6 +16,8 @@ end
 
 local function setUpPlayer( ply )
     
+    Quantum.Server.Char.SetCurrentCharacter( ply, ply.charindex || 1 )
+
     if( ply:GetModel() ~= nil ) then
         ply:SetupHands()
     else
@@ -26,8 +28,8 @@ end
 
 function GM:PlayerSpawn( ply )
 
-    if( !ply.isloaded ) then 
-        ply:Spectate( OBS_MODE_CHASE ) 
+    if( ply.isloaded ) then 
+        ply:Spectate( OBS_MODE_FIXED ) 
     else
         setUpPlayer( ply )
     end
