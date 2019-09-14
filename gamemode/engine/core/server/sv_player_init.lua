@@ -10,17 +10,26 @@ Quantum.Server.Player = {}
 local ply = FindMetaTable( "Player" )
 
 function GM:PlayerInitialSpawn( ply )
-    ply.isloaded = true -- REMOVE THIS WHEN MYSQL DB IS ADDED
+    --ply.isloaded = true -- REMOVE THIS WHEN MYSQL DB IS ADDED
+    
 end
 
-function GM:PlayerSpawn( ply )
-
-    ply:SetModel( "models/player/Group03/male_04.mdl" )
-
+local function setUpPlayer( ply )
+    
     if( ply:GetModel() ~= nil ) then
         ply:SetupHands()
     else
         Quantum.Error( tostring(ply) .. " doesn't have a valid model. Unable to set up hands!" )
     end
     Quantum.Debug( tostring( ply ) .. " spawned." )
+end
+
+function GM:PlayerSpawn( ply )
+
+    if( !ply.isloaded ) then 
+        ply:Spectate( OBS_MODE_CHASE ) 
+    else
+        setUpPlayer( ply )
+    end
+
 end
