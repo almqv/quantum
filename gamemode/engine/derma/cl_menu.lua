@@ -6,8 +6,7 @@
 --   \_\ /_/    \_\_|_| |_| |_|_|\___|\___|_| |_| /_/  
 
 net.Receive( "quantum_menu_net", function( len, pl ) 
-    local menu = net.ReadString()
     local dt = net.ReadTable()
-    local menu = include( "lib/cl_" .. menu .. ".lua" )
+    local menu = include( "menus/menu_" .. dt.id .. ".lua" )
     menu.open( dt )
 end)

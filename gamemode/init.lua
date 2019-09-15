@@ -63,13 +63,13 @@ if SERVER then
     end
 
     local function addAllDermaMenus()
-
-        AddCSLuaFile( fol .. "/cl_menu.lua" )
-
         local fol = GM.FolderName .. "/gamemode/engine/derma/"
-        local menuFiles = file.Find( fol .. "/lib/menu_*.lua", "LUA" )
+        AddCSLuaFile( fol .. "cl_menu.lua" )
+
+        local libfol = GM.FolderName .. "/gamemode/engine/derma/menus/"
+        local menuFiles = file.Find( libfol .. "menu_*.lua", "LUA" )
         for _, file in pairs( menuFiles ) do
-            AddCSLuaFile( fol .. "/" .. file )
+            AddCSLuaFile( libfol .. file )
         end
 
     end

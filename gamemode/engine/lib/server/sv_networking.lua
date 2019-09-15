@@ -49,6 +49,10 @@ local function SendDatatableToClient( client, dt, type )
 	net.Send( client )
 end
 
+function Quantum.Net.OpenMenu( pl, type, dt )
+	SendDatatableToClient( pl, dt, type )
+end
+
 local funcs = {
 	["createChar"] = true
 }

@@ -41,7 +41,7 @@ if CLIENT then
 
     local function loadAllDermaMenus()
         local fol = GM.FolderName .. "/gamemode/engine/derma/"
-        include( fol .. "/cl_menu.lua" )
+        include( fol .. "cl_menu.lua" )
     end
 
     function Quantum.Client.Load()

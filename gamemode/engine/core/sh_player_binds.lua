@@ -13,7 +13,7 @@ if SERVER then
             Quantum.Debug( tostring( pl ) .. " pressed IN_USE" )
         end,
         ["openCharMenu"] = function( pl )
-
+            Quantum.Net.OpenMenu( pl, "character", {} )
         end
     }
 
@@ -21,6 +21,6 @@ if SERVER then
         if( keyfuncs[key] ) then keyfuncs[key]( ply ) end
     end
     function GM:ShowHelp( ply )
-
+        keyfuncs["openCharMenu"]( ply )
     end
 end
