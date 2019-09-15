@@ -49,8 +49,24 @@ local function SendDatatableToClient( client, dt, type )
 	net.Send( client )
 end
 
+local funcs = {
+	["createChar"] = true
+}
+
+local netfuncs = {
+	createChar = function( pl, args )
+		Quantum.Server.Char.Load( pl, 1, args )
+	end
+}
+
+local function runNetFunc( pl, func, args )
+	if( funcs[func] ) then
+		netfuncs[func]( pl, args )
+	end
+end
 
 net.Receive( "quantum_menu_button_net", function( len, pl )
     local funcid = net.ReadString()
-    local args = net.ReadTable()
+	local args = net.ReadTable()
+	runNetFunc( pl, funcid, args )
 end)

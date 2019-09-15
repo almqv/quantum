@@ -18,7 +18,7 @@ local function char_derma()
         txt:SetPos( 100, 100 )
 
         local b = vgui.Create( "DButton" )
-        b:SetText( "Create char" )
+        b:SetText( "Create Char" )
         b:SizeToContents()
         b.DoClick = function()
             net.Start( "quantum_menu_button_net" )
