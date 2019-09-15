@@ -43,7 +43,7 @@ if CLIENT then
         local fol = GM.FolderName .. "/gamemode/engine/derma/"
         local clFiles = file.Find( fol .. "/cl_*.lua", "LUA" )
         for _, file in pairs( clFiles ) do
-            include( fol .. "/" .. file )
+            include( fol .. file )
         end
     end
 

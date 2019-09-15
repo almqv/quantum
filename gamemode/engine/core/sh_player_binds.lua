@@ -10,12 +10,13 @@ if SERVER then
 
     local keyfuncs = {
         [IN_USE] = function( pl )
-            pl:ChatPrint( "Use bind test" )
+            Quantum.Debug( tostring( pl ) .. " pressed IN_USE" )
         end
     }
 
     function GM:KeyRelease( ply, key )
-        if( keyfuncs[key] ) then keyfuncs[key]( pl ) end
+        if( keyfuncs[key] ) then keyfuncs[key]( ply ) end
     end
-
+else
+    --
 end
