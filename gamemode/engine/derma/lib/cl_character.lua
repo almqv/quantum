@@ -5,7 +5,9 @@
 --  \ \   / ____ \| | | | | | | |  __/ (__| | | |  / / 
 --   \_\ /_/    \_\_|_| |_| |_|_|\___|\___|_| |_| /_/  
 
-local function char_derma()
+local menu = {}
+
+function menu.open( dt )
     local sw, sh = ScrW(), ScrH()
     if( !f ) then
         local f = vgui.Create( "DFrame" )
@@ -28,3 +30,5 @@ local function char_derma()
         end
     end
 end
+
+return menu

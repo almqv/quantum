@@ -63,11 +63,15 @@ if SERVER then
     end
 
     local function addAllDermaMenus()
+
+        AddCSLuaFile( fol .. "/cl_menu.lua" )
+
         local fol = GM.FolderName .. "/gamemode/engine/derma/"
-        local clFiles = file.Find( fol .. "/cl_*.lua", "LUA" )
-        for _, file in pairs( clFiles ) do
+        local menuFiles = file.Find( fol .. "/lib/menu_*.lua", "LUA" )
+        for _, file in pairs( menuFiles ) do
             AddCSLuaFile( fol .. "/" .. file )
         end
+
     end
     
     function Quantum.Server.Load()

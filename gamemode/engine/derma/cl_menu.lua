@@ -5,11 +5,9 @@
 --  \ \   / ____ \| | | | | | | |  __/ (__| | | |  / / 
 --   \_\ /_/    \_\_|_| |_| |_|_|\___|\___|_| |_| /_/  
 
-local function mainMenu()
-    local sw, sh = ScrW(), ScrH()
-    if( !f ) then
-        local f = vgui.Create( "DFrame" )
-        f:SetTitle( "Main Menu" )
-        f:SetSize( sw, sh )
-    end
-end
+net.Receive( "quantum_menu_net", function( len, pl ) 
+    local menu = net.ReadString()
+    local dt = net.ReadTable()
+    local menu = include( "lib/cl_" .. menu .. ".lua" )
+    menu.open( dt )
+end)

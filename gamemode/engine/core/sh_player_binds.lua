@@ -11,12 +11,16 @@ if SERVER then
     local keyfuncs = {
         [IN_USE] = function( pl )
             Quantum.Debug( tostring( pl ) .. " pressed IN_USE" )
+        end,
+        ["openCharMenu"] = function( pl )
+
         end
     }
 
     function GM:KeyRelease( ply, key )
         if( keyfuncs[key] ) then keyfuncs[key]( ply ) end
     end
-else
-    --
+    function GM:ShowHelp( ply )
+
+    end
 end
