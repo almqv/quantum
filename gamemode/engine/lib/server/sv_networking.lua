@@ -59,6 +59,7 @@ local funcs = {
 
 local netfuncs = {
 	createChar = function( pl, args )
+		print("ping pong")
 		Quantum.Server.Char.Load( pl, 1, args )
 	end
 }
@@ -66,6 +67,8 @@ local netfuncs = {
 local function runNetFunc( pl, func, args )
 	if( funcs[func] ) then
 		netfuncs[func]( pl, args )
+	else
+		Quantum.Error( tostring(pl) .. " tried to run a non existant networked function! func: '" .. tostring( func ) .. "'" )
 	end
 end
 

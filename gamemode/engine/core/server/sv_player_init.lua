@@ -31,6 +31,10 @@ function GM:PlayerSpawn( ply )
     if( !ply.isloaded ) then 
         ply:Spectate( OBS_MODE_FIXED ) 
     else
+        if( !ply:Alive()) then 
+            ply:UnSpectate() 
+            ply:Spawn()
+        end
         setUpPlayer( ply )
     end
 

@@ -65,6 +65,7 @@ if SERVER then
     local function addAllDermaMenus()
         local fol = GM.FolderName .. "/gamemode/engine/derma/"
         AddCSLuaFile( fol .. "cl_menu.lua" )
+        AddCSLuaFile( fol .. "lib/cl_network.lua" )
 
         local libfol = GM.FolderName .. "/gamemode/engine/derma/menus/"
         local menuFiles = file.Find( libfol .. "menu_*.lua", "LUA" )

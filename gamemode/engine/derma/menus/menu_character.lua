@@ -7,6 +7,8 @@
 
 local menu = {}
 
+local net = include( "../lib/cl_network.lua" )
+
 function menu.open( dt )
     local sw, sh = ScrW(), ScrH()
     if( !f ) then
@@ -24,10 +26,7 @@ function menu.open( dt )
         b:SetText( "Create Char" )
         b:SizeToContents()
         b.DoClick = function()
-            net.Start( "quantum_menu_button_net" )
-                net.WriteString( "createchar" )
-                net.WriteTable( { name = txt:GetValue() } )
-            net.SendToServer()
+            net.RunNetworkedFunc( "createChar", { name = txt:GetValue() } )
         end
     end
 end
