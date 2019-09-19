@@ -7,6 +7,6 @@
 
 net.Receive( "quantum_menu_net", function( len, pl ) 
     local dt = net.ReadTable()
-    local menu = include( "menus/menu_" .. dt.id .. ".lua" )
+    local menu = include( GAMEMODE.FolderName .. "/gamemode/engine/derma/menus/menu_" .. dt.id .. ".lua" )
     menu.open( dt )
 end)
