@@ -59,7 +59,6 @@ local funcs = {
 
 local netfuncs = {
 	createChar = function( pl, args )
-		print("ping pong")
 		Quantum.Server.Char.Load( pl, 1, args )
 	end
 }
