@@ -7,7 +7,7 @@
 
 local menu = {}
 
-local net = include( "../lib/cl_network.lua" )
+local net = Quantum.Client.Menu.GetAPI( "net" )
 
 function menu.open( dt )
     local sw, sh = ScrW(), ScrH()
