@@ -19,12 +19,16 @@ function menu.open( dt )
 
         local txt = vgui.Create( "DTextEntry", f )
         txt:SetText( "Enter name here" )
-        txt:SizeToContents()
-        txt:SetPos( 100, 100 )
+        txt:SetSize( 250, 25 )
+        local txtW, txtH = txt:GetSize()
+        txt:SetPos( sw/2 - txtW/2, sh/2 - txtH/2 )
+        local txtX, txtY = txt:GetPos()
 
         local b = vgui.Create( "DButton", f )
         b:SetText( "Create Char" )
         b:SizeToContents()
+        local bW, bH = b:GetSize()
+        b:SetPos( sw/2 - bW/2, txtY - bH )
         b.DoClick = function()
             net.RunNetworkedFunc( "createChar", { name = txt:GetValue() } )
         end

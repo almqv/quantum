@@ -5,13 +5,13 @@
 --  \ \   / ____ \| | | | | | | |  __/ (__| | | |  / / 
 --   \_\ /_/    \_\_|_| |_| |_|_|\___|\___|_| |_| /_/  
 
-local net = {}
+local snm = {} -- Safe. Networked. Message
 
-function net.RunNetworkedFunc( func, args )
+function snm.RunNetworkedFunc( func, args )
     net.Start( "quantum_menu_button_net" )      -- used for menu buttons etc
         net.WriteString( func )                 -- don't worry! it's very secure :D
         net.WriteTable( args )
     net.SendToServer()
 end
 
-return net
+return snm

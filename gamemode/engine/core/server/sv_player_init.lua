@@ -11,7 +11,7 @@ local ply = FindMetaTable( "Player" )
 
 function GM:PlayerInitialSpawn( ply )
     --ply.isloaded = true -- REMOVE THIS WHEN MYSQL DB IS ADDED
-    
+    -- load in all of the players characters and stuff from the MySQL DB
 end
 
 local function setUpPlayer( ply )
@@ -31,10 +31,7 @@ function GM:PlayerSpawn( ply )
     if( !ply.isloaded ) then 
         ply:Spectate( OBS_MODE_FIXED ) 
     else
-        if( !ply:Alive()) then 
-            ply:UnSpectate() 
-            ply:Spawn()
-        end
+        ply:UnSpectate() 
         setUpPlayer( ply )
     end
 
