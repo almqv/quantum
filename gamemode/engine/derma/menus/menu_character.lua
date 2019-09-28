@@ -26,7 +26,7 @@ function menu.open( dt )
 
 
         local clist = vgui.Create( "DPanel", f )
-        clist:SetSize( 250 * resScale, 800 * resScale )
+        clist:SetSize( 200 * resScale, sh - padding*10 )
         clist.w, clist.h = clist:GetSize()
         clist:SetPos( (sw - clist.w) - padding*2, sh/2 - clist.h/2 )
         clist.Paint = function( self, w, h )
