@@ -35,9 +35,10 @@ function Quantum.Server.Char.Load( pl, index, tbl )
     local id = pl:SteamID() .. ":" .. index
     if( Quantum.Server.Char.Players[ id ] ~= nil ) then
         Quantum.Server.Char.Players[ id ] = CreateCharTable( tbl ) -- create the character
-        Quantum.Server.Inventory.Create( Quantum.Server.Char.Players[ id ] ) -- give the character a inventory
+        Quantum.Server.Char.Players[ id ].inventory = tbl.inventory || Quantum.Server.Inventory.Create( Quantum.Server.Char.Players[ id ] ) -- give the character an inventory
 
         Quantum.Debug( "Created character (" .. id .. ")" )
+        return Quantum.Server.Char.Players[ id ]
     else
         Quantum.Error( "Tried to duplicate character! Index already used. (" .. id .. ")" )
     end

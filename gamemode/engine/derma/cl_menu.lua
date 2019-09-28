@@ -7,7 +7,7 @@
 
 Quantum.Client.Menu = {}
 local libs = {
-    ["net"] = GAMEMODE.FolderName .. "/gamemode/engine/derma/lib/cl_network.lua"
+    ["net"] = GM.FolderName .. "/gamemode/engine/derma/lib/cl_network.lua"
 }
 Quantum.Client.Menu.GetAPI = function( lib ) return include( libs[lib] ) end
 
