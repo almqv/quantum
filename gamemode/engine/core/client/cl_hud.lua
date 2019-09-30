@@ -43,7 +43,7 @@ function GM:HUDPaint()
 			surface.SetTextColor( 255, 255, 255, 255 )
 			local hptxt = tostring( 100 * (hp/maxhp) .. "%" )
 			local txtW, txtH = surface.GetTextSize( hptxt )
-			surface.SetTextPos( ( ( sw/2 - txtW/2 ) + padding/2 ), ( ( sh*0.9 - txtH/2 ) ) )
+			surface.SetTextPos( ( ( sw/2 - txtW/2 ) + padding/2 ), ( ( sh*0.9 - txtH/3 ) ) )
 			surface.DrawText( hptxt )
 
 			-- Crosshair

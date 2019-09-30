@@ -60,7 +60,7 @@ function menu.open( dt )
             surface.SetDrawColor( 0, 0, 0, 190 )
             surface.DrawRect( 0, 0, w, h )
         end
-        f:IsDraggable( false )
+        f:SetDraggable( false )
         f:MakePopup()
 
         local char = pages.charCreate( f ) -- test
