@@ -8,11 +8,32 @@
 local menu = {}
 
 local net = Quantum.Client.Menu.GetAPI( "net" )
+local page = Quantum.Client.Menu.GetAPI( "page" )
 
 local resScale = Quantum.Client.ResolutionScale
 
-local panels = {
-    [1] = function( parent, args ) end
+local pages = {
+    charSelect = function()
+        local args = {
+            CloseButtonPaint = function( self, w, h )
+                surface.SetDrawColor( 100, 100, 100, 255 )
+                surface.DrawRect( 0, 0, w, h )
+            end,
+            OnClose = function() print("close test") end
+        }
+        local p = page.New( args )
+
+        local clist = vgui.Create( "DPanel", p )
+        clist:SetSize( 200 * resScale, sh - padding*10 )
+        clist.w, clist.h = clist:GetSize()
+        clist:SetPos( (sw - clist.w) - padding*2, sh/2 - clist.h/2 )
+        clist.Paint = function( self, w, h )
+            surface.SetDrawColor( 0, 0, 0, 200 )
+            surface.DrawRect( 0, 0, w, h )
+        end
+
+        return p
+    end
 }
 
 function menu.open( dt )
@@ -28,15 +49,9 @@ function menu.open( dt )
         end
         f:MakePopup()
 
+        pages.charSelect() -- test
 
-        local clist = vgui.Create( "DPanel", f )
-        clist:SetSize( 200 * resScale, sh - padding*10 )
-        clist.w, clist.h = clist:GetSize()
-        clist:SetPos( (sw - clist.w) - padding*2, sh/2 - clist.h/2 )
-        clist.Paint = function( self, w, h )
-            surface.SetDrawColor( 0, 0, 0, 200 )
-            surface.DrawRect( 0, 0, w, h )
-        end
+        
 
         -- local txt = vgui.Create( "DTextEntry", f )
         -- txt:SetText( "Enter name here" )

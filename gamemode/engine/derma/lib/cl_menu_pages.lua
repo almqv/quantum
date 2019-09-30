@@ -13,6 +13,9 @@ function page.New( args )
     args.w, args.h = args.w, args.h || ScrW(), ScrH()
     args.x, args.y = args.x, args.y || 0, 0
 
+    args.closeW, args.closeH = args.closeW, args.closeH || 50 * scale, 20 * scale
+    args.closeX, args.closeY = args.closeX, args.closeY || args.closeW, args.closeH
+
     local p = vgui.Create( "DPanel", args.parent )
     p.w, p.h = args.w, args.h
     p.x, p.y = args.x, args.y
@@ -25,7 +28,8 @@ function page.New( args )
     p.OnClose = args.OnClose || function() end
 
     local close = vgui.Create( "DButton", p )
-    close:SetSize( 50 * scale, 20 * scale )
+    close:SetSize( args.closeW, args.closeH )
+    close:SetPos( args.closeX, args.closeY )
     close.DoClick = function() p:Close() end
     close.Paint = args.CloseButtonPaint || function( self, w, h ) 
         surface.SetDrawColor( 255, 60, 60, 255 )
