@@ -7,16 +7,22 @@
 
 local page = {}
 local scale = Quantum.Client.ResolutionScale
+local padding = 10 * scale
+local padding_s = 4 * scale
 
-function page.New( args )
+function page.New( parent, args )
 
-    args.w, args.h = args.w, args.h || ScrW(), ScrH()
-    args.x, args.y = args.x, args.y || 0, 0
+    -- check the vars
+    args.w, args.h = parent:GetSize()
+    args.x, args.y = 0, 0
+    
+    args.closeW = args.closeW || 90 * scale
+    args.closeH = args.closeH || 20 * scale
+    args.closeX = args.closeX || padding
+    args.closeY = args.closeY || padding
+    --
 
-    args.closeW, args.closeH = args.closeW, args.closeH || 50 * scale, 20 * scale
-    args.closeX, args.closeY = args.closeX, args.closeY || args.closeW, args.closeH
-
-    local p = vgui.Create( "DPanel", args.parent )
+    local p = vgui.Create( "DPanel", parent )
     p.w, p.h = args.w, args.h
     p.x, p.y = args.x, args.y
 
@@ -28,15 +34,20 @@ function page.New( args )
     p.OnClose = args.OnClose || function() end
 
     local close = vgui.Create( "DButton", p )
+    close:SetText( args.CloseButtonText || "Close" )
+    close:SetTextColor( args.CloseButtonTextColor || Color( 0, 0, 0, 255 ) )
+    close:SetFont( args.CloseButtonFont || "q_text" )
     close:SetSize( args.closeW, args.closeH )
     close:SetPos( args.closeX, args.closeY )
-    close.DoClick = function() p:Close() end
-    close.Paint = args.CloseButtonPaint || function( self, w, h ) 
-        surface.SetDrawColor( 255, 60, 60, 255 )
+    close.DoClick = function() p:Remove() end
+    close.Paint = args.CloseButtonPaint || function( self, w, h )
+        surface.SetDrawColor( 50, 50, 50, 255 )
         surface.DrawRect( 0, 0, w, h )
-    end
 
-    return p
+        surface.SetDrawColor( 235, 64, 52, 255 )
+        surface.DrawRect( padding_s/2, padding_s/2, w - padding_s/2, h - padding_s/2 )
+    end
+    return p, close
 end
 
 return page

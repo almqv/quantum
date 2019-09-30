@@ -8,7 +8,7 @@
 if CLIENT then
     include( "shared.lua" )
     Quantum.Client = {}
-    Quantum.Client.ResolutionScale = ScrW() / 1080
+    Quantum.Client.ResolutionScale = ScrH() / 1080
 
     local function loadCoreFiles()
         local fol = GM.FolderName .. "/gamemode/engine/core/"

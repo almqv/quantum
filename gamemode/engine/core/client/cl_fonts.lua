@@ -7,7 +7,13 @@
 
 surface.CreateFont( "q_HUD", {
     font = "Arial",
-    size = 15 * Quantum.Client.ResolutionScale,
+    size = 38 * Quantum.Client.ResolutionScale,
     antialias = true,
     outline = true
+})
+
+surface.CreateFont( "q_text", {
+    font = "Arial",
+    size = 22 * Quantum.Client.ResolutionScale,
+    antialias = true
 })
