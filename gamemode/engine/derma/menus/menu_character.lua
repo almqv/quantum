@@ -11,6 +11,10 @@ local net = Quantum.Client.Menu.GetAPI( "net" )
 
 local resScale = Quantum.Client.ResolutionScale
 
+local panels = {
+    [1] = function( parent, args ) end
+}
+
 function menu.open( dt )
     local sw, sh = ScrW(), ScrH()
     local padding = 10 * resScale
