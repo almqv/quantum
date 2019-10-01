@@ -17,3 +17,22 @@ surface.CreateFont( "q_text", {
     size = 22 * Quantum.Client.ResolutionScale,
     antialias = true
 })
+
+surface.CreateFont( "q_text2", {
+    font = "Arial",
+    size = 26 * Quantum.Client.ResolutionScale,
+    antialias = true
+})
+
+surface.CreateFont( "q_charNameText", {
+    font = "Arial",
+    outline = true,
+    size = 28 * Quantum.Client.ResolutionScale,
+    antialias = true
+})
+
+surface.CreateFont( "q_header", {
+    font = "Constantia Bold Italic",
+    size = 50 * Quantum.Client.ResolutionScale,
+    antialias = true
+})

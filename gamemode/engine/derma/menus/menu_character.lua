@@ -18,18 +18,68 @@ local padding = 10 * resScale
 local pages = {
     charSelect = function( parent )
         local args = {
-            CloseButtonText = "Back",
-            CloseButtonFont = "q_text",
+            CloseButtonText = "Quit",
+            CloseButtonFont = "q_text2",
         }
         local p, c = page.New( parent, args )
 
         local clist = vgui.Create( "DPanel", p )
-        clist:SetSize( 200 * resScale, sh - padding*10 )
+        clist:SetSize( 380 * resScale, sh - padding*15 )
         clist.w, clist.h = clist:GetSize()
-        clist:SetPos( (sw - clist.w) - padding*2, sh/2 - clist.h/2 )
+        clist:SetPos( (sw - clist.w) - padding*2, padding*5 )
+        clist.x, clist.y = clist:GetPos()
         clist.Paint = function( self, w, h )
-            surface.SetDrawColor( 0, 0, 0, 200 )
-            surface.DrawRect( 0, 0, w, h )
+            draw.RoundedBox( 6, 0, 0, w, h, Color( 0, 0, 0, 200 ) )
+        end
+
+        --- Close/quit button stuff ---
+        local cW, cH = c:GetSize()
+        c:SetPos( clist.x, clist.y + clist.h + cH )
+        c.DoClick = function() parent:Close() end
+        ---
+
+        local header = vgui.Create( "DLabel", p )
+        header:SetText( "Characters" )
+        header:SetFont( "q_header" )
+        header:SizeToContents()
+        local headerW, headerH = header:GetSize()
+        header:SetPos( (clist.x + headerW/2) - padding, (clist.y - headerH) + padding/2 )
+        header:SetTextColor( Color( 255, 255, 255, 255 ) )
+        header.Paint = function( self, w, h ) end
+
+        local chars = {
+            {name="Vernull", lvl=81},
+            {name="Devoe", lvl=22},
+            {name="Leeroy", lvl=2},
+        }
+        local cpanels = {}
+        for k, v in pairs( chars ) do
+            cpanels[k] = vgui.Create( "DButton", clist )
+            cpanels[k]:SetText( "" )
+            cpanels[k]:SetSize( clist.w - padding, 100 * resScale )
+            cpanels[k].w, cpanels[k].h = cpanels[k]:GetSize()
+            cpanels[k]:SetPos( padding/2, (padding/2)*k + (cpanels[k].h * (k-1)) )
+            cpanels[k].Paint = function( self, w, h )
+                surface.SetDrawColor( 0, 0, 0, 0 )
+                surface.DrawRect( 0, 0, w, h )
+            end
+
+            local txt = vgui.Create( "DLabel", cpanels[k] )
+            txt:SetText( v.name || "NAME" )
+            txt:SetFont( "q_charNameText" )
+            txt:SetTextColor( Color( 200, 200, 200, 220 ) )
+            txt:SizeToContents()
+            local txtW, txtH = txt:GetSize()
+            txt:SetPos( padding, cpanels[k].h/2 - txtH/2 )
+            local txtX, txtY = txt:GetPos()
+
+            local lvl = vgui.Create( "DLabel", cpanels[k] )
+            lvl:SetText( "Level " .. v.lvl .. " Human" )
+            lvl:SetFont( "q_text2" )
+            lvl:SetTextColor( Color( 180, 180, 180, 225 ) )
+            lvl:SizeToContents()
+            local lvlW, lvlH = lvl:GetSize()
+            lvl:SetPos( txtX, txtY + lvlH )
         end
 
         return p
@@ -57,13 +107,13 @@ function menu.open( dt )
         f:SetTitle( "Character Menu" )
         f:SetSize( sw, sh )
         f.Paint = function( self, w, h )
-            surface.SetDrawColor( 0, 0, 0, 190 )
+            surface.SetDrawColor( 0, 0, 0, 120 )
             surface.DrawRect( 0, 0, w, h )
         end
         f:SetDraggable( false )
         f:MakePopup()
 
-        local char = pages.charCreate( f ) -- test
+        local charSel = pages.charSelect( f ) -- test
     end
 end
 
