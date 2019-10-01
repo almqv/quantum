@@ -9,6 +9,7 @@ local menu = {}
 
 local net = Quantum.Client.Menu.GetAPI( "net" )
 local page = Quantum.Client.Menu.GetAPI( "page" )
+local theme = Quantum.Client.Menu.GetAPI( "theme" )
 
 local resScale = Quantum.Client.ResolutionScale
 local sw, sh = ScrW(), ScrH()
@@ -19,22 +20,23 @@ local pages = {
     charSelect = function( parent )
         local args = {
             CloseButtonText = "Quit",
-            CloseButtonFont = "q_text2",
+            CloseButtonFont = "q_text2"
         }
         local p, c = page.New( parent, args )
 
         local clist = vgui.Create( "DPanel", p )
         clist:SetSize( 380 * resScale, sh - padding*15 )
         clist.w, clist.h = clist:GetSize()
-        clist:SetPos( (sw - clist.w) - padding*2, padding*5 )
+        clist:SetPos( (sw - clist.w) - padding*2, padding*6 )
         clist.x, clist.y = clist:GetPos()
         clist.Paint = function( self, w, h )
-            draw.RoundedBox( 6, 0, 0, w, h, Color( 0, 0, 0, 200 ) )
+            theme.panel( self, Color( 0, 0, 0, 200 ) )
         end
 
         --- Close/quit button stuff ---
         local cW, cH = c:GetSize()
-        c:SetPos( clist.x, clist.y + clist.h + cH )
+        c:SetPos( (clist.x + clist.w) - cW, clist.y + clist.h + cH )
+        c.Paint = function( self ) theme.button( self ) end
         c.DoClick = function() parent:Close() end
         ---
 
@@ -50,7 +52,7 @@ local pages = {
         local chars = {
             {name="Vernull", lvl=81},
             {name="Devoe", lvl=22},
-            {name="Leeroy", lvl=2},
+            {name="Leeroy", lvl=2}
         }
         local cpanels = {}
         for k, v in pairs( chars ) do
