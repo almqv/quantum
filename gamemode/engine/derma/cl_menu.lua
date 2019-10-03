@@ -14,7 +14,7 @@ local libs = {
 Quantum.Client.Menu.GetAPI = function( lib ) return include( libs[lib] ) end
 
 net.Receive( "quantum_menu_net", function( len, pl ) 
-    local dt = net.ReadTable()
+    local dt = net.ReadTable() -- TO DO: merge datatable with cached ( if same id/type )
     local menu = include( GAMEMODE.FolderName .. "/gamemode/engine/derma/menus/menu_" .. dt.id .. ".lua" )
     menu.open( dt )
 end)
