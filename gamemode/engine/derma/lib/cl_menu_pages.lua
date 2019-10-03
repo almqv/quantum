@@ -10,6 +10,8 @@ local scale = Quantum.Client.ResolutionScale
 local padding = 10 * scale
 local padding_s = 4 * scale
 
+local theme = Quantum.Client.Menu.GetAPI( "theme" )
+
 function page.New( parent, args )
 
     -- check the vars
@@ -48,11 +50,7 @@ function page.New( parent, args )
     end
     close.OnCursorEntered = function() surface.PlaySound( "UI/buttonrollover.wav" ) end
     close.Paint = args.CloseButtonPaint || function( self, w, h )
-        surface.SetDrawColor( 50, 50, 50, 255 )
-        surface.DrawRect( 0, 0, w, h )
-
-        surface.SetDrawColor( 235, 64, 52, 255 )
-        surface.DrawRect( padding_s/2, padding_s/2, w - padding_s/2, h - padding_s/2 )
+        theme.sharpbutton( self )
     end
     return p, close
 end

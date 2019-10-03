@@ -18,12 +18,51 @@ local padding_s = 4 * resScale
 
 
 local pages = {
-    charSelect = function( parent )
+    charCreate = function( parent )
+        local pW, pH = parent:GetSize()
         local args = {
-            CloseButtonText = "Quit",
-            CloseButtonFont = "q_text2"
+            CloseButtonText = "Return",
+            CloseButtonFont = "q_text",
         }
         local p, c = page.New( parent, args )
+        p:SetVisible( true )
+
+        c:SetSize( 85 * resScale, 25 * resScale )
+        local closeW, closeH = c:GetSize()
+        c:SetPos( padding*4, (pH - closeH) - padding*4 )
+        c.DoClick = function()
+            surface.PlaySound( "UI/buttonclick.wav" )
+            parent.page:SetVisible( true )
+            p:Remove()
+        end
+
+        return p, c
+    end
+}
+
+function menu.open( dt )
+    Quantum.Client.IsInMenu = true -- hide the hud
+    if( !f ) then
+        local f = vgui.Create( "DFrame" )
+        f:SetTitle( "" )
+        f:SetSize( sw, sh )
+        f.Paint = function( self, w, h )
+            surface.SetDrawColor( 0, 0, 0, 120 )
+            surface.DrawRect( 0, 0, w, h )
+        end
+        f:SetDraggable( false )
+        f:MakePopup()
+        function f:OnClose()
+            Quantum.Client.IsInMenu = false -- show the hud when closed
+        end
+
+        local args = {
+            CloseButtonText = "Quit",
+            CloseButtonFont = "q_text"
+        }
+        local p, c = page.New( f, args )
+        f.page = p
+        f.page:SetVisible( true )
 
         local clist = vgui.Create( "DScrollPanel", p )
         clist:SetSize( 380 * resScale, sh - padding*15 )
@@ -43,7 +82,7 @@ local pages = {
         c.Paint = function( self ) theme.button( self ) end
         c.DoClick = function() 
             surface.PlaySound( "UI/buttonclick.wav" )
-            parent:Close() 
+            f:Close() 
         end
         ---
 
@@ -109,54 +148,22 @@ local pages = {
         -- create char button
         local cr = vgui.Create( "DButton", p )
         cr:SetText("Create New Character")
-        cr:SetFont( "q_text2" )
+        cr:SetFont( "q_text" )
         cr:SetTextColor( Color( 0, 0, 0, 255 ) )
         cr:SizeToContents()
         cr.w, cr.h = cr:GetSize()
         cr:SetPos( clist.x + ( clist.w/2 - cr.w/2 ), clist.y + ( ( clist.h - cr.h ) - padding*2 ) )
         cr.Paint = function( self ) 
-            theme.button( self )
+            theme.sharpbutton( self )
         end
         cr.DoClick = function()
             surface.PlaySound( "UI/buttonclick.wav" )
+            p:SetVisible( false )
+            local crPage = pages.charCreate( f )
         end
+        
         cr.OnCursorEntered = function() surface.PlaySound( "UI/buttonrollover.wav" ) end
 
-        return p
-    end,
-    charCreate = function( parent )
-        local pW, pH = parent:GetSize()
-        local args = {
-            CloseButtonText = "Return",
-            CloseButtonFont = "q_text",
-        }
-        local p, c = page.New( parent, args )
-
-        c:SetSize( 85 * resScale, 25 * resScale )
-        local closeW, closeH = c:GetSize()
-        c:SetPos( padding*4, (pH - closeH) - padding*4 )
-
-        return p
-    end
-}
-
-function menu.open( dt )
-    Quantum.Client.IsInMenu = true -- hide the hud
-    if( !f ) then
-        local f = vgui.Create( "DFrame" )
-        f:SetTitle( "Character Menu" )
-        f:SetSize( sw, sh )
-        f.Paint = function( self, w, h )
-            surface.SetDrawColor( 0, 0, 0, 120 )
-            surface.DrawRect( 0, 0, w, h )
-        end
-        f:SetDraggable( false )
-        f:MakePopup()
-        function f:OnClose()
-            Quantum.Client.IsInMenu = false -- show the hud when closed
-        end
-
-        local charSel = pages.charSelect( f ) -- test
     end
 end
 
