@@ -12,7 +12,7 @@ local function CreateCharTable( args )
     return {
         name = args.name || "UNKNOWN",
         maxhealth = Quantum.Server.Settings.MaxHealth,
-        health = math.Clamp( args.health, 0, Quantum.Server.Settings.MaxHealth ) || Quantum.Server.Settings.MaxHealth,
+        health = args.health || Quantum.Server.Settings.MaxHealth,
         model = args.model || "models/player.mdl",
         money = args.money || Quantum.Server.Settings.StarterMoney,
         inventory = args.inventory || {}, -- create new inventory later
@@ -32,8 +32,8 @@ local function CreateCharTable( args )
 end
 
 function Quantum.Server.Char.Load( pl, index, tbl )
-    local id = pl:SteamID() .. ":" .. index
-    if( Quantum.Server.Char.Players[ id ] ~= nil ) then
+    local id = pl:SteamID() .. ";" .. index
+    if( Quantum.Server.Char.Players[ id ] == nil ) then
         Quantum.Server.Char.Players[ id ] = CreateCharTable( tbl ) -- create the character
         Quantum.Server.Char.Players[ id ].inventory = tbl.inventory || Quantum.Server.Inventory.Create( Quantum.Server.Char.Players[ id ] ) -- give the character an inventory
 
@@ -73,4 +73,12 @@ function Quantum.Server.Char.SetCurrentCharacter( pl, index )
         Quantum.Error( "Unable to set " .. tostring(pl) .. " character. Character not found!" )
         return nil
     end
+end
+
+function Quantum.Server.Char.GetPlayerChars( pl )
+    local chars = {}
+    for id, char in pairs( Quantum.Server.Char.Players ) do
+        chars[id] = char
+    end
+    return chars
 end
