@@ -7,8 +7,8 @@
 
 local theme ={}
 local scale = Quantum.Client.ResolutionScale
-local padding = 10 * scale
-local padding_s = 4 * scale
+local padding = math.Round( 10 * scale )
+local padding_s = math.Round( 4 * scale )
 
 
 local blur = Material("pp/blurscreen")
@@ -71,7 +71,7 @@ function theme.sharpbutton( b )
     surface.DrawRect( 0, 0, w, h )
 
     surface.SetDrawColor( 235, 64, 52, 255 )
-    surface.DrawRect( padding_s/2, padding_s/2, w - padding_s/2, h - padding_s/2 )
+    surface.DrawRect( padding_s/2, padding_s/2, w - padding_s, h - padding_s )
 end
 
 return theme
