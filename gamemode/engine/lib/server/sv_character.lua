@@ -77,8 +77,10 @@ end
 
 function Quantum.Server.Char.GetPlayerChars( pl )
     local chars = {}
-    for id, char in pairs( Quantum.Server.Char.Players ) do
-        chars[id] = char
+    local strtbl = {}
+    for id, char in pairs( Quantum.Server.Char.Players ) do 
+        strtbl = string.Split( id, ";" )
+        if( strtbl[1] == pl:SteamID() ) then chars[id] = char end
     end
     return chars
 end
