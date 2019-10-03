@@ -21,35 +21,37 @@ local padding = 5 * scale
 local sw, sh = ScrW(), ScrH()
 
 function GM:HUDPaint()
-	local hp = LocalPlayer():Health()
-	local lasthp = hp
-	local maxhp = LocalPlayer():GetMaxHealth()
-	
-	if( Quantum.Client.Config.EnableHUD ) then
-		if( !LocalPlayer():Alive() ) then 
-			surface.SetDrawColor( 0, 0, 0, 255 )
-			surface.DrawRect( 0, 0, sw, sh )
-		else
-			-- Health border
-			surface.SetDrawColor( 0, 0, 0, 200 )
-			surface.DrawRect( sw/2 - barW/2, sh*0.9, barW, barH )
-			
-			-- Health bar
-			surface.SetDrawColor( 168, 62, 50, 255 )
-			surface.DrawRect( ( sw/2 - barW/2 ) + padding/2, (sh*0.9) + padding/2, math.Clamp( (barW - padding) * hp/maxhp, 0, barW - padding ), barH - padding )
+	if( !Quantum.Client.IsInMenu ) then
+		local hp = LocalPlayer():Health()
+		local lasthp = hp
+		local maxhp = LocalPlayer():GetMaxHealth()
+		
+		if( Quantum.Client.Config.EnableHUD ) then
+			if( !LocalPlayer():Alive() ) then 
+				surface.SetDrawColor( 0, 0, 0, 255 )
+				surface.DrawRect( 0, 0, sw, sh )
+			else
+				-- Health border
+				surface.SetDrawColor( 0, 0, 0, 200 )
+				surface.DrawRect( sw/2 - barW/2, sh*0.9, barW, barH )
+				
+				-- Health bar
+				surface.SetDrawColor( 168, 62, 50, 255 )
+				surface.DrawRect( ( sw/2 - barW/2 ) + padding/2, (sh*0.9) + padding/2, math.Clamp( (barW - padding) * hp/maxhp, 0, barW - padding ), barH - padding )
 
-			-- Health Text
-			surface.SetFont( "q_HUD" )
-			surface.SetTextColor( 255, 255, 255, 255 )
-			local hptxt = tostring( 100 * (hp/maxhp) .. "%" )
-			local txtW, txtH = surface.GetTextSize( hptxt )
-			surface.SetTextPos( ( ( sw/2 - txtW/2 ) + padding/2 ), ( ( sh*0.9 - txtH/3 ) ) )
-			surface.DrawText( hptxt )
+				-- Health Text
+				surface.SetFont( "q_HUD" )
+				surface.SetTextColor( 255, 255, 255, 255 )
+				local hptxt = tostring( 100 * (hp/maxhp) .. "%" )
+				local txtW, txtH = surface.GetTextSize( hptxt )
+				surface.SetTextPos( ( ( sw/2 - txtW/2 ) + padding/2 ), ( ( sh*0.9 - txtH/3 ) ) )
+				surface.DrawText( hptxt )
 
-			-- Crosshair
-			if( Quantum.Client.ShowCrosshair ) then
-				surface.SetDrawColor( 255, 255, 255, 200 )
-				surface.DrawRect( sw/2 - radius, sh/2 - radius, radius*2, radius*2 )
+				-- Crosshair
+				if( Quantum.Client.ShowCrosshair ) then
+					surface.SetDrawColor( 255, 255, 255, 200 )
+					surface.DrawRect( sw/2 - radius, sh/2 - radius, radius*2, radius*2 )
+				end
 			end
 		end
 	end
@@ -57,18 +59,20 @@ function GM:HUDPaint()
 end
 
 hook.Add( "RenderScreenspaceEffects", "Quantum_HUD_RenderLowHealth", function() 
-	if( LocalPlayer():Health() / LocalPlayer():GetMaxHealth() <= 0.25 ) then 
-		DrawMotionBlur( 0.4, 0.8, 0.1 ) 
-		DrawColorModify( {
-			[ "$pp_colour_addr" ] = 0,
-			[ "$pp_colour_addg" ] = 0,
-			[ "$pp_colour_addb" ] = 0,
-			[ "$pp_colour_brightness" ] = Lerp( LocalPlayer():Health() / LocalPlayer():GetMaxHealth(), -0.25, 0 ),
-			[ "$pp_colour_contrast" ] = Lerp( LocalPlayer():Health() / LocalPlayer():GetMaxHealth(), 0.2, 1 ),
-			[ "$pp_colour_colour" ] = Lerp( LocalPlayer():Health() / LocalPlayer():GetMaxHealth(), 0.8, 1 ),
-			[ "$pp_colour_mulr" ] = 0,
-			[ "$pp_colour_mulg" ] = 0,
-			[ "$pp_colour_mulb" ] = 0
-		} )
+	if( !Quantum.Client.IsInMenu ) then
+		if( LocalPlayer():Health() / LocalPlayer():GetMaxHealth() <= 0.25 ) then 
+			DrawMotionBlur( 0.4, 0.8, 0.1 ) 
+			DrawColorModify( {
+				[ "$pp_colour_addr" ] = 0,
+				[ "$pp_colour_addg" ] = 0,
+				[ "$pp_colour_addb" ] = 0,
+				[ "$pp_colour_brightness" ] = Lerp( LocalPlayer():Health() / LocalPlayer():GetMaxHealth(), -0.25, 0 ),
+				[ "$pp_colour_contrast" ] = Lerp( LocalPlayer():Health() / LocalPlayer():GetMaxHealth(), 0.2, 1 ),
+				[ "$pp_colour_colour" ] = Lerp( LocalPlayer():Health() / LocalPlayer():GetMaxHealth(), 0.8, 1 ),
+				[ "$pp_colour_mulr" ] = 0,
+				[ "$pp_colour_mulg" ] = 0,
+				[ "$pp_colour_mulb" ] = 0
+			} )
+		end
 	end
 end)

@@ -42,7 +42,11 @@ function page.New( parent, args )
     local closeW, closeH = close:GetSize()
     close:SetSize( closeW + padding*2, closeH )
     close:SetPos( args.closeX, args.closeY )
-    close.DoClick = function() p:Remove() end
+    close.DoClick = function() 
+        surface.PlaySound( "UI/buttonclick.wav" )
+        p:Remove() 
+    end
+    close.OnCursorEntered = function() surface.PlaySound( "UI/buttonrollover.wav" ) end
     close.Paint = args.CloseButtonPaint || function( self, w, h )
         surface.SetDrawColor( 50, 50, 50, 255 )
         surface.DrawRect( 0, 0, w, h )

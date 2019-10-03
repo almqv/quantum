@@ -10,6 +10,21 @@ local scale = Quantum.Client.ResolutionScale
 local padding = 10 * scale
 local padding_s = 4 * scale
 
+
+local blur = Material("pp/blurscreen")
+local function renderBlur( p, a, d )
+    local x, y = p:LocalToScreen( 0, 0 )
+	surface.SetDrawColor( 255, 255, 255 )
+	surface.SetMaterial( blur )
+	
+	for i = 1, d do
+		blur:SetFloat( "$blur", (i / d) * a )
+		blur:Recompute()
+		render.UpdateScreenEffectTexture()
+		surface.DrawTexturedRect( x * -1, y * -1, ScrW(), ScrH() )
+	end
+end
+
 function theme.panel( p, color )
     local w, h = p:GetSize()
     local clr = color || Color( 0, 0, 0, 100 )
@@ -19,9 +34,19 @@ function theme.panel( p, color )
     draw.RoundedBox( 4, padding_s/2, padding_s/2, w - padding_s, h - padding_s, clr ) -- inner
 end
 
+function theme.blurpanel( p, color )
+    local w, h = p:GetSize()
+    local clr = color || Color( 0, 0, 0, 100 )
+    local bclr = Color( 50, 50, 50, 105 ) 
+    renderBlur( p, 2, 7 )
+
+    draw.RoundedBox( 6, 0, 0, w, h, bclr ) -- border
+    draw.RoundedBox( 4, padding_s/2, padding_s/2, w - padding_s, h - padding_s, clr ) -- inner
+end
+
 function theme.button( b, color )
     local w, h = b:GetSize()
-    local clr = color || Color( 225, 44, 52, 255 )
+    local clr = color || Color( 235, 64, 52, 255 )
     local bclr = Color( 50, 50, 50, 255 ) 
 
     if( b:IsHovered() ) then
