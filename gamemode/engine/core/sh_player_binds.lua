@@ -13,7 +13,7 @@ if SERVER then
             Quantum.Debug( tostring( pl ) .. " pressed IN_USE" )
         end,
         ["openCharMenu"] = function( pl )
-            Quantum.Net.OpenMenu( pl, "character", {} )
+            Quantum.Net.OpenMenu( pl, "character", Quantum.Server.Char.GetPlayerChars( pl ) )
         end
     }
 

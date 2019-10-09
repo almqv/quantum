@@ -26,15 +26,29 @@ local pages = {
         }
         local p, c = page.New( parent, args )
         p:SetVisible( true )
+		p.w, p.h = p:GetSize()
 
         c:SetSize( 85 * resScale, 25 * resScale )
-        local closeW, closeH = c:GetSize()
-        c:SetPos( padding*4, (pH - closeH) - padding*4 )
+        c.w, c.h = c:GetSize()
+        c:SetPos( (p.w - c.w) - padding*4, (p.h - c.h) - padding*4 )
         c.DoClick = function()
             surface.PlaySound( "UI/buttonclick.wav" )
             parent.page:SetVisible( true )
             p:Remove()
         end
+
+
+		local ip = vgui.Create( "DPanel", p ) -- input panel
+		ip:SetSize( 400 * resScale, p.h * 0.9 )
+		ip.w, ip.h = ip:GetSize()
+		ip:SetPos( padding*4, p.h/2 - ip.h/2 )
+		ip.Paint = function( self ) theme.blurpanel(self) end
+
+		local inputs = {}
+
+		-- input panel contens --
+
+		
 
         return p, c
     end
@@ -96,23 +110,38 @@ function menu.open( dt )
         header:SetTextColor( Color( 255, 255, 255, 255 ) )
         header.Paint = function( self, w, h ) end
 
-        local chars = {
-            {name="Vernull", lvl=81, model="models/player/Group01/male_09.mdl"},
-            {name="Devoe", lvl=22},
-            {name="Leeroy", lvl=2}
-        }
+        local chars = {}
         
         local cpanels = {}
         local selectedChar 
         local errorMdl = "models/player.mdl"
 
-        -- Char model
-        local mdl = vgui.Create( "DModelPanel", p )
-        mdl:SetSize( 600 * resScale, 1000 * resScale )
-        mdl.w, mdl.h = mdl:GetSize()
-        mdl:SetPos( p.w/2 - mdl.w/2, p.h/2 - mdl.h/2 )
-        mdl:SetFOV( 55 )
-        function mdl:LayoutEntity( ent ) return end
+		if( selectedChar ) then
+			-- Char model
+			local mdl = vgui.Create( "DModelPanel", p )
+			mdl:SetSize( 600 * resScale, 1000 * resScale )
+			mdl.w, mdl.h = mdl:GetSize()
+			mdl:SetPos( p.w/2 - mdl.w/2, p.h/2 - mdl.h/2 )
+			mdl:SetFOV( 55 )
+			function mdl:LayoutEntity( ent ) return end
+
+		else
+
+			local titles = {
+				"404 - Characters not found :(",
+				"No Characters Found"
+			}
+
+			local info = vgui.Create( "DLabel", p )
+			info:SetText( titles[ math.random( 1, #titles ) ] )
+			info:SetFont( "q_header" )
+			info:SizeToContents()
+
+			info.w, info.h = info:GetSize()
+
+			info:SetPos( p.w/2 - info.w/2, p.h/2 - info.h/2 )
+
+		end
 
         for k, v in pairs( chars ) do
             cpanels[k] = vgui.Create( "DButton", clist )
@@ -156,13 +185,14 @@ function menu.open( dt )
             lvl:SetPos( txtX, txtY + lvlH )
         end
 
-        mdl:SetModel( selectedChar.char.model ) -- set the char model
-        local minv, maxv = mdl.Entity:GetRenderBounds()
-        local eyepos = mdl.Entity:GetBonePosition( mdl.Entity:LookupBone( "ValveBiped.Bip01_Head1" ) )
-        eyepos:Add( Vector( 40, 0, -15 ) )
-        mdl:SetCamPos( eyepos - Vector( -10, 0, -2 ) )
-        mdl:SetLookAt( eyepos )
-        --
+		if( selectedChar ) then
+			mdl:SetModel( selectedChar.char.model ) -- set the char model
+			local minv, maxv = mdl.Entity:GetRenderBounds()
+			local eyepos = mdl.Entity:GetBonePosition( mdl.Entity:LookupBone( "ValveBiped.Bip01_Head1" ) )
+			eyepos:Add( Vector( 40, 0, -15 ) )
+			mdl:SetCamPos( eyepos - Vector( -10, 0, -2 ) )
+			mdl:SetLookAt( eyepos )
+		end
 
         -- create char button
         local cr = vgui.Create( "DButton", p )
@@ -183,24 +213,25 @@ function menu.open( dt )
         
         cr.OnCursorEntered = function() surface.PlaySound( "UI/buttonrollover.wav" ) end
 
-        -- Delete char button
-        local dl = vgui.Create( "DButton", p )
-        dl:SetText("Delete Character")
-        dl:SetFont( "q_text" )
-        dl:SetTextColor( Color( 0, 0, 0, 255 ) )
-        dl:SizeToContents()
-        dl.w, dl.h = dl:GetSize()
-        dl:SetPos( clist.x, clist.y + ( clist.h + dl.h ) )
-        dl.Paint = function( self ) 
-            theme.button( self )
-        end
-        dl.DoClick = function()
-            surface.PlaySound( "UI/buttonclick.wav" )
-            LocalPlayer():ChatPrint( "Comming soon!" )
-        end
-        
-        dl.OnCursorEntered = function() surface.PlaySound( "UI/buttonrollover.wav" ) end
-
+		if( selectedChar ) then
+			-- Delete char button
+			local dl = vgui.Create( "DButton", p )
+			dl:SetText("Delete Character")
+			dl:SetFont( "q_text" )
+			dl:SetTextColor( Color( 0, 0, 0, 255 ) )
+			dl:SizeToContents()
+			dl.w, dl.h = dl:GetSize()
+			dl:SetPos( clist.x, clist.y + ( clist.h + dl.h ) )
+			dl.Paint = function( self ) 
+				theme.button( self )
+			end
+			dl.DoClick = function()
+				surface.PlaySound( "UI/buttonclick.wav" )
+				LocalPlayer():ChatPrint( "Comming soon!" )
+			end
+			
+			dl.OnCursorEntered = function() surface.PlaySound( "UI/buttonrollover.wav" ) end
+		end
     end
 end
 

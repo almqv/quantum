@@ -7,6 +7,7 @@
 
 if SERVER then
     AddCSLuaFile( "engine/sh_debug.lua" )
+    AddCSLuaFile( "settings/sh_models.lua" )
     AddCSLuaFile( "cl_init.lua" )
     AddCSLuaFile( "shared.lua" )
 

@@ -8,3 +8,4 @@
 Quantum.Client.Config = {}
 Quantum.Client.Config.EnableHUD = true
 Quantum.Client.ShowCrosshair = true
+Quantum.Client.EnableDebug = true

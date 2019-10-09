@@ -63,7 +63,7 @@ Quantum.Server.Settings.PainSounds.Male = {
     "vo/npc/male01/pain09.wav"
 }
 
-Quantum.Server.Settings.DamageHurtSoundRepeatChance = 90
+Quantum.Server.Settings.DamageHurtSoundRepeatChance = 90 -- %
 
 Quantum.Server.Settings.IdlePainSounds = {}
 Quantum.Server.Settings.IdlePainSounds.Male = {

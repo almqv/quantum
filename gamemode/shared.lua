@@ -13,3 +13,5 @@ GM.Website = "N/A"
 Quantum = {}
 
 include( "engine/sh_debug.lua" ) -- add the debug functions and stuff
+
+include( "settings/sh_models.lua" )

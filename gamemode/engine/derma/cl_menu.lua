@@ -15,6 +15,14 @@ Quantum.Client.Menu.GetAPI = function( lib ) return include( libs[lib] ) end
 
 net.Receive( "quantum_menu_net", function( len, pl ) 
     local dt = net.ReadTable() -- TO DO: merge datatable with cached ( if same id/type )
+
+    if( Quantum.Client.EnableDebug ) then -- debug
+        Quantum.Debug( "Datatable size: " .. len/8 .. " bytes" )
+        Quantum.Debug( "--Datatable contents--")
+        PrintTable( dt ) 
+        Quantum.Debug( "--End of datatable contens--" )
+    end
+
     local menu = include( GAMEMODE.FolderName .. "/gamemode/engine/derma/menus/menu_" .. dt.id .. ".lua" )
     menu.open( dt )
 end)
