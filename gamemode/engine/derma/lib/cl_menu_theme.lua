@@ -58,8 +58,9 @@ function theme.button( b, color )
     draw.RoundedBox( 4, padding_s/2, padding_s/2, w - padding_s, h - padding_s, clr ) -- inner
 end
 
-function theme.sharpbutton( b )
+function theme.sharpbutton( b, inClr )
     local w, h = b:GetSize()
+    inClr = inClr || Color( 235, 64, 52, 255 )
 
     if( b:IsHovered() ) then
         surface.SetDrawColor( 205, 205, 205, 255 )
@@ -70,7 +71,7 @@ function theme.sharpbutton( b )
     
     surface.DrawRect( 0, 0, w, h )
 
-    surface.SetDrawColor( 235, 64, 52, 255 )
+    surface.SetDrawColor( inClr )
     surface.DrawRect( padding_s/2, padding_s/2, w - padding_s, h - padding_s )
 end
 

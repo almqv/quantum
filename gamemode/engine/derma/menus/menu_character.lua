@@ -45,9 +45,38 @@ local pages = {
 		ip.Paint = function( self ) theme.blurpanel(self) end
 
 		local inputs = {}
-
+		
 		-- input panel contens --
+		local gbuttons = {}
+		gbuttons.male = vgui.Create( "DButton", ip )
+		gbuttons.male:SetText( "M" )
+		gbuttons.male:SetTextColor( Color( 0, 0, 0, 255 ) )
+		gbuttons.male:SetFont( "q_button" )
+		gbuttons.male:SizeToContents()
+		gbuttons.male.w, gbuttons.male.h = gbuttons.male:GetSize()
+		gbuttons.male:SetPos( 0, 0 )
 
+		local selectedGenderButton = gbuttons.male -- select itself
+
+		gbuttons.male.Paint = function( self ) 
+			if( selectedGenderButton == self ) then
+				theme.sharpbutton( self, Color( 255, 255, 255 ) ) 
+			end
+		end
+
+		
+
+		gbuttons.female = vgui.Create( "DButton", ip )
+		gbuttons.female:SetText( "F" )
+		gbuttons.female:SetTextColor( Color( 0, 0, 0, 255 ) )
+		gbuttons.female:SetFont( "q_button" )
+		gbuttons.female.Paint = function( self ) theme.sharpbutton( self ) end
+		gbuttons.female:SizeToContents()
+		gbuttons.female.w, gbuttons.female.h = gbuttons.female:GetSize()
+		gbuttons.female:SetPos( 50, 0 )
+		gbuttons.female.DoClick = function( self ) 
+		
+		end
 		
 
         return p, c
