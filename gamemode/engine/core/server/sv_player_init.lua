@@ -12,8 +12,6 @@ local ply = FindMetaTable( "Player" )
 function GM:PlayerInitialSpawn( ply )
     --ply.isloaded = true -- REMOVE THIS WHEN MYSQL DB IS ADDED
     -- load in all of the players characters and stuff from the MySQL DB
-
-    Quantum.Net.OpenMenu( pl, "character", Quantum.Server.Char.GetPlayerChars( ply ) ) -- open the char select screen
 end
 
 local function setUpPlayer( ply )
@@ -33,6 +31,7 @@ function GM:PlayerSpawn( ply )
     if( !ply.isloaded ) then 
         ply:Spectate( OBS_MODE_FIXED ) 
         -- set cinematic view here
+        Quantum.Net.OpenMenu( ply, "character", Quantum.Server.Char.GetPlayerChars( ply ) )
     else
         ply:UnSpectate() 
         setUpPlayer( ply )
