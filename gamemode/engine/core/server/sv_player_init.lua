@@ -28,7 +28,7 @@ end
 
 function GM:PlayerSpawn( ply )
 
-    if( !ply.isloaded ) then 
+    if( ply.isloaded ) then 
         ply:Spectate( OBS_MODE_FIXED ) 
     else
         ply:UnSpectate() 

@@ -16,7 +16,7 @@ end)
 
 local scale = Quantum.Client.ResolutionScale
 local barW, barH = 400 * scale, 25 * scale
-local radius = 1 * scale
+local radius = 1.05 * scale
 local padding = 5 * scale
 local sw, sh = ScrW(), ScrH()
 

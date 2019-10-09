@@ -51,6 +51,7 @@ function menu.open( dt )
             surface.DrawRect( 0, 0, w, h )
         end
         f:SetDraggable( false )
+        f:ShowCloseButton( false )
         f:MakePopup()
         function f:OnClose()
             Quantum.Client.IsInMenu = false -- show the hud when closed
@@ -166,7 +167,7 @@ function menu.open( dt )
         -- create char button
         local cr = vgui.Create( "DButton", p )
         cr:SetText("Create New Character")
-        cr:SetFont( "q_text" )
+        cr:SetFont( "q_button" )
         cr:SetTextColor( Color( 0, 0, 0, 255 ) )
         cr:SizeToContents()
         cr.w, cr.h = cr:GetSize()
