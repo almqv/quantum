@@ -122,7 +122,7 @@ function menu.open( dt )
 
         local banner = vgui.Create( "DImage", p )
         banner:SetSize( 480 * resScale, 120 * resScale )
-        banner:SetImage( "../textures/server_banner.png" )
+        banner:SetImage( "content/materials/quantum/server_banner.png" )
         banner.w, banner.h = banner:GetSize()
         banner:SetPos( padding, padding )
 
