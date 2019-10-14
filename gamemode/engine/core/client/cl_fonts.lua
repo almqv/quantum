@@ -30,6 +30,12 @@ surface.CreateFont( "q_button", {
     antialias = true
 })
 
+surface.CreateFont( "q_button2", {
+    font = "Arial",
+    size = 35 * Quantum.Client.ResolutionScale,
+    antialias = true
+})
+
 surface.CreateFont( "q_charNameText", {
     font = "Arial",
     outline = true,

@@ -51,31 +51,43 @@ local pages = {
 		gbuttons.male = vgui.Create( "DButton", ip )
 		gbuttons.male:SetText( "M" )
 		gbuttons.male:SetTextColor( Color( 0, 0, 0, 255 ) )
-		gbuttons.male:SetFont( "q_button" )
+		gbuttons.male:SetFont( "q_button2" )
 		gbuttons.male:SizeToContents()
 		gbuttons.male.w, gbuttons.male.h = gbuttons.male:GetSize()
-		gbuttons.male:SetPos( 0, 0 )
+		gbuttons.male:SetPos( (ip.w/2 - padding) - gbuttons.male.w/2, ip.h/2 - gbuttons.male.h/2 )
+        gbuttons.male.x, gbuttons.male.y = gbuttons.male:GetPos()
 
 		local selectedGenderButton = gbuttons.male -- select itself
 
-		gbuttons.male.Paint = function( self ) 
+		gbuttons.male.Paint = function( self, w, h ) 
+            theme.sharpbutton( self ) 
 			if( selectedGenderButton == self ) then
-				theme.sharpbutton( self, Color( 255, 255, 255 ) ) 
+                surface.SetDrawColor( 100, 100, 100, 100 )
+                surface.DrawRect( 0, 0, w, h )
 			end
 		end
-
-		
+        gbuttons.male.DoClick = function( self )
+            selectedGenderButton = self
+            surface.PlaySound( "UI/buttonclick.wav" )
+        end
 
 		gbuttons.female = vgui.Create( "DButton", ip )
 		gbuttons.female:SetText( "F" )
 		gbuttons.female:SetTextColor( Color( 0, 0, 0, 255 ) )
-		gbuttons.female:SetFont( "q_button" )
-		gbuttons.female.Paint = function( self ) theme.sharpbutton( self ) end
-		gbuttons.female:SizeToContents()
+		gbuttons.female:SetFont( "q_button2" )
+		gbuttons.female.Paint = function( self, w, h ) 
+            theme.sharpbutton( self ) 
+			if( selectedGenderButton == self ) then
+                surface.SetDrawColor( 100, 100, 100, 100 )
+                surface.DrawRect( 0, 0, w, h )
+			end
+        end
+        gbuttons.female:SetSize( gbuttons.male:GetSize() )
 		gbuttons.female.w, gbuttons.female.h = gbuttons.female:GetSize()
-		gbuttons.female:SetPos( 50, 0 )
+		gbuttons.female:SetPos( (ip.w/2 + padding) + gbuttons.female.w/2, gbuttons.male.y )
 		gbuttons.female.DoClick = function( self ) 
-		
+            selectedGenderButton = self
+            surface.PlaySound( "UI/buttonclick.wav" )
 		end
 		
 
@@ -107,6 +119,12 @@ function menu.open( dt )
         local p, c = page.New( f, args )
         f.page = p
         f.page:SetVisible( true )
+
+        local banner = vgui.Create( "DImage", p )
+        banner:SetSize( 480 * resScale, 120 * resScale )
+        banner:SetImage( "../textures/server_banner.png" )
+        banner.w, banner.h = banner:GetSize()
+        banner:SetPos( padding, padding )
 
         local clist = vgui.Create( "DScrollPanel", p )
         clist:SetSize( 380 * resScale, sh - padding*15 )

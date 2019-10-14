@@ -11,6 +11,10 @@ if SERVER then
     AddCSLuaFile( "cl_init.lua" )
     AddCSLuaFile( "shared.lua" )
 
+    -- Content --
+    resource.AddFile("content/materials/quantum/server_banner.png")
+    -------------
+
     include( "shared.lua" )
 
     Quantum.Server = {}
