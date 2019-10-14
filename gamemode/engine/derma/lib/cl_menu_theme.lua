@@ -27,7 +27,7 @@ end
 
 function theme.panel( p, color )
     local w, h = p:GetSize()
-    local clr = color || Color( 0, 0, 0, 100 )
+    local clr = color || Color( 0, 0, 0, 200 )
     local bclr = Color( 50, 50, 50, 105 ) 
 
     draw.RoundedBox( 6, 0, 0, w, h, bclr ) -- border
@@ -36,7 +36,7 @@ end
 
 function theme.blurpanel( p, color )
     local w, h = p:GetSize()
-    local clr = color || Color( 0, 0, 0, 100 )
+    local clr = color || Color( 0, 0, 0, 200 )
     local bclr = Color( 50, 50, 50, 105 ) 
     renderBlur( p, 2, 7 )
 

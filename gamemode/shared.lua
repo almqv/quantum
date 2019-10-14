@@ -14,4 +14,4 @@ Quantum = {}
 
 include( "engine/sh_debug.lua" ) -- add the debug functions and stuff
 
-include( "settings/sh_models.lua" )
+include( "settings/sh_settings.lua" )

@@ -37,42 +37,68 @@ local pages = {
             p:Remove()
         end
 
+        local banner = vgui.Create( "DImage", p )
+        banner:SetImage( Quantum.Client.ServerBannerPath )
+        banner:SizeToContents()
+        banner.w, banner.h = banner:GetSize()
+        banner:SetSize( (banner.w * resScale)/2.8, (banner.h * resScale)/2.8 )
+        banner.w, banner.h = banner:GetSize()
+        banner:SetPos( (p.w - banner.w) + padding*2, 0 )
 
 		local ip = vgui.Create( "DPanel", p ) -- input panel
 		ip:SetSize( 400 * resScale, p.h * 0.9 )
 		ip.w, ip.h = ip:GetSize()
 		ip:SetPos( padding*4, p.h/2 - ip.h/2 )
 		ip.Paint = function( self ) theme.blurpanel(self) end
+        ip.x, ip.y = ip:GetPos()
+
+        local header = vgui.Create( "DLabel", p )
+        header:SetText( "Character Creation" )
+        header:SetFont( "q_header" )
+        header:SetTextColor( Color( 255, 255, 255, 255 ) )
+        header:SizeToContents()
+        header.w, header.h = header:GetSize()
+        header:SetPos( (ip.x + ip.w/2) - header.w/2, header.h/2 )
+
+        -- character model panel
+        local mdl = vgui.Create( "DModelPanel", p )
+		mdl:SetSize( 600 * resScale, 1000 * resScale )
+		mdl.w, mdl.h = mdl:GetSize()
+		mdl:SetPos( p.w/2 - mdl.w/2, p.h/2 - mdl.h/2 )
+		mdl:SetFOV( 55 )
+		function mdl:LayoutEntity( ent ) return end
 
 		local inputs = {}
 		
-		-- input panel contens --
-		local gbuttons = {}
-		gbuttons.male = vgui.Create( "DButton", ip )
-		gbuttons.male:SetText( "M" )
-		gbuttons.male:SetTextColor( Color( 0, 0, 0, 255 ) )
-		gbuttons.male:SetFont( "q_button2" )
-		gbuttons.male:SizeToContents()
-		gbuttons.male.w, gbuttons.male.h = gbuttons.male:GetSize()
-		gbuttons.male:SetPos( (ip.w/2 - padding) - gbuttons.male.w/2, ip.h/2 - gbuttons.male.h/2 )
-        gbuttons.male.x, gbuttons.male.y = gbuttons.male:GetPos()
-
-		local selectedGenderButton = gbuttons.male -- select itself
-
-		gbuttons.male.Paint = function( self, w, h ) 
-            theme.sharpbutton( self ) 
-			if( selectedGenderButton == self ) then
-                surface.SetDrawColor( 100, 100, 100, 100 )
-                surface.DrawRect( 0, 0, w, h )
-			end
-		end
-        gbuttons.male.DoClick = function( self )
-            selectedGenderButton = self
-            surface.PlaySound( "UI/buttonclick.wav" )
+        local name = vgui.Create( "DTextEntry", p )
+        name:SetText( "" )
+        name:SetFont( "q_button2" )
+        name:SetTextColor( Color( 255, 255, 255, 255 ) )
+        name:SetSize( 300 * resScale, 40 * resScale )
+        name.w, name.h = name:GetSize()
+        name:SetPos( p.w/2 - name.w/2, p.h*0.85 - name.h/2 )
+        name.Paint = function( self ) 
+            theme.blurpanel( self ) 
+            self:DrawTextEntryText( Color( 255, 255, 255, 255 ), Color( 150, 150, 150, 255 ), Color( 100, 100, 100, 255 ) )
         end
+        --function name:OnChange() inputs.name = self:GetValue() end
 
-		gbuttons.female = vgui.Create( "DButton", ip )
-		gbuttons.female:SetText( "F" )
+		-- input panel contens --
+
+        local rheader = vgui.Create( "DLabel", ip )
+        rheader:SetText("Select Race")
+        rheader:SetFont( "q_button2" )
+        rheader:SetTextColor( Color( 255, 255, 255, 255 ) )
+        rheader:SizeToContents()
+        rheader.w, rheader.h = rheader:GetSize()
+        rheader:SetPos( ip.w/2 - rheader.w/2, rheader.h )
+        rheader.x, rheader.y = rheader:GetPos()
+
+        local gbuttons = {}
+
+        gbuttons.female = vgui.Create( "DButton", ip )
+        local selectedGenderButton = gbuttons.female -- select itself
+		gbuttons.female:SetText( "Female" )
 		gbuttons.female:SetTextColor( Color( 0, 0, 0, 255 ) )
 		gbuttons.female:SetFont( "q_button2" )
 		gbuttons.female.Paint = function( self, w, h ) 
@@ -82,14 +108,48 @@ local pages = {
                 surface.DrawRect( 0, 0, w, h )
 			end
         end
-        gbuttons.female:SetSize( gbuttons.male:GetSize() )
+        gbuttons.female:SizeToContents()
 		gbuttons.female.w, gbuttons.female.h = gbuttons.female:GetSize()
-		gbuttons.female:SetPos( (ip.w/2 + padding) + gbuttons.female.w/2, gbuttons.male.y )
+		gbuttons.female:SetPos( padding, rheader.y + gbuttons.female.h + padding )
+        gbuttons.female.x, gbuttons.female.y = gbuttons.female:GetPos()
 		gbuttons.female.DoClick = function( self ) 
-            selectedGenderButton = self
-            surface.PlaySound( "UI/buttonclick.wav" )
+            if( selectedGenderButton ~= self ) then
+                selectedGenderButton = self
+                surface.PlaySound( "UI/buttonclick.wav" )
+            end
 		end
+
+		gbuttons.male = vgui.Create( "DButton", ip )
+		gbuttons.male:SetText( "Male" )
+		gbuttons.male:SetTextColor( Color( 0, 0, 0, 255 ) )
+		gbuttons.male:SetFont( "q_button2" )
+		gbuttons.male:SetSize( gbuttons.female:GetSize() )
+		gbuttons.male.w, gbuttons.male.h = gbuttons.male:GetSize()
+		gbuttons.male:SetPos( (ip.w/2 - padding) - gbuttons.male.w/2, ip.h/2 - gbuttons.male.h/2 )
+
+		gbuttons.male.Paint = function( self, w, h ) 
+            theme.sharpbutton( self ) 
+			if( selectedGenderButton == self ) then
+                surface.SetDrawColor( 100, 100, 100, 100 )
+                surface.DrawRect( 0, 0, w, h )
+			end
+		end
+        gbuttons.male.DoClick = function( self )
+            if( selectedGenderButton ~= self ) then
+                selectedGenderButton = self
+                surface.PlaySound( "UI/buttonclick.wav" )
+            end
+        end
+
 		
+		
+        --- set the model
+        mdl:SetModel( Quantum.Models.Player.Male[1] ) -- set the char model
+		local minv, maxv = mdl.Entity:GetRenderBounds()
+		local eyepos = mdl.Entity:GetBonePosition( mdl.Entity:LookupBone( "ValveBiped.Bip01_Head1" ) )
+		eyepos:Add( Vector( 40, 0, -15 ) )
+		mdl:SetCamPos( eyepos - Vector( -10, 0, -2 ) )
+		mdl:SetLookAt( eyepos )
 
         return p, c
     end
@@ -126,7 +186,7 @@ function menu.open( dt )
         clist:SetPos( (sw - clist.w) - padding*2, padding*6 )
         clist.x, clist.y = clist:GetPos()
         clist.Paint = function( self, w, h )
-            theme.blurpanel( self, Color( 0, 0, 0, 200 ) )
+            theme.blurpanel( self )
         end
 
         local sbar = clist:GetVBar()
