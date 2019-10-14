@@ -12,8 +12,8 @@ if SERVER then
     AddCSLuaFile( "shared.lua" )
 
     -- Content --
-    resource.AddFile("content/materials/quantum/server_banner.png")
-    -------------
+    local path = "gamemodes/" .. GM.FolderName .. "/gamemode/content/materials/quantum/server_banner.png"
+    resource.AddSingleFile( path )
 
     include( "shared.lua" )
 

@@ -120,12 +120,6 @@ function menu.open( dt )
         f.page = p
         f.page:SetVisible( true )
 
-        local banner = vgui.Create( "DImage", p )
-        banner:SetSize( 480 * resScale, 120 * resScale )
-        banner:SetImage( "content/materials/quantum/server_banner.png" )
-        banner.w, banner.h = banner:GetSize()
-        banner:SetPos( padding, padding )
-
         local clist = vgui.Create( "DScrollPanel", p )
         clist:SetSize( 380 * resScale, sh - padding*15 )
         clist.w, clist.h = clist:GetSize()
@@ -147,6 +141,13 @@ function menu.open( dt )
             f:Close() 
         end
         ---
+
+        local banner = vgui.Create( "DImage", p )
+        banner:SetImage( Quantum.Client.ServerBannerPath )
+        banner:SizeToContents()
+        banner.w, banner.h = banner:GetSize()
+        banner:SetSize( (banner.w * resScale)/2.8, (banner.h * resScale)/2.8 )
+        banner:SetPos( padding, padding )
 
         local header = vgui.Create( "DLabel", p )
         header:SetText( "Characters" )
