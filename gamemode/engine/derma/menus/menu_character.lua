@@ -141,12 +141,11 @@ local pages = {
             end
         end
 
-		
-		
         --- set the model
         mdl:SetModel( Quantum.Models.Player.Male[1] ) -- set the char model
-		local minv, maxv = mdl.Entity:GetRenderBounds()
-		local eyepos = mdl.Entity:GetBonePosition( mdl.Entity:LookupBone( "ValveBiped.Bip01_Head1" ) )
+        local minv, maxv = mdl.Entity:GetRenderBounds()
+        local ent = mdl.Entity
+		local eyepos = ent:GetBonePosition( ent:LookupBone( "ValveBiped.Bip01_Head1" ) )
 		eyepos:Add( Vector( 40, 0, -15 ) )
 		mdl:SetCamPos( eyepos - Vector( -10, 0, -2 ) )
 		mdl:SetLookAt( eyepos )
