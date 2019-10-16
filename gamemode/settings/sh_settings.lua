@@ -29,6 +29,10 @@ Quantum.Models = {
                 "models/player/group01/female_05.mdl",
                 "models/player/group01/female_06.mdl"
             }
+        },
+        Nobleman = {
+            Male = { "models/player/breen.mdl" },
+            Female = { "models/player/alyx.mdl" }
         }
     }
 }
@@ -42,7 +46,7 @@ Quantum.Classes = {
     Nobleman = {
         Name = "Nobleman",
         Desc = "A nobleman is someone who originates from a family of wealth and power and tend to look down upon those who are not 'fit' in their eyes. They often expects everyone to do their bidding without question.",
-        Models = Quantum.Models.Player.Citizen -- change this to better models
+        Models = Quantum.Models.Player.Nobleman -- change this to better models
     },
     Worker = {
         Name = "Worker",

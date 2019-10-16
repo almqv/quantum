@@ -24,7 +24,13 @@ local function getClassModels( class )
     end
 end
 local function getMaxModel( tbl, index ) return tbl[math.Clamp( index, 1, #tbl )] end
-
+local function renderSelectedButton( b, sel ) 
+    if( sel ) then
+        b:SetTextColor( Color( 252, 248, 212 ) )
+    else
+        b:SetTextColor( Color( 255, 255, 255 ) )
+    end
+end
 
 local pages = {
     charCreate = function( parent )
@@ -116,10 +122,7 @@ local pages = {
 		gbuttons.female:SetFont( "q_button2" )
 		gbuttons.female.Paint = function( self, w, h ) 
             theme.sharpbutton( self ) 
-			if( selectedGenderButton == self ) then
-                surface.SetDrawColor( 100, 100, 100, 100 )
-                surface.DrawRect( 0, 0, w, h )
-			end
+            renderSelectedButton( self, selectedGenderButton == self ) 
         end
         gbuttons.female:SizeToContents()
 		gbuttons.female.w, gbuttons.female.h = gbuttons.female:GetSize()
@@ -144,10 +147,7 @@ local pages = {
 
 		gbuttons.male.Paint = function( self, w, h ) 
             theme.sharpbutton( self ) 
-			if( selectedGenderButton == self ) then
-                surface.SetDrawColor( 100, 100, 100, 100 )
-                surface.DrawRect( 0, 0, w, h )
-			end
+			renderSelectedButton( self, selectedGenderButton == self ) 
 		end
         gbuttons.male.DoClick = function( self )
             if( selectedGenderButton ~= self ) then
@@ -167,7 +167,7 @@ local pages = {
 
         local classButtons = {}
         local classCount = 0
-        for n, class in pairs( Quantum.Classes ) do
+        for id, class in pairs( Quantum.Classes ) do
             classCount = classCount + 1 -- keep count
             classButtons[classCount] = vgui.Create( "DButton", cscroll )
             classButtons[classCount].class = class
@@ -181,8 +181,8 @@ local pages = {
             classButtons[classCount]:SetPos( cscroll.w/2 - classButtons[classCount].w/2, (classCount-1) * ( padding + classButtons[classCount].h ) )
             classButtons[classCount].Paint = function( self ) theme.sharpbutton( self, Color( 0, 0, 0, 0 ) ) end
             classButtons[classCount].DoClick = function( self )
-                if( inputs.class ~= class ) then
-                    inputs.class = class
+                if( inputs.class ~= id ) then
+                    inputs.class = id
                     surface.PlaySound( "UI/buttonclick.wav" )
                 end
             end
@@ -198,8 +198,9 @@ local pages = {
 		mdl:SetLookAt( eyepos )
 
         mdl.Think = function( self )
-            if( self:GetModel() ~= getMaxModel( getClassModels( inputs.class )[inputs.gender], inputs.modelIndex ) ) then  
-                self:SetModel( getMaxModel( getClassModels( inputs.class )[inputs.gender], inputs.modelIndex ) )
+            --getClassModels(inputs.class)
+            if( self:GetModel() ~= getMaxModel( getClassModels(inputs.class)[inputs.gender], inputs.modelIndex ) ) then  
+                self:SetModel( getMaxModel( getClassModels(inputs.class)[inputs.gender], inputs.modelIndex ) )
             end
         end
 
