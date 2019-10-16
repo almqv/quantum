@@ -16,6 +16,8 @@ local sw, sh = ScrW(), ScrH()
 local padding = 10 * resScale
 local padding_s = 4 * resScale
 
+local function getMaxModel( tbl, index ) return tbl[math.Clamp( index, 1, #tbl )] end
+
 
 local pages = {
     charCreate = function( parent )
@@ -68,7 +70,12 @@ local pages = {
 		mdl:SetFOV( 55 )
 		function mdl:LayoutEntity( ent ) return end
 
-		local inputs = {}
+		local inputs = {
+            gender = "Male",
+            class = "Citizen",
+            modelIndex = 1,
+            name = ""
+        }
 		
         local name = vgui.Create( "DTextEntry", p )
         name:SetText( "" )
@@ -81,12 +88,11 @@ local pages = {
             theme.blurpanel( self ) 
             self:DrawTextEntryText( Color( 255, 255, 255, 255 ), Color( 150, 150, 150, 255 ), Color( 100, 100, 100, 255 ) )
         end
-        --function name:OnChange() inputs.name = self:GetValue() end
 
 		-- input panel contens --
 
         local rheader = vgui.Create( "DLabel", ip )
-        rheader:SetText("Select Race")
+        rheader:SetText("Select Model")
         rheader:SetFont( "q_button2" )
         rheader:SetTextColor( Color( 255, 255, 255, 255 ) )
         rheader:SizeToContents()
@@ -115,6 +121,7 @@ local pages = {
 		gbuttons.female.DoClick = function( self ) 
             if( selectedGenderButton ~= self ) then
                 selectedGenderButton = self
+                inputs.gender = "Female"
                 surface.PlaySound( "UI/buttonclick.wav" )
             end
 		end
@@ -138,19 +145,46 @@ local pages = {
         gbuttons.male.DoClick = function( self )
             if( selectedGenderButton ~= self ) then
                 selectedGenderButton = self
+                inputs.gender = "Male"
                 surface.PlaySound( "UI/buttonclick.wav" )
             end
+        end
+        --- Class buttons ---
+
+        local cscroll = vgui.Create( "DScrollPanel", ip )
+        cscroll:SetSize( ip.w, ip.h/2 )
+        cscroll.w, cscroll.h = cscroll:GetSize()
+        cscroll:SetPos( 0, ip.h/5 )
+        --cscroll.Paint = function( self ) theme.panel( self ) end
+        cscroll:GetVBar():SetSize( 0, 0 )
+
+        local classButtons = {}
+        local classCount = 0
+        for n, class in pairs( Quantum.Classes ) do
+            classCount = classCount + 1 -- keep count
+            classButtons[classCount] = vgui.Create( "DButton", cscroll )
+            classButtons[classCount]:SetText( class.Name )
+            classButtons[classCount]:SetFont( "q_button2" )
+            classButtons[classCount]:SetTextColor( Color( 255, 255, 255, 255 ) )
+            classButtons[classCount]:SizeToContents()
+            classButtons[classCount].Paint = function( self ) theme.sharpbutton( self, Color( 20, 20, 120, 100 ) ) end
         end
 
 		
 		
         --- set the model
-        mdl:SetModel( Quantum.Models.Player.Male[1] ) -- set the char model
+        mdl:SetModel( Quantum.Models.Player.Citizen.Male[math.random(1, #Quantum.Models.Player.Citizen.Male)] ) -- set the char model
 		local minv, maxv = mdl.Entity:GetRenderBounds()
 		local eyepos = mdl.Entity:GetBonePosition( mdl.Entity:LookupBone( "ValveBiped.Bip01_Head1" ) )
 		eyepos:Add( Vector( 40, 0, -15 ) )
 		mdl:SetCamPos( eyepos - Vector( -10, 0, -2 ) )
 		mdl:SetLookAt( eyepos )
+
+        mdl.Think = function( self )
+            if( self:GetModel() ~= getMaxModel( Quantum.Models.Player[inputs.class][inputs.gender], inputs.modelIndex ) ) then  
+                self:SetModel( getMaxModel( Quantum.Models.Player[inputs.class][inputs.gender], inputs.modelIndex ) )
+            end
+        end
 
         return p, c
     end
