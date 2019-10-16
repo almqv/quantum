@@ -110,7 +110,7 @@ local pages = {
         end
         gbuttons.female:SizeToContents()
 		gbuttons.female.w, gbuttons.female.h = gbuttons.female:GetSize()
-		gbuttons.female:SetPos( padding, rheader.y + gbuttons.female.h + padding )
+		gbuttons.female:SetPos( (ip.w - gbuttons.female.w) - padding - gbuttons.female.w/2, rheader.y + gbuttons.female.h + padding )
         gbuttons.female.x, gbuttons.female.y = gbuttons.female:GetPos()
 		gbuttons.female.DoClick = function( self ) 
             if( selectedGenderButton ~= self ) then
@@ -120,12 +120,13 @@ local pages = {
 		end
 
 		gbuttons.male = vgui.Create( "DButton", ip )
+        selectedGenderButton = gbuttons.male
 		gbuttons.male:SetText( "Male" )
 		gbuttons.male:SetTextColor( Color( 0, 0, 0, 255 ) )
 		gbuttons.male:SetFont( "q_button2" )
 		gbuttons.male:SetSize( gbuttons.female:GetSize() )
-		gbuttons.male.w, gbuttons.male.h = gbuttons.male:GetSize()
-		gbuttons.male:SetPos( (ip.w/2 - padding) - gbuttons.male.w/2, ip.h/2 - gbuttons.male.h/2 )
+		gbuttons.male.w, gbuttons.male.h = gbuttons.male:GetSize() 
+		gbuttons.male:SetPos( padding + gbuttons.male.w/2, rheader.y + gbuttons.male.h + padding )
 
 		gbuttons.male.Paint = function( self, w, h ) 
             theme.sharpbutton( self ) 
