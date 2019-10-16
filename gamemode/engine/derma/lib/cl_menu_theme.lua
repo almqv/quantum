@@ -62,14 +62,13 @@ function theme.sharpbutton( b, inClr )
     local w, h = b:GetSize()
     inClr = inClr || Color( 235, 64, 52, 255 )
 
-    if( b:IsHovered() ) then
+    if( !b:IsHovered() ) then
         surface.SetDrawColor( 205, 205, 205, 255 )
     else
-        surface.SetDrawColor( 50, 50, 50, 255 )
+        surface.SetDrawColor( 120, 120, 120, 255 )
     end
 
-    
-    surface.DrawRect( 0, 0, w, h )
+    surface.DrawOutlinedRect( 0, 0, w, h )
 
     surface.SetDrawColor( inClr )
     surface.DrawRect( padding_s/2, padding_s/2, w - padding_s, h - padding_s )

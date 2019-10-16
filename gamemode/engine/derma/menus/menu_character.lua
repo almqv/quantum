@@ -16,6 +16,13 @@ local sw, sh = ScrW(), ScrH()
 local padding = 10 * resScale
 local padding_s = 4 * resScale
 
+local function getClassModels( class ) 
+    if( Quantum.Classes[class] ) then 
+        return Quantum.Classes[class].Models 
+    else
+        Quantum.Error( "Unable to get models from class[" .. tostring( class ) .. "]." )
+    end
+end
 local function getMaxModel( tbl, index ) return tbl[math.Clamp( index, 1, #tbl )] end
 
 
@@ -72,7 +79,7 @@ local pages = {
 
 		local inputs = {
             gender = "Male",
-            class = "Citizen",
+            class = "Worker",
             modelIndex = 1,
             name = ""
         }
@@ -92,7 +99,7 @@ local pages = {
 		-- input panel contens --
 
         local rheader = vgui.Create( "DLabel", ip )
-        rheader:SetText("Select Model")
+        rheader:SetText("Select Class")
         rheader:SetFont( "q_button2" )
         rheader:SetTextColor( Color( 255, 255, 255, 255 ) )
         rheader:SizeToContents()
@@ -105,7 +112,7 @@ local pages = {
         gbuttons.female = vgui.Create( "DButton", ip )
         local selectedGenderButton = gbuttons.female -- select itself
 		gbuttons.female:SetText( "Female" )
-		gbuttons.female:SetTextColor( Color( 0, 0, 0, 255 ) )
+		gbuttons.female:SetTextColor( Color( 255, 255, 255, 255 ) )
 		gbuttons.female:SetFont( "q_button2" )
 		gbuttons.female.Paint = function( self, w, h ) 
             theme.sharpbutton( self ) 
@@ -163,11 +170,22 @@ local pages = {
         for n, class in pairs( Quantum.Classes ) do
             classCount = classCount + 1 -- keep count
             classButtons[classCount] = vgui.Create( "DButton", cscroll )
+            classButtons[classCount].class = class
             classButtons[classCount]:SetText( class.Name )
             classButtons[classCount]:SetFont( "q_button2" )
             classButtons[classCount]:SetTextColor( Color( 255, 255, 255, 255 ) )
             classButtons[classCount]:SizeToContents()
-            classButtons[classCount].Paint = function( self ) theme.sharpbutton( self, Color( 20, 20, 120, 100 ) ) end
+            classButtons[classCount].w, classButtons[classCount].h = classButtons[classCount]:GetSize()
+            classButtons[classCount]:SetSize( ip.w - padding*2, classButtons[classCount].h )
+            classButtons[classCount].w, classButtons[classCount].h = classButtons[classCount]:GetSize()
+            classButtons[classCount]:SetPos( cscroll.w/2 - classButtons[classCount].w/2, (classCount-1) * ( padding + classButtons[classCount].h ) )
+            classButtons[classCount].Paint = function( self ) theme.sharpbutton( self, Color( 0, 0, 0, 0 ) ) end
+            classButtons[classCount].DoClick = function( self )
+                if( inputs.class ~= class ) then
+                    inputs.class = class
+                    surface.PlaySound( "UI/buttonclick.wav" )
+                end
+            end
         end
 
         --- set the model
@@ -180,8 +198,8 @@ local pages = {
 		mdl:SetLookAt( eyepos )
 
         mdl.Think = function( self )
-            if( self:GetModel() ~= getMaxModel( Quantum.Models.Player[inputs.class][inputs.gender], inputs.modelIndex ) ) then  
-                self:SetModel( getMaxModel( Quantum.Models.Player[inputs.class][inputs.gender], inputs.modelIndex ) )
+            if( self:GetModel() ~= getMaxModel( getClassModels( inputs.class )[inputs.gender], inputs.modelIndex ) ) then  
+                self:SetModel( getMaxModel( getClassModels( inputs.class )[inputs.gender], inputs.modelIndex ) )
             end
         end
 

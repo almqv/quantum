@@ -34,8 +34,19 @@ Quantum.Models = {
 }
 
 Quantum.Classes = {
-    Citizen = {
-        Name = "Downtown Citizen",
+    Commoner = { -- id
+        Name = "Commoner",
+        Desc = "Someone who lives in a city.",
         Models = Quantum.Models.Player.Citizen
+    },
+    Nobleman = {
+        Name = "Nobleman",
+        Desc = "A nobleman is someone who originates from a family of wealth and power and tend to look down upon those who are not 'fit' in their eyes. They often expects everyone to do their bidding without question.",
+        Models = Quantum.Models.Player.Citizen -- change this to better models
+    },
+    Worker = {
+        Name = "Worker",
+        Desc = "A worker is someone who is in the working-class and come from a poor family but has learned the secret of life; how to work hard and earn what you want.",
+        Models = Quantum.Models.Player.Citizen -- change this to better models
     }
 }
