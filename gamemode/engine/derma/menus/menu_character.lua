@@ -15,6 +15,7 @@ local resScale = Quantum.Client.ResolutionScale
 local sw, sh = ScrW(), ScrH()
 local padding = 10 * resScale
 local padding_s = 4 * resScale
+local errorMdl = "models/player.mdl"
 
 local function getClassModels( class ) 
     if( Quantum.Classes[class] ) then 
@@ -26,9 +27,34 @@ end
 local function getMaxModel( tbl, index ) return tbl[math.Clamp( index, 1, #tbl )] end
 local function renderSelectedButton( b, sel ) 
     if( sel ) then
-        b:SetTextColor( Color( 252, 248, 212 ) )
+        b:SetTextColor( Color( 255, 239, 158 ) )
     else
         b:SetTextColor( Color( 255, 255, 255 ) )
+    end
+end
+
+local function renderModelIcons( modelsButtons, parent )
+    local modelCount = 0
+    for id, model in pairs( getClassModels( inputs.class )[inputs.gender] ) do
+        modelCount = modelCount + 1
+        modelsButtons[modelCount] = vgui.Create( "SpawnIcon", parent )
+        modelsButtons[modelCount].index = modelCount
+        modelsButtons[modelCount]:SetSize( 100 * resScale, 100 * resScale )
+        modelsButtons[modelCount].w, modelsButtons[modelCount].h = modelsButtons[modelCount]:GetSize()
+        modelsButtons[modelCount]:SetPos( 0, modelsButtons[modelCount].h * (modelCount-1) )
+        modelsButtons[modelCount]:SetModel( model )
+        modelsButtons[modelCount].model = model
+    --    modelsButtons[modelCount].Paint = function( self )
+    --        theme.sharpbutton( self, Color( 0, 0, 0, 0 ) )
+    --    end
+        modelsButtons[modelCount].Think = function( self ) -- a bit inefficient but it works
+            print( getClassModels( inputs.class )[inputs.gender][self.index], self.model )
+            -- set the new models
+            if( getClassModels( inputs.class )[inputs.gender][self.index] ~= self.model ) then
+                print( "###:" ,getClassModels( inputs.class )[inputs.gender][modelCount] )
+                self:SetModel( getClassModels( inputs.class )[inputs.gender][modelCount] || errorMdl )
+            end
+        end
     end
 end
 
@@ -121,7 +147,7 @@ local pages = {
 		gbuttons.female:SetTextColor( Color( 255, 255, 255, 255 ) )
 		gbuttons.female:SetFont( "q_button2" )
 		gbuttons.female.Paint = function( self, w, h ) 
-            theme.sharpbutton( self ) 
+            theme.sharpbutton( self,  Color( 0, 0, 0, 0 ) ) 
             renderSelectedButton( self, selectedGenderButton == self ) 
         end
         gbuttons.female:SizeToContents()
@@ -146,7 +172,7 @@ local pages = {
 		gbuttons.male:SetPos( padding + gbuttons.male.w/2, rheader.y + gbuttons.male.h + padding )
 
 		gbuttons.male.Paint = function( self, w, h ) 
-            theme.sharpbutton( self ) 
+            theme.sharpbutton( self,  Color( 0, 0, 0, 0 ) ) 
 			renderSelectedButton( self, selectedGenderButton == self ) 
 		end
         gbuttons.male.DoClick = function( self )
@@ -159,10 +185,10 @@ local pages = {
         --- Class buttons ---
 
         local cscroll = vgui.Create( "DScrollPanel", ip )
-        cscroll:SetSize( ip.w, ip.h/2 )
+        cscroll:SetSize( ip.w, ip.h/5 )
         cscroll.w, cscroll.h = cscroll:GetSize()
-        cscroll:SetPos( 0, ip.h/5 )
-        --cscroll.Paint = function( self ) theme.panel( self ) end
+        cscroll:SetPos( 0, ip.h/6 )
+        cscroll.x, cscroll.y = cscroll:GetPos()
         cscroll:GetVBar():SetSize( 0, 0 )
 
         local classButtons = {}
@@ -170,7 +196,7 @@ local pages = {
         for id, class in pairs( Quantum.Classes ) do
             classCount = classCount + 1 -- keep count
             classButtons[classCount] = vgui.Create( "DButton", cscroll )
-            classButtons[classCount].class = class
+            classButtons[classCount].class = id
             classButtons[classCount]:SetText( class.Name )
             classButtons[classCount]:SetFont( "q_button2" )
             classButtons[classCount]:SetTextColor( Color( 255, 255, 255, 255 ) )
@@ -179,7 +205,10 @@ local pages = {
             classButtons[classCount]:SetSize( ip.w - padding*2, classButtons[classCount].h )
             classButtons[classCount].w, classButtons[classCount].h = classButtons[classCount]:GetSize()
             classButtons[classCount]:SetPos( cscroll.w/2 - classButtons[classCount].w/2, (classCount-1) * ( padding + classButtons[classCount].h ) )
-            classButtons[classCount].Paint = function( self ) theme.sharpbutton( self, Color( 0, 0, 0, 0 ) ) end
+            classButtons[classCount].Paint = function( self ) 
+                theme.sharpbutton( self, Color( 0, 0, 0, 0 ) ) 
+                renderSelectedButton( self, inputs.class == self.class ) 
+            end
             classButtons[classCount].DoClick = function( self )
                 if( inputs.class ~= id ) then
                     inputs.class = id
@@ -188,7 +217,16 @@ local pages = {
             end
         end
 
-        --- set the model
+        --- Model selector ---
+        local mscroll = vgui.Create( "DScrollPanel", ip )
+        mscroll:SetSize( ip.w, ip.h/1.6 )
+        mscroll.w, mscroll.h = mscroll:GetSize()
+        mscroll:SetPos( 0, ip.h - mscroll.h )
+        mscroll:GetVBar():SetSize( 0, 0 )
+        mscroll.Paint = function( self ) theme.panel( self ) end -- temp
+
+
+        --- Model viewer
         mdl:SetModel( Quantum.Models.Player.Citizen.Male[math.random(1, #Quantum.Models.Player.Citizen.Male)] ) -- set the char model
         local minv, maxv = mdl.Entity:GetRenderBounds()
         local ent = mdl.Entity
@@ -275,7 +313,6 @@ function menu.open( dt )
         
         local cpanels = {}
         local selectedChar 
-        local errorMdl = "models/player.mdl"
 
 		if( selectedChar ) then
 			-- Char model
