@@ -49,6 +49,20 @@ local function getNextIndex( index, isNext, min, max )
     end
 end
 
+local function checkNameString( name )
+    local strTbl = string.Explode( "", name )
+    for i, char in pairs( strTbl ) do
+        if( i == 1 || strTbl[ math.Clamp( i-1, 1, #strTbl ) ] == " " ) then -- if it is the first letter then make it a capital one
+            strTbl[i] = string.upper( char ) -- or if it is a space inbetween make it a capital one aswell
+        end
+        for n, char_ in pairs( strTbl ) do
+            if( n >= #strTbl && char == " " && strTbl[n-1] ~= " " ) then strTbl[i] = nil end -- remove the spaces at the end
+        end
+    end
+    PrintTable( strTbl )
+    print( #strTbl >= 3 )
+end
+
 local pages = {
     charCreate = function( parent )
         local pW, pH = parent:GetSize()
@@ -119,6 +133,9 @@ local pages = {
         name.Paint = function( self ) 
             theme.blurpanel( self ) 
             self:DrawTextEntryText( Color( 255, 255, 255, 255 ), Color( 150, 150, 150, 255 ), Color( 100, 100, 100, 255 ) )
+        end
+        name.OnEnter = function()
+            checkNameString( name:GetText() )
         end
 
 		-- input panel contens --
