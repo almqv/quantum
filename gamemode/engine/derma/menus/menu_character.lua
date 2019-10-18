@@ -33,28 +33,19 @@ local function renderSelectedButton( b, sel )
     end
 end
 
-local function renderModelIcons( modelsButtons, parent )
-    local modelCount = 0
-    for id, model in pairs( getClassModels( inputs.class )[inputs.gender] ) do
-        modelCount = modelCount + 1
-        modelsButtons[modelCount] = vgui.Create( "SpawnIcon", parent )
-        modelsButtons[modelCount].index = modelCount
-        modelsButtons[modelCount]:SetSize( 100 * resScale, 100 * resScale )
-        modelsButtons[modelCount].w, modelsButtons[modelCount].h = modelsButtons[modelCount]:GetSize()
-        modelsButtons[modelCount]:SetPos( 0, modelsButtons[modelCount].h * (modelCount-1) )
-        modelsButtons[modelCount]:SetModel( model )
-        modelsButtons[modelCount].model = model
-    --    modelsButtons[modelCount].Paint = function( self )
-    --        theme.sharpbutton( self, Color( 0, 0, 0, 0 ) )
-    --    end
-        modelsButtons[modelCount].Think = function( self ) -- a bit inefficient but it works
-            print( getClassModels( inputs.class )[inputs.gender][self.index], self.model )
-            -- set the new models
-            if( getClassModels( inputs.class )[inputs.gender][self.index] ~= self.model ) then
-                print( "###:" ,getClassModels( inputs.class )[inputs.gender][modelCount] )
-                self:SetModel( getClassModels( inputs.class )[inputs.gender][modelCount] || errorMdl )
-            end
-        end
+local function getNextIndex( index, isNext, min, max )
+    if( isNext ) then
+        if( index + 1 > max ) then 
+            return min -- integer overflow LUL
+        else
+            return index + 1
+        end 
+    else
+        if( index - 1 < min ) then -- integer underflow 
+            return max
+        else
+            return index - 1
+        end 
     end
 end
 
@@ -106,6 +97,7 @@ local pages = {
 		mdl:SetSize( 600 * resScale, 1000 * resScale )
 		mdl.w, mdl.h = mdl:GetSize()
 		mdl:SetPos( p.w/2 - mdl.w/2, p.h/2 - mdl.h/2 )
+        mdl.x, mdl.y = mdl:GetPos()
 		mdl:SetFOV( 55 )
 		function mdl:LayoutEntity( ent ) return end
 
@@ -117,7 +109,8 @@ local pages = {
         }
 		
         local name = vgui.Create( "DTextEntry", p )
-        name:SetText( "" )
+        name:SetPlaceholderText( "Character Name" )
+        name:SetPlaceholderColor( Color( 100, 100, 100, 100 ) )
         name:SetFont( "q_button2" )
         name:SetTextColor( Color( 255, 255, 255, 255 ) )
         name:SetSize( 300 * resScale, 40 * resScale )
@@ -218,6 +211,33 @@ local pages = {
         end
 
         --- Model selector ---
+        local pmodel = vgui.Create( "DButton", p ) -- previous model
+        pmodel:SetText( "< Prev. Model" )
+        pmodel:SetFont( "q_button_m" )
+        pmodel:SetTextColor( Color( 255, 255, 255, 255 ) )
+        pmodel:SizeToContents()
+        pmodel.w, pmodel.h = pmodel:GetSize()
+        pmodel:SetPos( (mdl.x - pmodel.w) + padding*10, (mdl.y + mdl.h/2) - pmodel.h/2 )
+        pmodel.Paint = function( self ) theme.sharpbutton( self, Color( 0, 0, 0, 100 ) ) end
+        pmodel.DoClick = function( self )
+            surface.PlaySound( "UI/buttonclick.wav" )
+            inputs.modelIndex = getNextIndex( inputs.modelIndex, false, 1, #getClassModels( inputs.class )[inputs.gender] )
+        end
+
+        local nmodel = vgui.Create( "DButton", p ) -- next model
+        nmodel:SetText( "Next Model >" )
+        nmodel:SetFont( "q_button_m" )
+        nmodel:SetTextColor( Color( 255, 255, 255, 255 ) )
+        nmodel:SetSize( pmodel.w, pmodel.h )
+        nmodel.w, nmodel.h = nmodel:GetSize()
+        nmodel:SetPos( (mdl.x + mdl.w) - padding*10, (mdl.y + mdl.h/2) - nmodel.h/2 )
+        nmodel.Paint = function( self ) theme.sharpbutton( self, Color( 0, 0, 0, 100 ) ) end
+        nmodel.DoClick = function( self )
+            surface.PlaySound( "UI/buttonclick.wav" )
+            inputs.modelIndex = getNextIndex( inputs.modelIndex, true, 1, #getClassModels( inputs.class )[inputs.gender] )
+        end
+
+        -- Class info --
         local mscroll = vgui.Create( "DScrollPanel", ip )
         mscroll:SetSize( ip.w, ip.h/1.6 )
         mscroll.w, mscroll.h = mscroll:GetSize()
