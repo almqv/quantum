@@ -258,7 +258,9 @@ local pages = {
         mscroll.w, mscroll.h = mscroll:GetSize()
         mscroll:SetPos( 0, ip.h - mscroll.h )
         mscroll:GetVBar():SetSize( 0, 0 )
-        mscroll.Paint = function( self ) theme.panel( self ) end -- temp
+        mscroll.Paint = function( self ) theme.panel( self ) 
+            theme.borderpanel( self )
+        end 
 
 
         --- Model viewer

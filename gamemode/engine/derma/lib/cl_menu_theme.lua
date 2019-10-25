@@ -25,6 +25,14 @@ local function renderBlur( p, a, d )
 	end
 end
 
+function theme.borderpanel( p, color )
+    local w, h = p:GetSize()
+    local clr = color || Color( 20, 20, 20, 100 )
+
+    surface.SetDrawColor( clr )
+    surface.DrawOutlinedRect( 0, 0, w, h )
+end
+
 function theme.panel( p, color )
     local w, h = p:GetSize()
     local clr = color || Color( 0, 0, 0, 200 )
