@@ -15,9 +15,13 @@ Quantum.Client.Menu.GetAPI = function( lib ) return include( libs[lib] ) end
 
 net.Receive( "quantum_menu_net", function( len, pl ) 
     local dt = net.ReadTable() -- TO DO: merge datatable with cached ( if same id/type )
+    if( Quantum.Client.Cache[dt.id] ~= nil && #Quantum.Client.Cache[dt.id] >= 1 ) then 
+        table.Merge( dt, Quantum.Client.Cache[dt.id] )
+    end
+    Quantum.Client.Cache[dt.id] = dt || { id = dt.id }
 
     if( Quantum.Client.EnableDebug ) then -- debug
-        Quantum.Debug( "Datatable size: " .. len/8 .. " bytes" )
+        Quantum.Debug( "Datatable size: " .. len .. "b (" .. len/8 .. "B)" )
         Quantum.Debug( "--Datatable contents--")
         PrintTable( dt ) 
         Quantum.Debug( "--End of datatable contens--" )

@@ -9,6 +9,7 @@ if CLIENT then
     include( "shared.lua" )
     --local gmfolder = GAMEMODE.FolderName || GM.FolderName
     Quantum.Client = {}
+    Quantum.Client.Cache = {}
     Quantum.Client.ResolutionScale = ScrH() / 1080
     Quantum.Client.ServerBannerPath = "gamemodes/" .. GM.FolderName .. "/gamemode/content/materials/quantum/server_banner.png" 
 
