@@ -59,8 +59,6 @@ local function checkNameString( name )
             if( n >= #strTbl && char == " " && strTbl[n-1] ~= " " ) then strTbl[i] = nil end -- remove the spaces at the end
         end
     end
-    PrintTable( strTbl )
-    print( #strTbl >= 3 )
 end
 
 local pages = {
