@@ -54,13 +54,17 @@ function Quantum.Net.OpenMenu( pl, type, dt )
 end
 
 local funcs = {
-	["createChar"] = true
+	["createChar"] = true,
+	["enterWorldChar"] = true
 }
 
 local netfuncs = {
 	createChar = function( pl, args )
 		pl.charcount = Quantum.Server.Char.GetCharCount( pl ) 
 		Quantum.Server.Char.Load( pl, pl.charcount + 1, args )
+	end,
+	enterWorldChar = function( pl, args )
+		Quantum.Server.Char.SetCurrentCharacter( pl, args.index )
 	end
 }
 

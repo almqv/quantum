@@ -59,19 +59,21 @@ function Quantum.Server.Char.GetCurrentCharacter( pl )
 end
 
 local function setupCharacter( pl, char )
+    pl:Respawn()
     pl:SetMaxHealth( char.maxhealth )
     pl:SetHealth( char.health )
     pl:SetModel( char.model )
 end
 
 function Quantum.Server.Char.SetCurrentCharacter( pl, index )
-    local id = pl:SteamID() .. ":" .. index
+    local id = pl:SteamID() .. ";" .. index
     if( Quantum.Server.Char.Players[ id ] ) then 
         pl.character = Quantum.Server.Char.Players[ id ]
+        pl.charindex = index
         setupCharacter( pl, pl.character )
         return pl.character
     else
-        Quantum.Error( "Unable to set " .. tostring(pl) .. " character. Character not found!" )
+        Quantum.Error( "Unable to set " .. tostring(pl) .. " character (" .. id ..  "). Character not found!" )
         return nil
     end
 end

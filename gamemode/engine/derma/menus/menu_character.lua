@@ -365,14 +365,11 @@ function menu.open( dt )
         header.Paint = function( self, w, h ) end
 
         local chars = dt.cont -- set the char table
-        PrintTable( chars )
-        print( table.Count( chars ) )
         
         local cpanels = {}
         local selectedChar
 
 		if( table.Count( chars ) >= 1 ) then
-            print( "CREATE p.mdl")
 			-- Char model
 			p.mdl = vgui.Create( "DModelPanel", p )
 			p.mdl:SetSize( 600 * resScale, 1000 * resScale )
@@ -403,6 +400,7 @@ function menu.open( dt )
         for k, v in pairs( chars ) do
             count = count + 1
             cpanels[count] = vgui.Create( "DButton", clist )
+            cpanels[count].index = count
 
             cpanels[count].char = v -- give the panel it's character
             if( !selectedChar ) then selectedChar = cpanels[1] end -- select the first one
@@ -489,6 +487,22 @@ function menu.open( dt )
 			end
 			
 			dl.OnCursorEntered = function() surface.PlaySound( "UI/buttonrollover.wav" ) end
+
+            -- Enter world button --
+            p.enter = vgui.Create( "DButton", p )
+            p.enter:SetText( "Enter World" )
+            p.enter:SetFont( "q_button2" )
+            p.enter:SetTextColor( Color( 0, 0, 0, 255 ) )
+            p.enter:SizeToContents()
+            p.enter.w, p.enter.h = p.enter:GetSize()
+            p.enter:SetPos( p.w/2 - p.enter.w/2, p.h*0.925 - p.enter.h/2 )
+            p.enter.Paint = function( self ) theme.sharpbutton( self ) end
+            p.enter.DoClick = function() 
+                surface.PlaySound( "UI/buttonclick.wav" ) 
+                -- enter world --
+                snm.RunNetworkedFunc( "enterWorldChar", {index = selectedChar.index} )
+            end
+            p.enter.OnCursorEntered = function() surface.PlaySound( "UI/buttonrollover.wav" ) end
 		end
     end
 end
