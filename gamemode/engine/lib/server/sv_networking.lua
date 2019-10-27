@@ -34,10 +34,10 @@ local function CacheDatatableMethod( id, datatable, ply )
 			end
 		end
 	end
-	datatable.id = id -- give it the id so that the client side could handle it
+	--datatable.id = id -- give it the id so that the client side could handle it
 	-- Always give the id since it is highly "valuable".
 	-- Don't want the client mixing up the NPC, which this caching system could do if not handled correctly.
-	return datatable
+	return { id = id, cont = datatable }
 end
 
 local function SendDatatableToClient( client, dt, type )
@@ -59,7 +59,8 @@ local funcs = {
 
 local netfuncs = {
 	createChar = function( pl, args )
-		Quantum.Server.Char.Load( pl, 1, args )
+		pl.charcount = Quantum.Server.Char.GetCharCount( pl ) 
+		Quantum.Server.Char.Load( pl, pl.charcount + 1, args )
 	end
 }
 

@@ -11,9 +11,10 @@ Quantum.Server.Char.Players = {}
 local function CreateCharTable( args )
     return {
         name = args.name || "UNKNOWN",
+        class = Quantum.Classes[args.class] || Quantum.Classes[1],
         maxhealth = Quantum.Server.Settings.MaxHealth,
         health = args.health || Quantum.Server.Settings.MaxHealth,
-        model = args.model || "models/player.mdl",
+        model = Quantum.Classes[args.class].Models[args.gender][args.modelIndex] || "models/player.mdl",
         money = args.money || Quantum.Server.Settings.StarterMoney,
         inventory = args.inventory || {}, -- create new inventory later
         jobs = args.jobs || {
@@ -81,6 +82,27 @@ function Quantum.Server.Char.GetPlayerChars( pl )
     for id, char in pairs( Quantum.Server.Char.Players ) do 
         strtbl = string.Split( id, ";" )
         if( strtbl[1] == pl:SteamID() ) then chars[id] = char end
+    end
+    return chars
+end
+
+function Quantum.Server.Char.GetCharCount( pl )
+    return table.Count( Quantum.Server.Char.GetPlayerChars( pl ) ) || 0
+end
+
+local function getBasicCharInfo( char )
+    return {
+        name = char.name,
+        model = char.model,
+        class = char.class.Name,
+        job = char.jobs[1]
+    }
+end
+
+function Quantum.Server.Char.GetPlayerChars_cl( pl )
+    local chars = {}
+    for id, char in pairs( Quantum.Server.Char.GetPlayerChars( pl ) ) do
+        chars[id] = getBasicCharInfo( char )
     end
     return chars
 end

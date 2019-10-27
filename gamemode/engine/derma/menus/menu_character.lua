@@ -7,7 +7,7 @@
 
 local menu = {}
 
-local net = Quantum.Client.Menu.GetAPI( "net" )
+local snm = Quantum.Client.Menu.GetAPI( "net" )
 local page = Quantum.Client.Menu.GetAPI( "page" )
 local theme = Quantum.Client.Menu.GetAPI( "theme" )
 
@@ -56,9 +56,10 @@ local function checkNameString( name )
             strTbl[i] = string.upper( char ) -- or if it is a space inbetween make it a capital one aswell
         end
         for n, char_ in pairs( strTbl ) do
-            if( n >= #strTbl && char == " " && strTbl[n-1] ~= " " ) then strTbl[i] = nil end -- remove the spaces at the end
+            if( n >= #strTbl && char == " " && strTbl[n-1] ~= " " ) then strTbl[i] = " " end -- remove the spaces at the end
         end
     end
+    return table.concat( strTbl ) -- return the "fixed" name
 end
 
 local pages = {
@@ -128,6 +129,7 @@ local pages = {
         name:SetSize( 300 * resScale, 40 * resScale )
         name.w, name.h = name:GetSize()
         name:SetPos( p.w/2 - name.w/2, p.h*0.85 - name.h/2 )
+        name.x, name.y = name:GetPos()
         name.Paint = function( self ) 
             theme.blurpanel( self ) 
             self:DrawTextEntryText( Color( 255, 255, 255, 255 ), Color( 150, 150, 150, 255 ), Color( 100, 100, 100, 255 ) )
@@ -258,7 +260,7 @@ local pages = {
         mscroll.w, mscroll.h = mscroll:GetSize()
         mscroll:SetPos( 0, ip.h - mscroll.h )
         mscroll:GetVBar():SetSize( 0, 0 )
-        mscroll.Paint = function( self ) theme.panel( self ) 
+        mscroll.Paint = function( self )
             theme.borderpanel( self )
         end 
 
@@ -277,6 +279,22 @@ local pages = {
             if( self:GetModel() ~= getMaxModel( getClassModels(inputs.class)[inputs.gender], inputs.modelIndex ) ) then  
                 self:SetModel( getMaxModel( getClassModels(inputs.class)[inputs.gender], inputs.modelIndex ) )
             end
+        end
+
+        -- create char button --
+        local cr = vgui.Create( "DButton", p )
+        cr:SetText( "Create Character" )
+        cr:SetFont( "q_button2" )
+        cr:SetTextColor( Color( 0, 0, 0, 255 ) )
+        cr:SizeToContents()
+        cr.w, cr.h = cr:GetSize()
+        cr:SetPos( name.x + name.w/2 - cr.w/2, name.y + cr.h + padding )
+        cr.Paint = function( self ) theme.sharpbutton( self ) end
+        cr.DoClick = function( self )
+            surface.PlaySound( "UI/buttonclick.wav" )
+            -- create char
+            inputs.name = checkNameString( name:GetText() )
+            snm.RunNetworkedFunc( "createChar", inputs )
         end
 
         return p, c
@@ -346,19 +364,22 @@ function menu.open( dt )
         header:SetTextColor( Color( 255, 255, 255, 255 ) )
         header.Paint = function( self, w, h ) end
 
-        local chars = {}
+        local chars = dt.cont -- set the char table
+        PrintTable( chars )
+        print( table.Count( chars ) )
         
         local cpanels = {}
-        local selectedChar 
+        local selectedChar
 
-		if( selectedChar ) then
+		if( table.Count( chars ) >= 1 ) then
+            print( "CREATE p.mdl")
 			-- Char model
-			local mdl = vgui.Create( "DModelPanel", p )
-			mdl:SetSize( 600 * resScale, 1000 * resScale )
-			mdl.w, mdl.h = mdl:GetSize()
-			mdl:SetPos( p.w/2 - mdl.w/2, p.h/2 - mdl.h/2 )
-			mdl:SetFOV( 55 )
-			function mdl:LayoutEntity( ent ) return end
+			p.mdl = vgui.Create( "DModelPanel", p )
+			p.mdl:SetSize( 600 * resScale, 1000 * resScale )
+			p.mdl.w, p.mdl.h = p.mdl:GetSize()
+			p.mdl:SetPos( p.w/2 - p.mdl.w/2, p.h/2 - p.mdl.h/2 )
+			p.mdl:SetFOV( 55 )
+			function p.mdl:LayoutEntity( ent ) return end
 
 		else
 
@@ -378,41 +399,43 @@ function menu.open( dt )
 
 		end
 
+        local count = 0
         for k, v in pairs( chars ) do
-            cpanels[k] = vgui.Create( "DButton", clist )
+            count = count + 1
+            cpanels[count] = vgui.Create( "DButton", clist )
 
-            cpanels[k].char = v -- give the panel it's character
+            cpanels[count].char = v -- give the panel it's character
             if( !selectedChar ) then selectedChar = cpanels[1] end -- select the first one
 
-            cpanels[k]:SetText( "" )
-            cpanels[k]:SetSize( clist.w - padding, 100 * resScale )
-            cpanels[k].w, cpanels[k].h = cpanels[k]:GetSize()
-            cpanels[k]:SetPos( padding/2, (padding)*k + (cpanels[k].h * (k-1)) )
-            cpanels[k].Paint = function( self, w, h )
+            cpanels[count]:SetText( "" )
+            cpanels[count]:SetSize( clist.w - padding, 100 * resScale )
+            cpanels[count].w, cpanels[count].h = cpanels[count]:GetSize()
+            cpanels[count]:SetPos( padding/2, (padding)*count + (cpanels[count].h * (count-1)) )
+            cpanels[count].Paint = function( self, w, h )
                 surface.SetDrawColor( 0, 0, 0, 0 )
                 surface.DrawRect( 0, 0, w, h )
-                if( cpanels[k] == selectedChar ) then
+                if( self == selectedChar ) then
                     surface.SetDrawColor( 252, 186, 3, 100 )
                     surface.DrawOutlinedRect( 0, 0, w, h )
                 end
             end
-            cpanels[k].DoClick = function( self ) -- if you press the char, then select it
+            cpanels[count].DoClick = function( self ) -- if you press the char, then select it
                 selectedChar = self
                 surface.PlaySound( "UI/buttonclick.wav" )
-                mdl:SetModel( self.char.model || errorMdl )
+                p.mdl:SetModel( self.char.model || errorMdl )
             end
 
-            local txt = vgui.Create( "DLabel", cpanels[k] )
+            local txt = vgui.Create( "DLabel", cpanels[count] )
             txt:SetText( v.name || "NAME" )
             txt:SetFont( "q_charNameText" )
             txt:SetTextColor( Color( 200, 200, 200, 220 ) )
             txt:SizeToContents()
             local txtW, txtH = txt:GetSize()
-            txt:SetPos( padding, cpanels[k].h/4 - txtH/2 )
+            txt:SetPos( padding, cpanels[count].h/4 - txtH/2 )
             local txtX, txtY = txt:GetPos()
 
-            local lvl = vgui.Create( "DLabel", cpanels[k] )
-            lvl:SetText( "Level " .. v.lvl .. " Citizen" )
+            local lvl = vgui.Create( "DLabel", cpanels[count] )
+            lvl:SetText( "Level " .. v.job.level .. " " .. v.job.title )
             lvl:SetFont( "q_text2" )
             lvl:SetTextColor( Color( 180, 180, 180, 225 ) )
             lvl:SizeToContents()
@@ -420,13 +443,13 @@ function menu.open( dt )
             lvl:SetPos( txtX, txtY + lvlH )
         end
 
-		if( selectedChar ) then
-			mdl:SetModel( selectedChar.char.model ) -- set the char model
-			local minv, maxv = mdl.Entity:GetRenderBounds()
-			local eyepos = mdl.Entity:GetBonePosition( mdl.Entity:LookupBone( "ValveBiped.Bip01_Head1" ) )
+		if( selectedChar && p.mdl ~= nil ) then
+			p.mdl:SetModel( selectedChar.char.model ) -- set the char model
+			local minv, maxv = p.mdl.Entity:GetRenderBounds()
+			local eyepos = p.mdl.Entity:GetBonePosition( p.mdl.Entity:LookupBone( "ValveBiped.Bip01_Head1" ) )
 			eyepos:Add( Vector( 40, 0, -15 ) )
-			mdl:SetCamPos( eyepos - Vector( -10, 0, -2 ) )
-			mdl:SetLookAt( eyepos )
+			p.mdl:SetCamPos( eyepos - Vector( -10, 0, -2 ) )
+			p.mdl:SetLookAt( eyepos )
 		end
 
         -- create char button
