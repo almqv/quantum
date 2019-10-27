@@ -500,7 +500,7 @@ function menu.open( dt )
             p.enter.DoClick = function() 
                 surface.PlaySound( "UI/buttonclick.wav" ) 
                 -- enter world --
-                snm.RunNetworkedFunc( "enterWorldChar", {index = selectedChar.index} )
+                snm.RunNetworkedFunc( "enterWorldChar", {index = selectedChar.index} ) -- FIX CRASH ISSUE ( 0xC00000FD )
             end
             p.enter.OnCursorEntered = function() surface.PlaySound( "UI/buttonrollover.wav" ) end
 		end

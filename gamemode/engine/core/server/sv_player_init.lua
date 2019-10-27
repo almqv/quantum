@@ -10,7 +10,7 @@ Quantum.Server.Player = {}
 local ply = FindMetaTable( "Player" )
 
 function GM:PlayerInitialSpawn( ply )
-    --ply.isloaded = true -- REMOVE THIS WHEN MYSQL DB IS ADDED
+    ply.isloaded = true -- REMOVE THIS WHEN MYSQL DB IS ADDED
     -- load in all of the players characters and stuff from the MySQL DB
 end
 
