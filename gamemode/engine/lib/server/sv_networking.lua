@@ -61,6 +61,14 @@ local funcs = {
 local netfuncs = {
 	createChar = function( pl, args )
 		pl.charcount = Quantum.Server.Char.GetCharCount( pl ) 
+		if( #args.name > 16 ) then 
+			Quantum.Debug( "Player " .. tostring( pl ) .. " character name too long. Unable to create." )
+			return
+		elseif( pl.charcount + 1 > Quantum.Server.Settings.CharacterLimit ) then -- character limit
+			Quantum.Debug( "Player " .. tostring( pl ) .. " tried to exceed their character limit." )
+			return 
+		end
+		print(pl.charcount + 1)
 		Quantum.Server.Char.Load( pl, pl.charcount + 1, args )
 	end,
 	enterWorldChar = function( pl, args )

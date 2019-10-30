@@ -424,7 +424,7 @@ function menu.open( dt )
             end
 
             local txt = vgui.Create( "DLabel", cpanels[count] )
-            txt:SetText( v.name || "NAME" )
+            txt:SetText( v.name || "[ERROR] NAME=nil" )
             txt:SetFont( "q_charNameText" )
             txt:SetTextColor( Color( 200, 200, 200, 220 ) )
             txt:SizeToContents()
@@ -516,7 +516,8 @@ function menu.open( dt )
             p.enter.DoClick = function() 
                 surface.PlaySound( "UI/buttonclick.wav" ) 
                 -- enter world --
-                snm.RunNetworkedFunc( "enterWorldChar", {index = selectedChar.index} ) -- FIX CRASH ISSUE ( 0xC00000FD )
+                local dt = { index = selectedChar.index }
+                snm.RunNetworkedFunc( "enterWorldChar", dt ) -- FIX CRASH ISSUE ( 0xC00000FD )
             end
             p.enter.OnCursorEntered = function() surface.PlaySound( "UI/buttonrollover.wav" ) end
 		end
