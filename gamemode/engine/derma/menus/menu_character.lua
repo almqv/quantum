@@ -520,6 +520,7 @@ function menu.open( dt )
                 -- enter world --
                 local dt = { index = selectedChar.index }
                 snm.RunNetworkedFunc( "enterWorldChar", dt ) -- FIX CRASH ISSUE ( 0xC00000FD )
+                f:Close() -- close the frame
             end
             p.enter.OnCursorEntered = function() surface.PlaySound( "UI/buttonrollover.wav" ) end
 		end
