@@ -466,24 +466,26 @@ function menu.open( dt )
 			p.mdl:SetLookAt( eyepos )
 		end
 
-        -- create char button
-        local cr = vgui.Create( "DButton", p )
-        cr:SetText("Create New Character")
-        cr:SetFont( "q_button" )
-        cr:SetTextColor( Color( 0, 0, 0, 255 ) )
-        cr:SizeToContents()
-        cr.w, cr.h = cr:GetSize()
-        cr:SetPos( clist.x + ( clist.w/2 - cr.w/2 ), clist.y + ( ( clist.h - cr.h ) - padding*2 ) )
-        cr.Paint = function( self ) 
-            theme.sharpbutton( self )
+        if( table.Count( dt.cont ) < Quantum.CharacterLimit ) then
+            -- create char button
+            local cr = vgui.Create( "DButton", p )
+            cr:SetText("Create New Character")
+            cr:SetFont( "q_button" )
+            cr:SetTextColor( Color( 0, 0, 0, 255 ) )
+            cr:SizeToContents()
+            cr.w, cr.h = cr:GetSize()
+            cr:SetPos( clist.x + ( clist.w/2 - cr.w/2 ), clist.y + ( ( clist.h - cr.h ) - padding*2 ) )
+            cr.Paint = function( self ) 
+                theme.sharpbutton( self )
+            end
+            cr.DoClick = function()
+                surface.PlaySound( "UI/buttonclick.wav" )
+                p:SetVisible( false )
+                local crPage = pages.charCreate( f )
+            end
+            
+            cr.OnCursorEntered = function() surface.PlaySound( "UI/buttonrollover.wav" ) end
         end
-        cr.DoClick = function()
-            surface.PlaySound( "UI/buttonclick.wav" )
-            p:SetVisible( false )
-            local crPage = pages.charCreate( f )
-        end
-        
-        cr.OnCursorEntered = function() surface.PlaySound( "UI/buttonrollover.wav" ) end
 
 		if( selectedChar ) then
 			-- Delete char button

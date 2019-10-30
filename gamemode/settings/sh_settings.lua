@@ -5,6 +5,8 @@
 --  \ \   / ____ \| | | | | | | |  __/ (__| | | |  / / 
 --   \_\ /_/    \_\_|_| |_| |_|_|\___|\___|_| |_| /_/  
 
+Quantum.CharacterLimit = 5
+
 Quantum.Models = {
     NPC = {},
     Player = {
