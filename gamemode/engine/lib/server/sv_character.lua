@@ -18,7 +18,7 @@ local function CreateCharTable( args )
         money = args.money || Quantum.Server.Settings.StarterMoney,
         inventory = args.inventory || {}, -- create new inventory later
         jobs = args.jobs || {
-            [1] = { title = "Hobo", level = -1 },
+            [1] = { title = "Unemployed", level = -1 },
         },
         skills = args.skills || {
             crafting = 0,

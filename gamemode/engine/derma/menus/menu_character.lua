@@ -432,13 +432,29 @@ function menu.open( dt )
             txt:SetPos( padding, cpanels[count].h/4 - txtH/2 )
             local txtX, txtY = txt:GetPos()
 
+            local lvlTxt
+            if( v.job.level >= 0 ) then
+                lvlTxt = "Level " .. v.job.level .. " "
+            else
+                lvlTxt = ""
+            end
+
             local lvl = vgui.Create( "DLabel", cpanels[count] )
-            lvl:SetText( "Level " .. v.job.level .. " " .. v.job.title )
+            lvl:SetText( lvlTxt .. v.job.title )
             lvl:SetFont( "q_text2" )
             lvl:SetTextColor( Color( 180, 180, 180, 225 ) )
             lvl:SizeToContents()
             local lvlW, lvlH = lvl:GetSize()
             lvl:SetPos( txtX, txtY + lvlH )
+            local lvlX, lvlY = lvl:GetPos()
+
+            local class = vgui.Create( "DLabel", cpanels[count] )
+            class:SetText( v.class )
+            class:SetFont( "q_text2" )
+            class:SetTextColor( Color( 252, 186, 3, 180 ) )
+            class:SizeToContents()
+            local classW, classH = class:GetSize()
+            class:SetPos( txtX, lvlY + classH )
         end
 
 		if( selectedChar && p.mdl ~= nil ) then
