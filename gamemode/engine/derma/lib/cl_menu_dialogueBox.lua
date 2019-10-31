@@ -18,7 +18,7 @@ function log.createinfobox( title, text, parent )
     box:SetSize( 775 * scale, 200 * scale )
     box.Paint = function( self ) theme.blurpanel( self, Color( 0, 0, 0, 0 ) ) end
     box.w, box.h = box:GetSize()
-    box:SetPos( fw/2 - box.w/2, fh*0.8 - box.h/2 )
+    box:SetPos( fw/2 - box.w/2, fh*0.8 - box.h/2 ) -- fix this bug pls
     box.x, box.y = box:GetSize()
 
     local header = vgui.Create( "DLabel", parent )
