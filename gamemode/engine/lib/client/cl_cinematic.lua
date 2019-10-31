@@ -15,9 +15,10 @@ function Quantum.Client.Cam.Stop()
     Quantum.Debug( "Stopped cinematic." )
 end
 
-function Quantum.Client.Cam.Start( scene, fov, velocity, loop )
+function Quantum.Client.Cam.Start( scene, loop )
     local frac = 0
     local time -- speed of the camera ( how long till it reaches its finish point )
+    local fov 
     Quantum.Client.Cam.Temp = {}
     Quantum.Client.Cam.Temp.scene_index = 1
 
@@ -26,7 +27,8 @@ function Quantum.Client.Cam.Start( scene, fov, velocity, loop )
     hook.Remove( "CalcView", "Quantum_Cinematic" ) -- if a cinematic is already running; cancel it
 
     hook.Add( "CalcView", "Quantum_Cinematic", function( ply, pos, ang, fov ) 
-        time = velocity[Quantum.Client.Cam.Temp.scene_index] || 5
+        time = scene[Quantum.Client.Cam.Temp.scene_index].velocity || 5
+        fov = scene[Quantum.Client.Cam.Temp.scene_index].fov || 20
         frac = math.Clamp( frac + FrameTime()/time, 0, 1 )
         if( frac <= 0 ) then return end
 
