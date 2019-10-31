@@ -40,3 +40,8 @@ function Quantum.Client.Cam.Start( scene, fov, velocity, loop )
         return view
     end)
 end
+
+function Quantum.Client.Cam.Stop() 
+    hook.Remove( "CalcView", "Quantum_Cinematic" )
+    Quantum.Debug( "Stopped cinematic." )
+end
