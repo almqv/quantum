@@ -7,6 +7,8 @@
 
 local intro = {}
 
+local log = Quantum.Client.Menu.GetAPI( "dialogue" )
+
 local scenes = {
     ["rp_truenorth_v1a_livin"] = {
         [1] = { 
@@ -41,8 +43,13 @@ function intro.open( dt )
 
         local f = vgui.Create( "DFrame" )
         f:SetSize( sw, sh )
-        f:SetTitle( "Cinematic Intro Test" )
-        f.Paint = function( self ) end
+        f:SetTitle( "" )
+        f.Paint = function( self, w, h ) 
+            surface.SetDrawColor( Color( 20, 20, 20, 255 ) )
+            local height = 90 * resScale
+            surface.DrawRect( 0, 0, w, 90 * resScale )
+            surface.DrawRect( 0, h - height, w, height )
+        end
         f:SetDraggable( false )
         f:MakePopup()
         function f:OnClose() 
@@ -51,6 +58,7 @@ function intro.open( dt )
         end
 
         Quantum.Client.Cam.Start( scenes[game.GetMap()], false ) -- start the cinematic
+        local box = log.createinfobox( "Sample Title", "TEST", f )
     end
 end
 

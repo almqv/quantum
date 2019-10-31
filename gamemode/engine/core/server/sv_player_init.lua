@@ -20,7 +20,12 @@ local function setUpPlayer( ply )
     else
         Quantum.Error( tostring(ply) .. " doesn't have a valid model. Unable to set up hands!" )
     end
-    Quantum.Debug( tostring( ply ) .. " spawned." )
+    local char = Quantum.Server.Char.GetCurrentCharacter( ply )
+    local charnametxt = " spawned."
+    if( char ~= nil ) then
+        charnametxt = " spawned as '" .. char.name .. "'." 
+    end
+    Quantum.Debug( tostring( ply ) .. charnametxt  )
 end
 
 function GM:PlayerSpawn( ply )
