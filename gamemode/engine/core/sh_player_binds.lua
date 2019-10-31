@@ -14,13 +14,16 @@ if SERVER then
         end,
         ["openCharMenu"] = function( pl )
             Quantum.Net.OpenMenu( pl, "character", Quantum.Server.Char.GetPlayerChars_cl( pl ) )
+        end,
+        ["introTest"] = function( pl )
+            Quantum.Net.OpenMenu( pl, "intro", Quantum.Server.Char.GetPlayerChars_cl( pl ) )
         end
     }
 
     function GM:KeyRelease( ply, key )
         if( keyfuncs[key] ) then keyfuncs[key]( ply ) end
     end
-    function GM:ShowHelp( ply )
-        keyfuncs["openCharMenu"]( ply )
-    end
+    function GM:ShowHelp( ply ) keyfuncs["openCharMenu"]( ply ) end
+    function GM:ShowTeam( ply ) keyfuncs["introTest"]( ply ) end
+    
 end

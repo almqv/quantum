@@ -9,31 +9,43 @@
 
 function Quantum.Client.Cam.InvertAngle( ang ) return Angle( -ang.x, ang.y, -ang.z ) end -- Flip the camera 180* relative to target
 
+function Quantum.Client.Cam.Stop() 
+    hook.Remove( "CalcView", "Quantum_Cinematic" )
+    Quantum.Client.Cam.Temp.scene_index = nil -- remove the var becuase it is unneeded
+    Quantum.Debug( "Stopped cinematic." )
+end
+
 function Quantum.Client.Cam.Start( scene, fov, velocity, loop )
     local frac = 0
-    local time = velocity || 10 -- speed of the camera ( how long till it reaches its finish point )
-    local scene_index = 1
+    local time -- speed of the camera ( how long till it reaches its finish point )
+    Quantum.Client.Cam.Temp = {}
+    Quantum.Client.Cam.Temp.scene_index = 1
 
     local view = {} -- calcview vector data
-
-    scene.pos2 = scene.pos2 || scene.pos1 -- if there is no finish pos then make it stay still at starting pos
-    scene.ang2 = scene.ang2 || scene.ang1
 
     hook.Remove( "CalcView", "Quantum_Cinematic" ) -- if a cinematic is already running; cancel it
 
     hook.Add( "CalcView", "Quantum_Cinematic", function( ply, pos, ang, fov ) 
-        frac = math.Clamp( frac + FrameTime()/velocity, 0, 1 )
+        time = velocity[Quantum.Client.Cam.Temp.scene_index] || 5
+        frac = math.Clamp( frac + FrameTime()/time, 0, 1 )
         if( frac <= 0 ) then return end
 
-        view.origin = LerpVector( frac, scene.pos1[scene_index], scene.pos2[scene_index] ),
-        view.angles = LerpAngle( frac, scene.ang1[scene_index], scene.ang2[scene_index] ),
-        view.fov = fov,
+        scene[Quantum.Client.Cam.Temp.scene_index].pos2 = scene[Quantum.Client.Cam.Temp.scene_index].pos2 || scene[Quantum.Client.Cam.Temp.scene_index].pos1 -- if there is no finish pos then make it stay still at starting pos
+        scene[Quantum.Client.Cam.Temp.scene_index].ang2 = scene[Quantum.Client.Cam.Temp.scene_index].ang2 || scene[Quantum.Client.Cam.Temp.scene_index].ang1
+
+        view.origin = LerpVector( frac, scene[Quantum.Client.Cam.Temp.scene_index].pos1, scene[Quantum.Client.Cam.Temp.scene_index].pos2 )
+        view.angles = LerpAngle( frac, scene[Quantum.Client.Cam.Temp.scene_index].ang1, scene[Quantum.Client.Cam.Temp.scene_index].ang2 )
+        view.fov = fov
         view.drawviewer = true
 
-        if( view.origin:IsEqualTol( scene.pos2[scene_index], 2 ) ) then
-            frac = 0
-            scene_index = scene_index + 1
-            if( scene_index > #scene.pos1 && loop ) then scene_index = 1 end -- if all scenes are finished, loop them if loop is enabled
+        if( view.origin:IsEqualTol( scene[Quantum.Client.Cam.Temp.scene_index].pos2, 1 ) ) then
+            if( Quantum.Client.Cam.Temp.scene_index + 1 <= #scene ) then
+                frac = 0
+                Quantum.Client.Cam.Temp.scene_index = Quantum.Client.Cam.Temp.scene_index + 1
+            end
+            if( Quantum.Client.Cam.Temp.scene_index > #scene ) then -- if all scenes are finished, loop them if loop is enabled
+                Quantum.Client.Cam.Temp.scene_index = 1 
+            end 
             -- otherwise it will just stop at the end.
         end
 
@@ -41,7 +53,3 @@ function Quantum.Client.Cam.Start( scene, fov, velocity, loop )
     end)
 end
 
-function Quantum.Client.Cam.Stop() 
-    hook.Remove( "CalcView", "Quantum_Cinematic" )
-    Quantum.Debug( "Stopped cinematic." )
-end

@@ -25,7 +25,7 @@ end
 
 function GM:PlayerSpawn( ply )
 
-    if( !ply.isloaded ) then 
+    if( ply.isloaded ) then -- replace logic ( reversed )
         ply:Spectate( OBS_MODE_FIXED ) 
         Quantum.Net.OpenMenu( ply, "character", Quantum.Server.Char.GetPlayerChars( ply ) )
     else
