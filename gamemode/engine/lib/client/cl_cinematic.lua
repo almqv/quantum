@@ -14,6 +14,8 @@ function Quantum.Client.Cam.Start( scene, fov, velocity, loop )
     local time = velocity || 10 -- speed of the camera ( how long till it reaches its finish point )
     local scene_index = 1
 
+    local view = {} -- calcview vector data
+
     scene.pos2 = scene.pos2 || scene.pos1 -- if there is no finish pos then make it stay still at starting pos
     scene.ang2 = scene.ang2 || scene.ang1
 
@@ -23,12 +25,10 @@ function Quantum.Client.Cam.Start( scene, fov, velocity, loop )
         frac = math.Clamp( frac + FrameTime()/velocity, 0, 1 )
         if( frac <= 0 ) then return end
 
-        local view = {
-            origin = LerpVector( frac, scene.pos1[scene_index], scene.pos2[scene_index] ),
-            angles = LerpAngle( frac, scene.ang1[scene_index], scene.ang2[scene_index] ),
-            fov = fov,
-            drawviewer = true
-        }
+        view.origin = LerpVector( frac, scene.pos1[scene_index], scene.pos2[scene_index] ),
+        view.angles = LerpAngle( frac, scene.ang1[scene_index], scene.ang2[scene_index] ),
+        view.fov = fov,
+        view.drawviewer = true
 
         if( view.origin:IsEqualTol( scene.pos2[scene_index], 2 ) ) then
             frac = 0
