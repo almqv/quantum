@@ -8,6 +8,7 @@
 local intro = {}
 
 local log = Quantum.Client.Menu.GetAPI( "dialogue" )
+local theme = local log = Quantum.Client.Menu.GetAPI( "themes" )
 
 local scenes = {
     ["rp_truenorth_v1a_livin"] = {
@@ -57,8 +58,31 @@ function intro.open( dt )
             Quantum.Client.Cam.Stop() -- stop the cinematic
         end
 
+        local skip = vgui.Create( "DButton", f )
+        skip:SetText( "Skip Intro" )
+        skip:SetFont( "q_button_m" )
+        skip:SetTextColor( Color( 255, 255, 255, 255 ) )
+        skip:SizeToContents()
+        skip.Paint = function( self ) theme.skipbutton( self ) end
+
         Quantum.Client.Cam.Start( scenes[game.GetMap()], false ) -- start the cinematic
-        local box = log.createinfobox( "Sample Title", "TEST", f )
+
+        local logdata = {
+            [1] = {
+                title = "Welcome!",
+                text = "Welcome to the server! This server is running the Quantum framework which was developed by AlmTech.\n\nDuring this awesome cinematic you will be shown what you can do on the server. Starting with the basics."
+            },
+            [2] = {
+                title = "Classes & Professions",
+                text = "You can learn a profession at any teacher NPC. Professions unlocks certian abilities to craft, cook and gather certain resources."
+            },
+            [3] = {
+                title = "Classes & Professions",
+                text = "Some character classes are better at certain things but worse at other things."
+            }
+        }
+
+        local box = log.createinfobox( logdata, f )
     end
 end
 

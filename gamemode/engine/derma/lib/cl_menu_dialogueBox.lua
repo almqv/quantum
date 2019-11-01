@@ -12,22 +12,38 @@ local padding_s = 4 * scale
 
 local theme = Quantum.Client.Menu.GetAPI( "theme" )
 
-function log.createinfobox( title, text, parent )
+function log.createinfobox( logdata, parent )
     local fw, fh = parent:GetSize()
+    local logtitle = logdata[1].title
+    local logtext = logdata[1].text
+
     local box = vgui.Create( "DPanel", parent )
     box:SetSize( 775 * scale, 200 * scale )
-    box.Paint = function( self ) theme.blurpanel( self, Color( 0, 0, 0, 0 ) ) end
+    box.Paint = function( self ) theme.sharpblurpanel( self ) end
     box.w, box.h = box:GetSize()
     box:SetPos( fw/2 - box.w/2, fh*0.8 - box.h/2 ) 
     box.x, box.y = box:GetPos()
 
     local header = vgui.Create( "DLabel", parent )
-    header:SetText( title )
     header:SetFont( "q_header_s" )
     header:SetTextColor( Color( 255, 255, 255, 220 ) )
     header:SizeToContents()
     header.w, header.h = header:GetSize()
-    header:SetPos( box.x - box.w/2 + header.w/2, box.y )
+    header:SetPos( box.x, ( box.y - header.h ) - padding/2 )
+    header.Think = function( self ) 
+        if( logdata[Quantum.Client.Cam.Temp.scene_index].title ~= nil ) then
+            PrintTable( logdata[Quantum.Client.Cam.Temp.scene_index] )
+            self:SetVisible( true )
+            self:SetText( logdata[Quantum.Client.Cam.Temp.scene_index].title ) 
+            surface.SetFont( self:GetFont() )
+            local tw, th = surface.GetTextSize( self:GetText() )
+            self:SetSize( tw * 1.1, th * 1.1 )
+        end
+    end
+    header.Paint = function( self )
+        theme.sharpblurpanel( self )
+    end
+    header:SetContentAlignment( 5 )
 
     local scroll = vgui.Create( "DScrollPanel", box )
     scroll:SetSize( box:GetSize() )
@@ -35,11 +51,24 @@ function log.createinfobox( title, text, parent )
     local sb = scroll:GetVBar()
     sb.Paint = function( self ) end
     function sb.btnGrip:Paint() 
-        theme.button( self, Color( 0, 0, 0, 80 ) ) 
+        theme.button( self, Color( 0, 0, 0, 0 ) ) 
     end
     sb.btnUp:SetSize(0,0)
     sb.btnDown:SetSize(0,0)
+    scroll.w, scroll.h = scroll:GetSize()
 
+    local text = vgui.Create( "DLabel", scroll )
+    text:SetText( logtext )
+    text:SetFont( "q_info" )
+    text:SetTextColor( Color( 240, 240, 240, 255 ) )
+    text:SetSize( scroll.w * 0.95, scroll.h * 0.95 )
+    text:SetWrap( true )
+
+    text.w, text.h = text:GetSize()
+
+    text:SetPos( scroll.w/2 - text.w/2, 0 )
+
+    text.Think = function( self ) self:SetText( logdata[Quantum.Client.Cam.Temp.scene_index].text ) end
 
     return box
 end
