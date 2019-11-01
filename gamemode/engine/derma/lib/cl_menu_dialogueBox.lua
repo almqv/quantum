@@ -32,7 +32,6 @@ function log.createinfobox( logdata, parent )
     header:SetPos( box.x, ( box.y - header.h ) - padding/2 )
     header.Think = function( self ) 
         if( logdata[Quantum.Client.Cam.Temp.scene_index].title ~= nil ) then
-            PrintTable( logdata[Quantum.Client.Cam.Temp.scene_index] )
             self:SetVisible( true )
             self:SetText( logdata[Quantum.Client.Cam.Temp.scene_index].title ) 
             surface.SetFont( self:GetFont() )

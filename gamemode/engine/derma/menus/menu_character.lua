@@ -82,6 +82,18 @@ local pages = {
             p:Remove()
         end
 
+        local scene = {
+            ["rp_truenorth_v1a_livin"] = { --;setang 
+                [1] = {
+                    fov = 75,
+                    velocity = 10,
+                    pos1 = Vector(11504.430664, 3809.523193, 72.031250),
+                    ang1 = Angle(5, 112.406662, 0.000000)
+                }
+            }
+        }
+        Quantum.Client.Cam.Start( scene[game.GetMap()], true )
+
         local banner = vgui.Create( "DImage", p )
         banner:SetImage( Quantum.Client.ServerBannerPath )
         banner:SizeToContents()
@@ -316,7 +328,20 @@ function menu.open( dt )
         f:MakePopup()
         function f:OnClose()
             Quantum.Client.IsInMenu = false -- show the hud when closed
+            Quantum.Client.Cam.Stop()
         end
+
+        local scene = {
+            ["rp_truenorth_v1a_livin"] = { 
+                [1] = {
+                    fov = 70,
+                    velocity = 10,
+                    pos1 = Vector(9807.226563, -9093.957031, 5560.153809),
+                    ang1 = Angle(5.702401, -42.888149, 0.000000)
+                }
+            }
+        }
+        Quantum.Client.Cam.Start( scene[game.GetMap()], true )
 
         local args = {
             CloseButtonText = "Quit",

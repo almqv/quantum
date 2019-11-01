@@ -8,20 +8,28 @@
 local intro = {}
 
 local log = Quantum.Client.Menu.GetAPI( "dialogue" )
-local theme = local log = Quantum.Client.Menu.GetAPI( "themes" )
+local theme = Quantum.Client.Menu.GetAPI( "theme" )
 
-local scenes = {
+local scenes = { -- 5031.821777 3866.334961 120.090790;setang 0.898059 56.421352 0.000000
     ["rp_truenorth_v1a_livin"] = {
-        [1] = { 
-            fov = 80,
+        [1] = {
+            fov = 70,
             velocity = 10,
+            pos1 = Vector(5062.544434, 3264.783447, 136.604355),
+            pos2 = Vector(5031.821777, 3866.334961, 120.090790),
+            ang1 = Angle(0.370070, 90.952415, 0.000000),
+            ang2 = Angle(0.898059, 56.421352, 0.000000) 
+        },
+        [2] = { 
+            fov = 80,
+            velocity = 14,
             pos1 = Vector(6879, 4135, 72),
             pos2 = Vector(8760, 2740, 86),
-            ang1 = Angle(7, 122, 0),
+            ang1 = Angle(0.686861, -43.159401, 0.000000),
             ang2 = Angle(1, -104, 0) 
         },
-        [2] = {
-            fov = 60,
+        [3] = {
+            fov = 70,
             velocity = 8,
             pos1 = Vector( 8917, 2194, 83 ),
             pos2 = Vector( 8312, 2265, 83 ),
@@ -45,6 +53,7 @@ function intro.open( dt )
         local f = vgui.Create( "DFrame" )
         f:SetSize( sw, sh )
         f:SetTitle( "" )
+        f:ShowCloseButton( false )
         f.Paint = function( self, w, h ) 
             surface.SetDrawColor( Color( 20, 20, 20, 255 ) )
             local height = 90 * resScale
@@ -57,13 +66,21 @@ function intro.open( dt )
             Quantum.Client.IsInMenu = false 
             Quantum.Client.Cam.Stop() -- stop the cinematic
         end
+        f.w, f.h = f:GetSize()
 
         local skip = vgui.Create( "DButton", f )
         skip:SetText( "Skip Intro" )
         skip:SetFont( "q_button_m" )
         skip:SetTextColor( Color( 255, 255, 255, 255 ) )
         skip:SizeToContents()
-        skip.Paint = function( self ) theme.skipbutton( self ) end
+        skip.Paint = function( self ) theme.skipbutton( self, Color( 0, 0, 0, 0 ) ) end
+        skip.w, skip.h = skip:GetSize()
+        skip:SetPos( f.w - skip.w - padding, f.h - skip.h - padding )
+        skip.DoClick = function( self ) 
+            surface.PlaySound( "UI/buttonclick.wav" ) 
+            f:Close()
+        end
+        skip.OnCursorEntered = function() surface.PlaySound( "UI/buttonrollover.wav" ) end
 
         Quantum.Client.Cam.Start( scenes[game.GetMap()], false ) -- start the cinematic
 
@@ -78,7 +95,7 @@ function intro.open( dt )
             },
             [3] = {
                 title = "Classes & Professions",
-                text = "Some character classes are better at certain things but worse at other things."
+                text = "Some character classes are better at certain things but worse at other things. But your class does not define your journey on this server."
             }
         }
 

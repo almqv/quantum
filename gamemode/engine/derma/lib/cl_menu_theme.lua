@@ -93,12 +93,14 @@ end
 
 function theme.skipbutton( b, inClr )
     local w, h = b:GetSize()
-    inClr = inClr || Color( 235, 64, 52, 255 )
+    inClr = inClr || Color( 0, 0, 0, 0 )
 
     if( !b:IsHovered() ) then
-        surface.SetDrawColor( 205, 205, 205, 255 )
+        surface.SetDrawColor( 205, 205, 205, 2 )
+        b:SetTextColor( Color( 255, 255, 255, 2 ) )
     else
         surface.SetDrawColor( 120, 120, 120, 255 )
+        b:SetTextColor( Color( 255, 255, 255, 255 ) )
     end
 
     surface.DrawOutlinedRect( 0, 0, w, h )
