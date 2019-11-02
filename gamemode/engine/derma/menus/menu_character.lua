@@ -83,7 +83,7 @@ local pages = {
         end
 
         local scene = {
-            ["rp_truenorth_v1a_livin"] = { --;setang 
+            ["rp_truenorth_v1a_livin"] = { 
                 [1] = {
                     fov = 75,
                     velocity = 10,

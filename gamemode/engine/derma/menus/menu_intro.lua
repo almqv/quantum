@@ -14,7 +14,7 @@ local scenes = { -- 5031.821777 3866.334961 120.090790;setang 0.898059 56.421352
     ["rp_truenorth_v1a_livin"] = {
         [1] = {
             fov = 70,
-            velocity = 10,
+            velocity = 12,
             pos1 = Vector(5062.544434, 3264.783447, 136.604355),
             pos2 = Vector(5031.821777, 3866.334961, 120.090790),
             ang1 = Angle(0.370070, 90.952415, 0.000000),
@@ -22,7 +22,7 @@ local scenes = { -- 5031.821777 3866.334961 120.090790;setang 0.898059 56.421352
         },
         [2] = { 
             fov = 80,
-            velocity = 14,
+            velocity = 16,
             pos1 = Vector(6879, 4135, 72),
             pos2 = Vector(8760, 2740, 86),
             ang1 = Angle(0.686861, -43.159401, 0.000000),
@@ -30,11 +30,19 @@ local scenes = { -- 5031.821777 3866.334961 120.090790;setang 0.898059 56.421352
         },
         [3] = {
             fov = 70,
-            velocity = 8,
+            velocity = 12,
             pos1 = Vector( 8917, 2194, 83 ),
             pos2 = Vector( 8312, 2265, 83 ),
             ang1 = Angle( 2, -123, 0 ),
             ang2 = Angle( 3, -41, 0 )
+        }, 
+        [4] = {
+            fov = 70,
+            velocity = 12,
+            pos1 = Vector( 10860.154297, 3337.662109, 141.101013 ),
+            pos2 = Vector( 10881.356445, 5483.074219, 132.792114 ),
+            ang1 = Angle( 0.052806, 85.319626, 0.000000 ),
+            ang2 = Angle( -0.105593, 90.978638, 0.000000 )
         }
     }
 }
@@ -68,6 +76,9 @@ function intro.open( dt )
         end
         f.w, f.h = f:GetSize()
 
+        --- MUSIC --- 
+        surface.PlaySound( "music/HL1_song10.mp3" ) -- get some better music
+
         local skip = vgui.Create( "DButton", f )
         skip:SetText( "Skip Intro" )
         skip:SetFont( "q_button_m" )
@@ -77,7 +88,6 @@ function intro.open( dt )
         skip.w, skip.h = skip:GetSize()
         skip:SetPos( f.w - skip.w - padding, f.h - skip.h - padding )
         skip.DoClick = function( self ) 
-            surface.PlaySound( "UI/buttonclick.wav" ) 
             f:Close()
         end
         skip.OnCursorEntered = function() surface.PlaySound( "UI/buttonrollover.wav" ) end
@@ -91,11 +101,15 @@ function intro.open( dt )
             },
             [2] = {
                 title = "Classes & Professions",
-                text = "You can learn a profession at any teacher NPC. Professions unlocks certian abilities to craft, cook and gather certain resources."
+                text = "Professions are the core gameplay where they can unlock certian abilities to craft, cook and gather certain resources. You can learn a profession at any teacher NPC.\n\nYou can have the maximum of 2 professions and if you are skilled enough then some players might hire you."
             },
             [3] = {
                 title = "Classes & Professions",
-                text = "Some character classes are better at certain things but worse at other things. But your class does not define your journey on this server."
+                text = "Professions are important where they could lead you to many opportunities.\nThe items produced by certain professions could be sold or traded to NPCs and other players. But keep in mind that everyone might not be as trustworthy as you would have thought."
+            },
+            [4] = {
+                title = "Classes & Professions",
+                text = "Character classes are also one of many key element to the core gameplay. Some character classes are better at certain things but worse at other things, but your class does not define your journey and you have the freedom to choose whatever you want to do."
             }
         }
 
