@@ -43,9 +43,26 @@ local scenes = { -- 5031.821777 3866.334961 120.090790;setang 0.898059 56.421352
             pos2 = Vector( 10881.356445, 5483.074219, 132.792114 ),
             ang1 = Angle( 0.052806, 85.319626, 0.000000 ),
             ang2 = Angle( -0.105593, 90.978638, 0.000000 )
+        },
+        [5] = {
+            fov = 60,
+            velocity = 12,
+            pos1 = Vector( 3114.608887, -13817.962891, 82.778885 ),
+            pos2 = Vector( 5247.718262, -14413.496094, 74.946350 ),
+            ang1 = Angle( 0.844603, -15.770578, 0.000000 ),
+            ang2 = Angle( 2.006202, 37.927032, 0.000000 )
+        },
+        [6] = {
+            fov = 60,
+            velocity = 12,
+            pos1 = Vector( 6830.229004, 9614.283203, 105.920792 ),
+            pos2 = Vector( 6675.346191, 9711.740234, 102.549484 ),
+            ang1 = Angle( 1.055771, 147.803604, 0.000000 ),
+            ang2 = Angle( 1.055771, 149.803604, 0.000000 )
         }
     }
 }
+
 
 function intro.open( dt )
     local chars = dt.cont
@@ -76,8 +93,10 @@ function intro.open( dt )
         end
         f.w, f.h = f:GetSize()
 
-        --- MUSIC --- 
-        surface.PlaySound( "music/HL1_song10.mp3" ) -- get some better music
+        --- MUSIC ---
+        --surface.PlaySound( "music/HL1_song11.mp3" ) -- too short
+        --surface.PlaySound( "music/HL2_song23_SuitSong3.mp3" )
+        --LocalPlayer():EmitSound("Quantum_Music_TriangeAtDawn") 
 
         local skip = vgui.Create( "DButton", f )
         skip:SetText( "Skip Intro" )

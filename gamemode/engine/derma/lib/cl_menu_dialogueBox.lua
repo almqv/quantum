@@ -31,12 +31,14 @@ function log.createinfobox( logdata, parent )
     header.w, header.h = header:GetSize()
     header:SetPos( box.x, ( box.y - header.h ) - padding/2 )
     header.Think = function( self ) 
-        if( logdata[Quantum.Client.Cam.Temp.scene_index].title ~= nil ) then
-            self:SetVisible( true )
-            self:SetText( logdata[Quantum.Client.Cam.Temp.scene_index].title ) 
-            surface.SetFont( self:GetFont() )
-            local tw, th = surface.GetTextSize( self:GetText() )
-            self:SetSize( tw * 1.1, th * 1.1 )
+        if( logdata[Quantum.Client.Cam.Temp.scene_index] ~= nil ) then
+            if( logdata[Quantum.Client.Cam.Temp.scene_index].title ~= nil ) then
+                self:SetVisible( true )
+                self:SetText( logdata[Quantum.Client.Cam.Temp.scene_index].title ) 
+                surface.SetFont( self:GetFont() )
+                local tw, th = surface.GetTextSize( self:GetText() )
+                self:SetSize( tw * 1.1, th * 1.1 )
+            end
         end
     end
     header.Paint = function( self )
@@ -67,7 +69,11 @@ function log.createinfobox( logdata, parent )
 
     text:SetPos( scroll.w/2 - text.w/2, 0 )
 
-    text.Think = function( self ) self:SetText( logdata[Quantum.Client.Cam.Temp.scene_index].text ) end
+    text.Think = function( self ) 
+        if( logdata[Quantum.Client.Cam.Temp.scene_index] ~= nil ) then
+            self:SetText( logdata[Quantum.Client.Cam.Temp.scene_index].text ) 
+        end
+    end
 
     return box
 end
