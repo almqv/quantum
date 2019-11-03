@@ -94,7 +94,7 @@ function intro.open( dt )
         f.w, f.h = f:GetSize()
 
         --- MUSIC ---
-        surface.PlaySound( "music/HL1_song10.mp3" ) -- too short
+        --surface.PlaySound( "music/HL1_song10.mp3" ) -- too short
         --surface.PlaySound( "music/HL2_song23_SuitSong3.mp3" )
         --LocalPlayer():EmitSound("Quantum_Music_TriangeAtDawn") 
 
