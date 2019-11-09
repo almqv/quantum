@@ -10,6 +10,8 @@ local intro = {}
 local log = Quantum.Client.Menu.GetAPI( "dialogue" )
 local theme = Quantum.Client.Menu.GetAPI( "theme" )
 
+print("Git remote push test")
+
 local scenes = { -- 5031.821777 3866.334961 120.090790;setang 0.898059 56.421352 0.000000
     ["rp_truenorth_v1a_livin"] = {
         [1] = {
