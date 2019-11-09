@@ -11,6 +11,7 @@ local ply = FindMetaTable( "Player" )
 
 function GM:PlayerInitialSpawn( ply )
     ply.isloaded = false -- REMOVE THIS WHEN MYSQL DB IS ADDED
+    ply.cache = {}
     -- load in all of the players characters and stuff from the MySQL DB
 end
 

@@ -9,26 +9,45 @@ Quantum.Net = {}
 util.AddNetworkString( "quantum_menu_net" )
 util.AddNetworkString( "quantum_menu_button_net" )
 
+local function checkCacheTable( ply, cache_id, dt )
+	Quantum.Debug( "Checking cache tables (" .. tostring(ply) .. " | " .. tostring(cache_id) .. " | " .. tostring(dt) .. ")" )
+	local datatable = dt || {}
+	if( ply.cache == nil ) then 
+		Quantum.Error( tostring(ply) .. " does not have a cache table, creating..." )
+		ply.cache = {} 
+		if( ply.cache ~= nil ) then Quantum.Debug( "Success! Created cache table for " .. tostring(ply) ) end
+	else
+		if( ply.cache[cache_id] == nil ) then
+			Quantum.Debug( tostring(ply) .. " does not have a cache for '" .. tostring(cache_id) .. "'. Creating..." )
+			ply.cache[cache_id] = {
+				id = cache_id,
+				cache = datatable
+			}
+			if( ply.cache[cache_id] ~= nil && table.Count( ply.cache[cache_id] ) == 1 ) then
+				Quantum.Debug( "Success! Created cache '" .. tostring(cache_id) .. "' for " .. tostring(ply) .. "." )
+				if( ply.cache[id].count == nil ) then ply.cache[id].count = 1 else ply.cache[id].count = ply.cache[id].count + 1 end -- keep count
+			else
+				Quantum.Error( "Failed. Creation of cache '" .. tostring(cache_id) .. "' for " .. tostring(ply) .. " failed to validate or did not get created." )
+				ply.cache[cache_id] = nil -- remove the cache since it is "broken"
+			end
+		end
+	end
+	return ply.cache[cache_id]
+end
+
 local function CacheDatatableMethod( id, datatable, ply )
-	if( ply.cache == nil ) then ply.cache = {} end 
-
-	if( ply.cache[id] == nil ) then -- if this is the first time then create a cache record
-		ply.cache[id] = {
-			cache = datatable
-			-- won't be defining the count here
-		} 
-	end 
-
-	if( ply.cache[id].count == nil ) then ply.cache[id].count = 1 else ply.cache[id].count = ply.cache[id].count + 1 end -- keep count of how many times we have cached this datatable
-
-	if( ply.cache[id].count > 1 ) then -- dont want to filter out data if this is the first time.
-		for k, v in pairs( datatable ) do -- loop through the datatable
-			for k2, v2 in pairs( table.GetKeys( ply.cache[id].cache ) ) do -- check each key with each key from the record cache
-				if( tostring(k) == tostring(v2) ) then -- check if the keys are the same
-					if( v == ply.cache[id].cache[tostring(v2)] ) then -- check if the value/contents are the same
-						datatable[k] = nil -- if so then remove the key from the datatable
-					else -- if the key's value has changed we dont remove it since the client needs to know about it
-						ply.cache[id].cache[tostring(v2)] = v -- and then update the cache so we know about it next time
+	ply.cache[id] = checkCacheTable( ply, id, datatable ) -- check caching tables etc
+	Quantum.Debug( "(" .. tostring(ply) .. " | " .. tostring(id) .. ") Removing known data in cache from datatable..." )
+	if( ply.cache[id] ~= nil ) then
+		if( ply.cache[id].count > 1 ) then -- dont want to filter out data if this is the first time.
+			for k, v in pairs( datatable ) do -- loop through the datatable
+				for k2, v2 in pairs( table.GetKeys( ply.cache[id].cache ) ) do -- check each key with each key from the record cache
+					if( tostring(k) == tostring(v2) ) then -- check if the keys are the same
+						if( v == ply.cache[id].cache[tostring(v2)] ) then -- check if the value/contents are the same
+							datatable[k] = nil -- if so then remove the key from the datatable
+						else -- if the key's value has changed we dont remove it since the client needs to know about it
+							ply.cache[id].cache[tostring(v2)] = v -- and then update the cache so we know about it next time
+						end
 					end
 				end
 			end
@@ -40,13 +59,25 @@ local function CacheDatatableMethod( id, datatable, ply )
 	return { id = id, cont = datatable }
 end
 
+local function shortenDataTableMethod( datatable )
+	Quantum.Debug( "(" .. datatable.id .. ") Converting datatable '" .. tostring( datatable ) .. "' to json..." )
+	return util.TableToJSON( datatable, false )
+end
+
+local function initializeDatatable( id, datatable, ply )
+	Quantum.Debug( "(" .. tostring(ply) .. ") Initializing datatable for client net message.." )
+	return shortenDataTableMethod( CacheDatatableMethod( id, datatable, ply ) )
+end
+
 local function SendDatatableToClient( client, dt, type )
-	local datatable = CacheDatatableMethod( type, dt, client ) -- before we actually send the stuff, cache it and remove unneeded stuff
-	net.Start( "quantum_menu_net" )
-		if( table.Count( datatable ) > 0 ) then -- if it's empty just dont send it because we will save 8 bits 
-			net.WriteTable( datatable ) -- send the data to the player
+	local datatable = initializeDatatable( type, dt, client ) -- before we actually send the stuff, cache it and remove unneeded stuff
+	local net_start = net.Start( "quantum_menu_net" )
+		if( net_start ) then Quantum.Debug( "Sending net message to " tostring(ply) .. "..." )
+		if( #datatable > 0 ) then -- if it's empty just dont send it because we will save 8 bits 
+			net.WriteString( datatable ) -- send the data to the player
 		end
 	net.Send( client )
+	Quantum.Debug("Net message sent.")
 end
 
 function Quantum.Net.OpenMenu( pl, type, dt )

@@ -15,7 +15,7 @@ local libs = {
 Quantum.Client.Menu.GetAPI = function( lib ) return include( libs[lib] ) end
 
 net.Receive( "quantum_menu_net", function( len, pl ) 
-    local dt = net.ReadTable() -- TO DO: merge datatable with cached ( if same id/type )
+    local dt = util.JSONToTable(net.ReadString()) -- TO DO: merge datatable with cached ( if same id/type )
     if( Quantum.Client.Cache[dt.id] ~= nil && #Quantum.Client.Cache[dt.id] >= 1 ) then 
         table.Merge( Quantum.Client.Cache[dt.id], dt )
     else
