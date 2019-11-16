@@ -8,22 +8,19 @@
 
 if SERVER then
 
-    local keyfuncs = {
-        [IN_USE] = function( pl )
-            Quantum.Debug( tostring( pl ) .. " pressed IN_USE" )
-        end,
-        ["openCharMenu"] = function( pl )
-            Quantum.Net.OpenMenu( pl, "character", Quantum.Server.Char.GetPlayerChars_cl( pl ) )
-        end,
-        ["introTest"] = function( pl )
-            Quantum.Net.OpenMenu( pl, "intro", Quantum.Server.Char.GetPlayerChars_cl( pl ) )
-        end
-    }
+	local keyfuncs = {
+		["openCharMenu"] = function( pl )
+			Quantum.Net.OpenMenu( pl, "character", Quantum.Server.Char.GetPlayerChars_cl( pl ) )
+		end,
+		["mainMenu"] = function( pl )
+			Quantum.Net.OpenMenu( pl, "main", Quantum.Server.Char.GetPlayerChars_cl( pl ) )
+		end
+	}
 
-    function GM:KeyRelease( ply, key )
-        if( keyfuncs[key] ) then keyfuncs[key]( ply ) end
-    end
-    function GM:ShowHelp( ply ) keyfuncs["openCharMenu"]( ply ) end
-    function GM:ShowTeam( ply ) keyfuncs["introTest"]( ply ) end
-    
+	function GM:KeyRelease( ply, key )
+		if( keyfuncs[key] ) then keyfuncs[key]( ply ) end
+	end
+	function GM:ShowHelp( ply ) keyfuncs["openCharMenu"]( ply ) end
+	function GM:ShowTeam( ply ) keyfuncs["mainMenu"]( ply ) end
+	
 end

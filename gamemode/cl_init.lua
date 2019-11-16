@@ -6,56 +6,56 @@
 --   \_\ /_/    \_\_|_| |_| |_|_|\___|\___|_| |_| /_/  
 
 if CLIENT then
-    include( "shared.lua" )
-    --local gmfolder = GAMEMODE.FolderName || GM.FolderName
-    Quantum.Client = {}
-    Quantum.Client.Cache = {}
-    Quantum.Client.ResolutionScale = ScrH() / 1080
-    Quantum.Client.ServerBannerPath = "gamemodes/" .. GM.FolderName .. "/gamemode/content/materials/quantum/server_banner.png" 
+	include( "shared.lua" )
+	--local gmfolder = GAMEMODE.FolderName || GM.FolderName
+	Quantum.Client = {}
+	Quantum.Client.Cache = {}
+	Quantum.Client.ResolutionScale = ScrH() / 1080
+	Quantum.Client.ServerBannerPath = "gamemodes/" .. GM.FolderName .. "/gamemode/content/materials/quantum/server_banner.png" 
 
-    local function loadCoreFiles()
-        local fol = GM.FolderName .. "/gamemode/engine/core/"
+	local function loadCoreFiles()
+		local fol = GM.FolderName .. "/gamemode/engine/core/"
 
-        local shFiles = file.Find( fol .. "/sh_*.lua", "LUA" )
-        for _, file in pairs( shFiles ) do
+		local shFiles = file.Find( fol .. "/sh_*.lua", "LUA" )
+		for _, file in pairs( shFiles ) do
 			include( fol .. file )
-        end
+		end
 
-        local clFiles = file.Find( fol .. "/client/cl_*.lua", "LUA" )
-        for _, file in pairs( clFiles ) do
-            include( fol .. "client/" .. file )
-        end
-    end
+		local clFiles = file.Find( fol .. "/client/cl_*.lua", "LUA" )
+		for _, file in pairs( clFiles ) do
+			include( fol .. "client/" .. file )
+		end
+	end
 
-    local function loadLibFiles()
-        local fol = GM.FolderName .. "/gamemode/engine/lib/"
+	local function loadLibFiles()
+		local fol = GM.FolderName .. "/gamemode/engine/lib/"
 
-        local shFiles = file.Find( fol .. "/sh_*.lua", "LUA" )
-        for _, file in pairs( shFiles ) do
+		local shFiles = file.Find( fol .. "/sh_*.lua", "LUA" )
+		for _, file in pairs( shFiles ) do
 			AddCSLuaFile( fol .. file )
 			include( fol .. file )
-        end
+		end
 
-        local clFiles = file.Find( fol .. "/client/cl_*.lua", "LUA" )
-        for _, file in pairs( clFiles ) do
-            include( fol .. "client/" .. file )
-        end
-    end
+		local clFiles = file.Find( fol .. "/client/cl_*.lua", "LUA" )
+		for _, file in pairs( clFiles ) do
+			include( fol .. "client/" .. file )
+		end
+	end
 
-    local function loadAllDermaMenus()
-        local fol = GM.FolderName .. "/gamemode/engine/derma/"
-        include( fol .. "cl_menu.lua" )
-    end
+	local function loadAllDermaMenus()
+		local fol = GM.FolderName .. "/gamemode/engine/derma/"
+		include( fol .. "cl_menu.lua" )
+	end
 
-    function Quantum.Client.Load()
+	function Quantum.Client.Load()
 		local fol = GM.FolderName .. "/gamemode/engine/core/"
 		
-        loadCoreFiles()
-        loadLibFiles()
-        loadAllDermaMenus()
+		loadCoreFiles()
+		loadLibFiles()
+		loadAllDermaMenus()
 
-        Quantum.Debug( "Loaded all files." )
-    end
+		Quantum.Debug( "Loaded all files." )
+	end
 
-    Quantum.Client.Load() 
+	Quantum.Client.Load() 
 end

@@ -9,17 +9,17 @@ local prefix
 if CLIENT then prefix = "[Quantum] : " else prefix = "" end -- A little advertisement for the players
 
 function Quantum.Debug( txt ) -- Very usefull for debugging 
-    if( txt ) then 
-        MsgC( Color( 200, 200, 200 ), prefix .. "[Debug] " .. txt .. "\n" )
-    else 
-        MsgC( Color( 200, 200, 200 ), prefix .. "[Debug]\n" ) 
-    end
+	if( txt ) then 
+		MsgC( Color( 200, 200, 200 ), prefix .. "[Debug] " .. txt .. "\n" )
+	else 
+		MsgC( Color( 200, 200, 200 ), prefix .. "[Debug]\n" ) 
+	end
 end
 
 function Quantum.Error( txt )
-    if( txt ) then 
-        MsgC( Color( 255, 10, 10 ), prefix .. "[ERROR] " .. txt .. "\n"  ) 
-    else 
-        return 
-    end
+	if( txt ) then 
+		MsgC( Color( 255, 10, 10 ), prefix .. "[ERROR] " .. txt .. "\n"  ) 
+	else 
+		return 
+	end
 end

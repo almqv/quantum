@@ -8,10 +8,10 @@
 local snm = {} -- Safe. Networked. Message
 
 function snm.RunNetworkedFunc( func, args )
-    net.Start( "quantum_menu_button_net" )      -- used for menu buttons etc
-        net.WriteString( func )                 -- don't worry! it's very secure :D
-        net.WriteTable( args )
-    net.SendToServer()
+	net.Start( "quantum_menu_button_net" )      -- used for menu buttons etc
+		net.WriteString( func )                 -- don't worry! it's very secure :D
+		net.WriteTable( args )
+	net.SendToServer()
 end
 
 return snm

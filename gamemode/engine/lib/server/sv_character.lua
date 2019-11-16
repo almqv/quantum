@@ -9,102 +9,102 @@ Quantum.Server.Char = {}
 Quantum.Server.Char.Players = {}
 
 local function CreateCharTable( args )
-    return {
-        name = args.name || "UNKNOWN",
-        class = Quantum.Classes[args.class] || Quantum.Classes[1],
-        maxhealth = Quantum.Server.Settings.MaxHealth,
-        health = args.health || Quantum.Server.Settings.MaxHealth,
-        model = Quantum.Classes[args.class].Models[args.gender][args.modelIndex] || "models/player.mdl",
-        money = args.money || Quantum.Server.Settings.StarterMoney,
-        inventory = args.inventory || {}, -- create new inventory later
-        jobs = args.jobs || {
-            [1] = { title = "Unemployed", level = -1 },
-        },
-        skills = args.skills || {
-            crafting = 0,
-            cooking = 0,
-            combat = 0,
-            science = 0
-        },
-        training = args.training || {},
-        licenses = args.licenses || {},
-        titles = args.titles || {}
-    }
+	return {
+		name = args.name || "UNKNOWN",
+		class = Quantum.Classes[args.class] || Quantum.Classes[1],
+		maxhealth = Quantum.Server.Settings.MaxHealth,
+		health = args.health || Quantum.Server.Settings.MaxHealth,
+		model = Quantum.Classes[args.class].Models[args.gender][args.modelIndex] || "models/player.mdl",
+		money = args.money || Quantum.Server.Settings.StarterMoney,
+		inventory = args.inventory || {}, -- create new inventory later
+		jobs = args.jobs || {
+			[1] = { title = "Unemployed", level = -1 },
+		},
+		skills = args.skills || {
+			crafting = 0,
+			cooking = 0,
+			combat = 0,
+			science = 0
+		},
+		training = args.training || {},
+		licenses = args.licenses || {},
+		titles = args.titles || {}
+	}
 end
 
 function Quantum.Server.Char.Load( pl, index, tbl )
-    local id = pl:SteamID() .. ";" .. index
-    if( Quantum.Server.Char.Players[ id ] == nil ) then
-        Quantum.Server.Char.Players[ id ] = CreateCharTable( tbl ) -- create the character
-        Quantum.Server.Char.Players[ id ].inventory = tbl.inventory || Quantum.Server.Inventory.Create( Quantum.Server.Char.Players[ id ] ) -- give the character an inventory
+	local id = pl:SteamID() .. ";" .. index
+	if( Quantum.Server.Char.Players[ id ] == nil ) then
+		Quantum.Server.Char.Players[ id ] = CreateCharTable( tbl ) -- create the character
+		Quantum.Server.Char.Players[ id ].inventory = tbl.inventory || Quantum.Server.Inventory.Create( Quantum.Server.Char.Players[ id ] ) -- give the character an inventory
 
-        Quantum.Debug( "Created character (" .. id .. ")" )
-        return Quantum.Server.Char.Players[ id ]
-    else
-        Quantum.Error( "Tried to duplicate character! Index already used. (" .. id .. ")" )
-    end
+		Quantum.Debug( "Created character (" .. id .. ")" )
+		return Quantum.Server.Char.Players[ id ]
+	else
+		Quantum.Error( "Tried to duplicate character! Index already used. (" .. id .. ")" )
+	end
 end
 
 function Quantum.Server.Char.Remove( pl, index )
-    local id = pl:SteamID() .. ":" .. index
-    if( Quantum.Server.Char.Players[ id ] ~= nil ) then
-        Quantum.Server.Char.Players[ id ] = nil
-        Quantum.Debug( "Removed character (" .. id .. ")" )
-    end
+	local id = pl:SteamID() .. ":" .. index
+	if( Quantum.Server.Char.Players[ id ] ~= nil ) then
+		Quantum.Server.Char.Players[ id ] = nil
+		Quantum.Debug( "Removed character (" .. id .. ")" )
+	end
 end
 
 function Quantum.Server.Char.GetCurrentCharacter( pl )
-    if( pl.character == nil ) then Quantum.Error( tostring( pl ) .. " doesn't have a character! Unable to get current character table." ) end
-    return pl.character
+	if( pl.character == nil ) then Quantum.Error( tostring( pl ) .. " doesn't have a character! Unable to get current character table." ) end
+	return pl.character
 end
 
 local function setupCharacter( pl, char )
-    pl:Spawn()
-    pl:SetMaxHealth( char.maxhealth )
-    pl:SetHealth( char.health )
-    pl:SetModel( char.model )
+	pl:Spawn()
+	pl:SetMaxHealth( char.maxhealth )
+	pl:SetHealth( char.health )
+	pl:SetModel( char.model )
 end
 
 function Quantum.Server.Char.SetCurrentCharacter( pl, index )
-    local id = pl:SteamID() .. ";" .. index
-    if( Quantum.Server.Char.Players[ id ] ) then 
-        pl.character = Quantum.Server.Char.Players[ id ]
-        pl.charindex = index
-        setupCharacter( pl, pl.character )
-        return pl.character
-    else
-        Quantum.Error( "Unable to set " .. tostring(pl) .. " character (" .. id ..  "). Character not found!" )
-        return nil
-    end
+	local id = pl:SteamID() .. ";" .. index
+	if( Quantum.Server.Char.Players[ id ] ) then 
+		pl.character = Quantum.Server.Char.Players[ id ]
+		pl.charindex = index
+		setupCharacter( pl, pl.character )
+		return pl.character
+	else
+		Quantum.Error( "Unable to set " .. tostring(pl) .. " character (" .. id ..  "). Character not found!" )
+		return nil
+	end
 end
 
 function Quantum.Server.Char.GetPlayerChars( pl )
-    local chars = {}
-    local strtbl = {}
-    for id, char in pairs( Quantum.Server.Char.Players ) do 
-        strtbl = string.Split( id, ";" )
-        if( strtbl[1] == pl:SteamID() ) then chars[id] = char end
-    end
-    return chars
+	local chars = {}
+	local strtbl = {}
+	for id, char in pairs( Quantum.Server.Char.Players ) do 
+		strtbl = string.Split( id, ";" )
+		if( strtbl[1] == pl:SteamID() ) then chars[id] = char end
+	end
+	return chars
 end
 
 function Quantum.Server.Char.GetCharCount( pl )
-    return table.Count( Quantum.Server.Char.GetPlayerChars( pl ) ) || 0
+	return table.Count( Quantum.Server.Char.GetPlayerChars( pl ) ) || 0
 end
 
 local function getBasicCharInfo( char )
-    return {
-        name = char.name,
-        model = char.model,
-        class = char.class.Name,
-        job = char.jobs[1]
-    }
+	return {
+		name = char.name,
+		model = char.model,
+		class = char.class.Name,
+		job = char.jobs[1]
+	}
 end
 
 function Quantum.Server.Char.GetPlayerChars_cl( pl )
-    local chars = {}
-    for id, char in pairs( Quantum.Server.Char.GetPlayerChars( pl ) ) do
-        chars[id] = getBasicCharInfo( char )
-    end
-    return chars
+	local chars = {}
+	for id, char in pairs( Quantum.Server.Char.GetPlayerChars( pl ) ) do
+		chars[id] = getBasicCharInfo( char )
+	end
+	return chars
 end

@@ -110,7 +110,7 @@ local function runNetFunc( pl, func, args )
 end
 
 net.Receive( "quantum_menu_button_net", function( len, pl )
-    local funcid = net.ReadString()
+	local funcid = net.ReadString()
 	local args = net.ReadTable()
 	runNetFunc( pl, funcid, args )
 end)
