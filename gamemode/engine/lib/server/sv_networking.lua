@@ -59,22 +59,17 @@ local function CacheDatatableMethod( id, datatable, ply )
 	return { id = id, cont = datatable }
 end
 
-local function shortenDataTableMethod( datatable )
-	Quantum.Debug( "(" .. datatable.id .. ") Converting datatable '" .. tostring( datatable ) .. "' to json..." )
-	return util.TableToJSON( datatable, false )
-end
-
 local function initializeDatatable( id, datatable, ply )
 	Quantum.Debug( "(" .. tostring(ply) .. ") Initializing datatable for client net message.." )
-	return shortenDataTableMethod( CacheDatatableMethod( id, datatable, ply ) )
+	return CacheDatatableMethod( id, datatable, ply ) 
 end
 
 local function SendDatatableToClient( client, dt, type )
 	local datatable = initializeDatatable( type, dt, client ) -- before we actually send the stuff, cache it and remove unneeded stuff
 	local net_start = net.Start( "quantum_menu_net" )
-		if( net_start ) then Quantum.Debug( "Sending net message to " .. tostring(ply) .. "..." ) end
-		if( #datatable > 0 ) then -- if it's empty just dont send it because we will save 8 bits 
-			net.WriteString( datatable ) -- send the data to the player
+		if( net_start ) then Quantum.Debug( "Sending net message to " .. tostring(client) .. "..." ) end
+		if( table.Count(datatable) > 0 ) then -- if it's empty just dont send it because we will save 8 bits 
+			net.WriteTable( datatable ) -- send the data to the player
 		end
 	net.Send( client )
 	Quantum.Debug("Net message sent.")
