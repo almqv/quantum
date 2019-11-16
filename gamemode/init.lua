@@ -15,7 +15,7 @@ if SERVER then
     local path = "gamemodes/" .. GM.FolderName .. "/gamemode/content/materials/quantum/server_banner.png"
     resource.AddSingleFile( path )
 
-    include( "shared.lua" ) -- git push test (REMOVE THIS LATER)
+    include( "shared.lua" ) 
 
     Quantum.Server = {}
     include( "settings/sv_settings.lua" ) -- include the settings
