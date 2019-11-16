@@ -6,6 +6,7 @@
 --   \_\ /_/    \_\_|_| |_| |_|_|\___|\___|_| |_| /_/  
 
 Quantum.CharacterLimit = 5
+Quantum.ServerTitle = "Electron Networks: CityRP"
 
 Quantum.Models = {
 	NPC = {},

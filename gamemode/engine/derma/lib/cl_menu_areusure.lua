@@ -5,14 +5,11 @@
 --  \ \   / ____ \| | | | | | | |  __/ (__| | | |  / / 
 --   \_\ /_/    \_\_|_| |_| |_|_|\___|\___|_| |_| /_/  
 
-GM.Name = "Quantum Framework"
-GM.Author = "AlmTech"
-GM.Email = "elias@almtech.se"
-GM.Website = "N/A"
+local sure = {}
 
-Quantum = {}
-Quantum.Version = "v0.1-alpha"
+function sure.openSureBox( text, parent, func )
+	local p = vgui.Create( "DPanel", parent )
+	p:SetSize( 100, 100 )
+end
 
-include( "engine/sh_debug.lua" ) -- add the debug functions and stuff
-
-include( "settings/sh_settings.lua" )
+return sure

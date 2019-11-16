@@ -66,3 +66,15 @@ surface.CreateFont( "q_header_s", {
 	size = 42 * Quantum.Client.ResolutionScale,
 	antialias = true
 })
+
+surface.CreateFont( "q_title", {
+	font = "Cambria Bold",
+	size = 60 * Quantum.Client.ResolutionScale,
+	antialias = true
+})
+
+surface.CreateFont( "q_subtitle", {
+	font = "Cambria Bold",
+	size = 38 * Quantum.Client.ResolutionScale,
+	antialias = true
+})
