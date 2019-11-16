@@ -129,6 +129,10 @@ function intro.open( dt )
             [4] = {
                 title = "Classes & Professions",
                 text = "Character classes are also one of many key element to the core gameplay. Some character classes are better at certain things but worse at other things, but your class does not define your journey and you have the freedom to choose whatever you want to do."
+            },
+            [5] = {
+                title = "Different Professions",
+                text = "There are different kinds of professions. These professions range from gathering resources, crafting items and even combat. But choose wisely becuase " -- insert more text later
             }
         }
 
