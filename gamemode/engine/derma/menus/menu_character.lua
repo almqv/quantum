@@ -303,10 +303,19 @@ local pages = {
 		cr:SetPos( name.x + name.w/2 - cr.w/2, name.y + cr.h + padding )
 		cr.Paint = function( self ) theme.sharpbutton( self ) end
 		cr.DoClick = function( self )
-			surface.PlaySound( "UI/buttonclick.wav" )
+			
 			-- create char
 			inputs.name = checkNameString( name:GetText() )
-			snm.RunNetworkedFunc( "createChar", inputs )
+			if( #inputs.name > Quantum.CharacterNameLimit || #inputs.name < Quantum.CharacterNameMin ) then 
+				surface.PlaySound( "common/wpn_denyselect.wav" )
+				return 
+			else
+				surface.PlaySound( "UI/buttonclick.wav" )
+				snm.RunNetworkedFunc( "createChar", inputs )
+				inputs.model = Quantum.Classes[inputs.class].Models[inputs.gender][inputs.index]
+				table.insert( Quantum.Client.Chars, inputs )
+			end
+			
 		end
 
 		return p, c
@@ -315,6 +324,7 @@ local pages = {
 
 function menu.open( dt )
 	Quantum.Client.IsInMenu = true -- hide the hud
+	Quantum.Client.Chars = dt.cont
 	if( !f ) then
 		local f = vgui.Create( "DFrame" )
 		f:SetTitle( "" )
@@ -327,6 +337,7 @@ function menu.open( dt )
 		f:ShowCloseButton( false )
 		f:MakePopup()
 		function f:OnClose()
+			Quantum.Client.Chars = nil
 			Quantum.Client.IsInMenu = false -- show the hud when closed
 			Quantum.Client.Cam.Stop()
 		end
@@ -394,7 +405,7 @@ function menu.open( dt )
 		local cpanels = {}
 		local selectedChar
 
-		if( table.Count( chars ) >= 1 ) then
+		if( table.Count( Quantum.Client.Chars ) >= 1 ) then
 			-- Char model
 			p.mdl = vgui.Create( "DModelPanel", p )
 			p.mdl:SetSize( 600 * resScale, 1000 * resScale )
@@ -422,7 +433,7 @@ function menu.open( dt )
 		end
 
 		local count = 0
-		for k, v in pairs( chars ) do
+		for k, v in pairs( Quantum.Client.Chars ) do
 			count = count + 1
 			cpanels[count] = vgui.Create( "DButton", clist )
 			cpanels[count].index = count

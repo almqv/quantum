@@ -59,6 +59,7 @@ function Quantum.Server.Char.GetCurrentCharacter( pl )
 end
 
 local function setupCharacter( pl, char )
+	pl.isloaded = true
 	pl:Spawn()
 	pl:SetMaxHealth( char.maxhealth )
 	pl:SetHealth( char.health )

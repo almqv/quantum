@@ -6,7 +6,11 @@
 --   \_\ /_/    \_\_|_| |_| |_|_|\___|\___|_| |_| /_/  
 
 Quantum.CharacterLimit = 5
+Quantum.CharacterNameLimit = 12
+Quantum.CharacterNameMin = 3
 Quantum.ServerTitle = "Electron Networks: CityRP"
+Quantum.DiscordInvite = "https://discord.gg/heUJB4B"
+Quantum.WorkshopLink = "https://steamcommunity.com/sharedfiles/filedetails/?id=1842234130"
 
 Quantum.Models = {
 	NPC = {},

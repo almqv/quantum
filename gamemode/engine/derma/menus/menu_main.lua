@@ -8,6 +8,7 @@
 local main = {}
 
 local theme = Quantum.Client.Menu.GetAPI( "theme" )
+local surebox = Quantum.Client.Menu.GetAPI( "sure" )
 
 local scenes = {
 	["rp_truenorth_v1a_livin"] = {
@@ -46,6 +47,8 @@ local scenes = {
 	}
 }
 
+local charmenu = include( GAMEMODE.FolderName .. "/gamemode/engine/derma/menus/menu_character.lua" )
+
 function main.open(dt)
 
 	if( !f ) then
@@ -65,13 +68,15 @@ function main.open(dt)
 		f:SetSize( sw, sh )
 		f:SetTitle( "" )
 		f:IsDraggable( false )
+		f:ShowCloseButton( false )
 		f:MakePopup()
 		f.Paint = function( self ) 
 			theme.renderblur( self, 2, 7 )
 		end
 		f.OnClose = function( self )
-			Quantum.Client.IsInMenu = false 
-			Quantum.Client.Cam.Stop()
+			--Quantum.Client.IsInMenu = false 
+			--Quantum.Client.Cam.Stop()
+			charmenu.open( dt )
 		end
 
 		Quantum.Client.Cam.Start( scenes[ game.GetMap() ][math.random( 1, table.Count(scenes[ game.GetMap() ])) ], false )
@@ -125,6 +130,7 @@ function main.open(dt)
 
 		play.DoClick = function( self )
 			surface.PlaySound( "UI/buttonclick.wav" )
+			--charmenu.open( dt )
 			f:Close()
 		end
 		play.OnCursorEntered = function() surface.PlaySound( "UI/buttonrollover.wav" ) end
@@ -170,6 +176,7 @@ function main.open(dt)
 		end
 		ws.DoClick = function( self )
 			surface.PlaySound( "UI/buttonclick.wav" )
+			gui.OpenURL( Quantum.WorkshopLink )
 		end
 		ws.OnCursorEntered = function() surface.PlaySound( "UI/buttonrollover.wav" ) end
 
@@ -192,6 +199,7 @@ function main.open(dt)
 		end
 		inv.DoClick = function( self )
 			surface.PlaySound( "UI/buttonclick.wav" )
+			gui.OpenURL( Quantum.DiscordInvite )
 		end
 		inv.OnCursorEntered = function() surface.PlaySound( "UI/buttonrollover.wav" ) end
 
@@ -214,7 +222,9 @@ function main.open(dt)
 		end
 		quit.DoClick = function( self )
 			surface.PlaySound( "UI/buttonclick.wav" )
-			LocalPlayer():ConCommand("disconnect")
+			surebox.open( "You are about to leave the server.", self:GetParent(), function() 
+				LocalPlayer():ConCommand("disconnect")
+			end)
 		end
 		quit.OnCursorEntered = function() surface.PlaySound( "UI/buttonrollover.wav" ) end
 
