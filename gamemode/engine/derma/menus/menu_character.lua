@@ -323,8 +323,8 @@ local pages = {
 }
 menu.charScroll = {}
 menu.charScroll.del = function( clist )
-	for k, v in pairs( clist.panels ) do
-		v:Remove()
+	for n, panel in pairs( clist.panels ) do
+		panel:Remove()
 	end
 end
 menu.charScroll.add = function( chars, clist )
@@ -391,6 +391,12 @@ menu.charScroll.add = function( chars, clist )
 	end
 	clist.panels = cpanels
 	return clist.panels
+end
+
+menu.charScroll.replace = function( clist, chars )
+	menu.charScroll.del(clist)
+	local panels = menu.charScroll.add( chars, clist )
+	return panels
 end
 
 function menu.open( dt )
