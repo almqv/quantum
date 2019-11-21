@@ -36,7 +36,7 @@ end
 local function getNextIndex( index, isNext, min, max )
 	if( isNext ) then
 		if( index + 1 > max ) then 
-			return min -- integer overflow LUL
+			return min -- integer overflow 
 		else
 			return index + 1
 		end 
