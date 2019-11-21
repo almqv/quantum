@@ -508,67 +508,9 @@ function menu.open( dt )
 			info:SetPos( p.w/2 - info.w/2, p.h/2 - info.h/2 )
 
 		end
-
-		local count = 0
-		for k, v in pairs( Quantum.Client.Chars ) do
-			count = count + 1
-			cpanels[count] = vgui.Create( "DButton", clist )
-			cpanels[count].index = count
-
-			cpanels[count].char = v -- give the panel it's character
-			if( !selectedChar ) then selectedChar = cpanels[1] end -- select the first one
-
-			cpanels[count]:SetText( "" )
-			cpanels[count]:SetSize( clist.w - padding, 100 * resScale )
-			cpanels[count].w, cpanels[count].h = cpanels[count]:GetSize()
-			cpanels[count]:SetPos( padding/2, (padding)*count + (cpanels[count].h * (count-1)) )
-			cpanels[count].Paint = function( self, w, h )
-				surface.SetDrawColor( 0, 0, 0, 0 )
-				surface.DrawRect( 0, 0, w, h )
-				if( self == selectedChar ) then
-					surface.SetDrawColor( 252, 186, 3, 100 )
-					surface.DrawOutlinedRect( 0, 0, w, h )
-				end
-			end
-			cpanels[count].DoClick = function( self ) -- if you press the char, then select it
-				selectedChar = self
-				surface.PlaySound( "UI/buttonclick.wav" )
-				p.mdl:SetModel( self.char.model || errorMdl )
-			end
-
-			local txt = vgui.Create( "DLabel", cpanels[count] )
-			txt:SetText( v.name || "[ERROR] NAME=nil" )
-			txt:SetFont( "q_charNameText" )
-			txt:SetTextColor( Color( 200, 200, 200, 220 ) )
-			txt:SizeToContents()
-			local txtW, txtH = txt:GetSize()
-			txt:SetPos( padding, cpanels[count].h/4 - txtH/2 )
-			local txtX, txtY = txt:GetPos()
-
-			local lvlTxt
-			if( v.job.level >= 0 ) then
-				lvlTxt = "Level " .. v.job.level .. " "
-			else
-				lvlTxt = ""
-			end
-
-			local lvl = vgui.Create( "DLabel", cpanels[count] )
-			lvl:SetText( lvlTxt .. v.job.title )
-			lvl:SetFont( "q_text2" )
-			lvl:SetTextColor( Color( 180, 180, 180, 225 ) )
-			lvl:SizeToContents()
-			local lvlW, lvlH = lvl:GetSize()
-			lvl:SetPos( txtX, txtY + lvlH )
-			local lvlX, lvlY = lvl:GetPos()
-
-			local class = vgui.Create( "DLabel", cpanels[count] )
-			class:SetText( v.class )
-			class:SetFont( "q_text2" )
-			class:SetTextColor( Color( 252, 186, 3, 180 ) )
-			class:SizeToContents()
-			local classW, classH = class:GetSize()
-			class:SetPos( txtX, lvlY + classH )
-		end
+		-----------------------------------------------------
+		menu.charScroll.add( Quantum.Client.Chars, clist ) -- add the panels
+		-----------------------------------------------------
 
 		if( selectedChar && p.mdl ~= nil ) then
 			p.mdl:SetModel( selectedChar.char.model ) -- set the char model
