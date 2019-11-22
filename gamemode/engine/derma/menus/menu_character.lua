@@ -11,6 +11,8 @@ local snm = Quantum.Client.Menu.GetAPI( "net" )
 local page = Quantum.Client.Menu.GetAPI( "page" )
 local theme = Quantum.Client.Menu.GetAPI( "theme" )
 
+--local mainmenu = include( GAMEMODE.FolderName .. "/gamemode/engine/derma/menus/menu_main.lua" )
+
 local resScale = Quantum.Client.ResolutionScale
 local sw, sh = ScrW(), ScrH()
 local padding = 10 * resScale
@@ -130,7 +132,11 @@ local pages = {
 			gender = "Male",
 			class = "Worker",
 			modelIndex = 1,
-			name = ""
+			name = "",
+			job = {
+				title = "Unemployed",
+				level = -1
+			}
 		}
 		
 		local name = vgui.Create( "DTextEntry", p )
@@ -310,10 +316,38 @@ local pages = {
 				surface.PlaySound( "common/wpn_denyselect.wav" )
 				return 
 			else
+				-- send it to the server
 				surface.PlaySound( "UI/buttonclick.wav" )
 				snm.RunNetworkedFunc( "createChar", inputs )
-				inputs.model = Quantum.Classes[inputs.class].Models[inputs.gender][inputs.index]
-				table.insert( Quantum.Client.Chars, inputs )
+
+				---- save it on the client
+				inputs.model = Quantum.Classes[inputs.class].Models[inputs.gender][inputs.modelIndex]
+
+				Quantum.Client.Chars[#Quantum.Client.Chars + 1] = inputs
+
+				--refresh chars in dscrollpanel--
+				menu.charScroll.del( Quantum.Client.CharMenuList )
+				Quantum.Client.charPanels = menu.charScroll.add( Quantum.Client.Chars, Quantum.Client.CharMenuList, parent.page )
+				Quantum.Client.selectedChar = Quantum.Client.charPanels[#Quantum.Client.charPanels] -- select the newly created char
+
+				-- switching buttons & stuff
+				parent.page.info:Remove()
+				parent.page.mdl:SetVisible(true)
+				parent.page.mdl:SetModel( Quantum.Client.selectedChar.char.model )
+
+				local minv, maxv = parent.page.mdl.Entity:GetRenderBounds()
+				local eyepos = parent.page.mdl.Entity:GetBonePosition( parent.page.mdl.Entity:LookupBone( "ValveBiped.Bip01_Head1" ) )
+				eyepos:Add( Vector( 40, 0, -15 ) )
+				parent.page.mdl:SetCamPos( eyepos - Vector( -10, 0, -2 ) )
+				parent.page.mdl:SetLookAt( eyepos )
+				
+
+				parent.page.enter:SetVisible(true)
+				parent.page.dl:SetVisible(true)
+
+				--close the page
+				parent.page:SetVisible( true )
+				p:Remove()
 			end
 			
 		end
@@ -327,16 +361,17 @@ menu.charScroll.del = function( clist )
 		panel:Remove()
 	end
 end
-menu.charScroll.add = function( chars, clist )
+menu.charScroll.add = function( chars, clist, p )
 	local count = 0
 	local cpanels = {}
+	PrintTable(chars)
 	for k, v in pairs( chars ) do
 		count = count + 1
 		cpanels[count] = vgui.Create( "DButton", clist )
 		cpanels[count].index = count
 
 		cpanels[count].char = v -- give the panel it's character
-		if( !selectedChar ) then selectedChar = cpanels[1] end -- select the first one
+		if( !Quantum.Client.selectedChar ) then Quantum.Client.selectedChar = cpanels[1] end -- select the first one
 
 		cpanels[count]:SetText( "" )
 		cpanels[count]:SetSize( clist.w - padding, 100 * resScale )
@@ -345,13 +380,13 @@ menu.charScroll.add = function( chars, clist )
 		cpanels[count].Paint = function( self, w, h )
 			surface.SetDrawColor( 0, 0, 0, 0 )
 			surface.DrawRect( 0, 0, w, h )
-			if( self == selectedChar ) then
+			if( self == Quantum.Client.selectedChar ) then
 				surface.SetDrawColor( 252, 186, 3, 100 )
 				surface.DrawOutlinedRect( 0, 0, w, h )
 			end
 		end
 		cpanels[count].DoClick = function( self ) -- if you press the char, then select it
-			selectedChar = self
+			Quantum.Client.selectedChar = self
 			surface.PlaySound( "UI/buttonclick.wav" )
 			p.mdl:SetModel( self.char.model || errorMdl )
 		end
@@ -393,12 +428,6 @@ menu.charScroll.add = function( chars, clist )
 	return clist.panels
 end
 
-menu.charScroll.replace = function( clist, chars )
-	menu.charScroll.del(clist)
-	local panels = menu.charScroll.add( chars, clist )
-	return panels
-end
-
 function menu.open( dt )
 	Quantum.Client.IsInMenu = true -- hide the hud
 	Quantum.Client.Chars = dt.cont
@@ -432,31 +461,32 @@ function menu.open( dt )
 		Quantum.Client.Cam.Start( scene[game.GetMap()], true )
 
 		local args = {
-			CloseButtonText = "Quit",
+			CloseButtonText = "Return",
 			CloseButtonFont = "q_text"
 		}
 		local p, c = page.New( f, args )
 		f.page = p
 		f.page:SetVisible( true )
 
-		local clist = vgui.Create( "DScrollPanel", p )
-		clist:SetSize( 380 * resScale, sh - padding*15 )
-		clist.w, clist.h = clist:GetSize()
-		clist:SetPos( (sw - clist.w) - padding*2, padding*6 )
-		clist.x, clist.y = clist:GetPos()
-		clist.Paint = function( self, w, h )
+		Quantum.Client.CharMenuList = vgui.Create( "DScrollPanel", p )
+		Quantum.Client.CharMenuList:SetSize( 380 * resScale, sh - padding*15 )
+		Quantum.Client.CharMenuList.w, Quantum.Client.CharMenuList.h = Quantum.Client.CharMenuList:GetSize()
+		Quantum.Client.CharMenuList:SetPos( (sw - Quantum.Client.CharMenuList.w) - padding*2, padding*6 )
+		Quantum.Client.CharMenuList.x, Quantum.Client.CharMenuList.y = Quantum.Client.CharMenuList:GetPos()
+		Quantum.Client.CharMenuList.Paint = function( self, w, h )
 			theme.blurpanel( self )
 		end
 
-		local sbar = clist:GetVBar()
+		local sbar = Quantum.Client.CharMenuList:GetVBar()
 		sbar:SetSize( 0, 0 ) -- Remove the scroll bar
 
 		--- Close/quit button stuff ---
 		local cW, cH = c:GetSize()
-		c:SetPos( (clist.x + clist.w) - cW, clist.y + clist.h + cH )
+		c:SetPos( (Quantum.Client.CharMenuList.x + Quantum.Client.CharMenuList.w) - cW, Quantum.Client.CharMenuList.y + Quantum.Client.CharMenuList.h + cH )
 		c.Paint = function( self ) theme.button( self ) end
 		c.DoClick = function() 
 			surface.PlaySound( "UI/buttonclick.wav" )
+			--mainmenu.open(dt)
 			f:Close() 
 		end
 		---
@@ -473,47 +503,53 @@ function menu.open( dt )
 		header:SetFont( "q_header" )
 		header:SizeToContents()
 		local headerW, headerH = header:GetSize()
-		header:SetPos( clist.x + ( clist.w/2 - headerW/2 ), (clist.y - headerH) + padding/2 )
+		header:SetPos( Quantum.Client.CharMenuList.x + ( Quantum.Client.CharMenuList.w/2 - headerW/2 ), (Quantum.Client.CharMenuList.y - headerH) + padding/2 )
 		header:SetTextColor( Color( 255, 255, 255, 255 ) )
 		header.Paint = function( self, w, h ) end
 
 		local chars = dt.cont -- set the char table
 		
 		local cpanels = {}
-		local selectedChar
+
+		-- Char model
+		p.mdl = vgui.Create( "DModelPanel", p )
+		p.mdl:SetSize( 600 * resScale, 1000 * resScale )
+		p.mdl.w, p.mdl.h = p.mdl:GetSize()
+		p.mdl:SetPos( p.w/2 - p.mdl.w/2, p.h/2 - p.mdl.h/2 )
+		p.mdl:SetFOV( 55 )
+		function p.mdl:LayoutEntity( ent ) return end
+		p.mdl:SetVisible( false )
+
+		-- No char found text
+		local titles = {
+			"404 - Characters not found :(",
+			"No Characters Found"
+		}
+
+		p.info = vgui.Create( "DLabel", p )
+		p.info:SetText( titles[ math.random( 1, #titles ) ] )
+		p.info:SetFont( "q_header" )
+		p.info:SizeToContents()
+
+		p.info.w, p.info.h = p.info:GetSize()
+
+		p.info:SetPos( p.w/2 - p.info.w/2, p.h/2 - p.info.h/2 )
+		p.info:SetVisible( false )
 
 		if( table.Count( Quantum.Client.Chars ) >= 1 ) then
-			-- Char model
-			p.mdl = vgui.Create( "DModelPanel", p )
-			p.mdl:SetSize( 600 * resScale, 1000 * resScale )
-			p.mdl.w, p.mdl.h = p.mdl:GetSize()
-			p.mdl:SetPos( p.w/2 - p.mdl.w/2, p.h/2 - p.mdl.h/2 )
-			p.mdl:SetFOV( 55 )
-			function p.mdl:LayoutEntity( ent ) return end
-
+			p.mdl:SetVisible( true )
+			p.info:SetVisible( false )
 		else
-
-			local titles = {
-				"404 - Characters not found :(",
-				"No Characters Found"
-			}
-
-			local info = vgui.Create( "DLabel", p )
-			info:SetText( titles[ math.random( 1, #titles ) ] )
-			info:SetFont( "q_header" )
-			info:SizeToContents()
-
-			info.w, info.h = info:GetSize()
-
-			info:SetPos( p.w/2 - info.w/2, p.h/2 - info.h/2 )
-
+			p.mdl:SetVisible( false )
+			p.info:SetVisible( true )
 		end
 		-----------------------------------------------------
-		menu.charScroll.add( Quantum.Client.Chars, clist ) -- add the panels
+		Quantum.Client.charPanels = menu.charScroll.add( Quantum.Client.Chars, Quantum.Client.CharMenuList, p ) -- add the panels
+		Quantum.Client.selectedChar = Quantum.Client.charPanels[1]
 		-----------------------------------------------------
 
-		if( selectedChar && p.mdl ~= nil ) then
-			p.mdl:SetModel( selectedChar.char.model ) -- set the char model
+		if( Quantum.Client.selectedChar && p.mdl ~= nil ) then
+			p.mdl:SetModel( Quantum.Client.selectedChar.char.model ) -- set the char model
 			local minv, maxv = p.mdl.Entity:GetRenderBounds()
 			local eyepos = p.mdl.Entity:GetBonePosition( p.mdl.Entity:LookupBone( "ValveBiped.Bip01_Head1" ) )
 			eyepos:Add( Vector( 40, 0, -15 ) )
@@ -529,7 +565,7 @@ function menu.open( dt )
 			cr:SetTextColor( Color( 0, 0, 0, 255 ) )
 			cr:SizeToContents()
 			cr.w, cr.h = cr:GetSize()
-			cr:SetPos( clist.x + ( clist.w/2 - cr.w/2 ), clist.y + ( ( clist.h - cr.h ) - padding*2 ) )
+			cr:SetPos( Quantum.Client.CharMenuList.x + ( Quantum.Client.CharMenuList.w/2 - cr.w/2 ), Quantum.Client.CharMenuList.y + ( ( Quantum.Client.CharMenuList.h - cr.h ) - padding*2 ) )
 			cr.Paint = function( self ) 
 				theme.sharpbutton( self )
 			end
@@ -542,42 +578,47 @@ function menu.open( dt )
 			cr.OnCursorEntered = function() surface.PlaySound( "UI/buttonrollover.wav" ) end
 		end
 
-		if( selectedChar ) then
-			-- Delete char button
-			local dl = vgui.Create( "DButton", p )
-			dl:SetText("Delete Character")
-			dl:SetFont( "q_text" )
-			dl:SetTextColor( Color( 0, 0, 0, 255 ) )
-			dl:SizeToContents()
-			dl.w, dl.h = dl:GetSize()
-			dl:SetPos( clist.x, clist.y + ( clist.h + dl.h ) )
-			dl.Paint = function( self ) 
-				theme.button( self )
-			end
-			dl.DoClick = function()
-				surface.PlaySound( "UI/buttonclick.wav" )
-				LocalPlayer():ChatPrint( "Comming soon!" )
-			end
-			
-			dl.OnCursorEntered = function() surface.PlaySound( "UI/buttonrollover.wav" ) end
+		-- Delete char button
+		p.dl = vgui.Create( "DButton", p )
+		p.dl:SetText("Delete Character")
+		p.dl:SetFont( "q_text" )
+		p.dl:SetTextColor( Color( 0, 0, 0, 255 ) )
+		p.dl:SizeToContents()
+		p.dl.w, p.dl.h = p.dl:GetSize()
+		p.dl:SetPos( Quantum.Client.CharMenuList.x, Quantum.Client.CharMenuList.y + ( Quantum.Client.CharMenuList.h + p.dl.h ) )
+		p.dl.Paint = function( self ) 
+			theme.button( self )
+		end
+		p.dl.DoClick = function()
+			surface.PlaySound( "UI/buttonclick.wav" )
+			LocalPlayer():ChatPrint( "Comming soon!" )
+		end
+		
+		p.dl.OnCursorEntered = function() surface.PlaySound( "UI/buttonrollover.wav" ) end
+		p.dl:SetVisible(false)
 
-			-- Enter world button --
-			p.enter = vgui.Create( "DButton", p )
-			p.enter:SetText( "Enter World" )
-			p.enter:SetFont( "q_button2" )
-			p.enter:SetTextColor( Color( 0, 0, 0, 255 ) )
-			p.enter:SizeToContents()
-			p.enter.w, p.enter.h = p.enter:GetSize()
-			p.enter:SetPos( p.w/2 - p.enter.w/2, p.h*0.925 - p.enter.h/2 )
-			p.enter.Paint = function( self ) theme.sharpbutton( self ) end
-			p.enter.DoClick = function() 
-				surface.PlaySound( "UI/buttonclick.wav" ) 
-				-- enter world --
-				local dt = { index = selectedChar.index }
-				snm.RunNetworkedFunc( "enterWorldChar", dt ) -- FIX CRASH ISSUE ( 0xC00000FD )
-				f:Close() -- close the frame
-			end
-			p.enter.OnCursorEntered = function() surface.PlaySound( "UI/buttonrollover.wav" ) end
+		-- Enter world button --
+		p.enter = vgui.Create( "DButton", p )
+		p.enter:SetText( "Enter World" )
+		p.enter:SetFont( "q_button2" )
+		p.enter:SetTextColor( Color( 0, 0, 0, 255 ) )
+		p.enter:SizeToContents()
+		p.enter.w, p.enter.h = p.enter:GetSize()
+		p.enter:SetPos( p.w/2 - p.enter.w/2, p.h*0.925 - p.enter.h/2 )
+		p.enter.Paint = function( self ) theme.sharpbutton( self ) end
+		p.enter.DoClick = function() 
+			surface.PlaySound( "UI/buttonclick.wav" ) 
+			-- enter world --
+			local dt = { index = Quantum.Client.selectedChar.index }
+			snm.RunNetworkedFunc( "enterWorldChar", dt ) -- FIX CRASH ISSUE ( 0xC00000FD )
+			f:Close() -- close the frame
+		end
+		p.enter.OnCursorEntered = function() surface.PlaySound( "UI/buttonrollover.wav" ) end
+		p.enter:SetVisible(false)
+
+		if( Quantum.Client.selectedChar ) then
+			p.enter:SetVisible(true)
+			p.dl:SetVisible(true)
 		end
 	end
 end

@@ -104,8 +104,10 @@ end
 
 function Quantum.Server.Char.GetPlayerChars_cl( pl )
 	local chars = {}
+	local count = 0
 	for id, char in pairs( Quantum.Server.Char.GetPlayerChars( pl ) ) do
-		chars[id] = getBasicCharInfo( char )
+		count = count + 1
+		chars[count] = getBasicCharInfo( char )
 	end
 	return chars
 end
