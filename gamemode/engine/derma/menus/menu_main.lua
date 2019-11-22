@@ -130,7 +130,6 @@ function main.open(dt)
 
 		play.DoClick = function( self )
 			surface.PlaySound( "UI/buttonclick.wav" )
-			--charmenu.open( dt )
 			f:Close()
 		end
 		play.OnCursorEntered = function() surface.PlaySound( "UI/buttonrollover.wav" ) end

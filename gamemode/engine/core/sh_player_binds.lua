@@ -14,6 +14,9 @@ if SERVER then
 		end,
 		["mainMenu"] = function( pl )
 			Quantum.Net.OpenMenu( pl, "main", Quantum.Server.Char.GetPlayerChars_cl( pl ) )
+		end,
+		["intro"] = function( pl )
+			Quantum.Net.OpenMenu( pl, "intro", {} )
 		end
 	}
 
@@ -22,5 +25,6 @@ if SERVER then
 	end
 	function GM:ShowHelp( ply ) keyfuncs["openCharMenu"]( ply ) end
 	function GM:ShowTeam( ply ) keyfuncs["mainMenu"]( ply ) end
+	function GM:ShowSpare2( ply ) keyfuncs["intro"]( ply ) end
 	
 end
