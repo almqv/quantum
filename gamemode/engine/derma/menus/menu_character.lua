@@ -461,7 +461,7 @@ function menu.open( dt )
 		Quantum.Client.Cam.Start( scene[game.GetMap()], true )
 
 		local args = {
-			CloseButtonText = "Return",
+			CloseButtonText = "Main Menu",
 			CloseButtonFont = "q_text"
 		}
 		local p, c = page.New( f, args )
@@ -486,8 +486,8 @@ function menu.open( dt )
 		c.Paint = function( self ) theme.button( self ) end
 		c.DoClick = function() 
 			surface.PlaySound( "UI/buttonclick.wav" )
-			--mainmenu.open(dt)
 			f:Close() 
+			mainmenu.open(dt)
 		end
 		---
 

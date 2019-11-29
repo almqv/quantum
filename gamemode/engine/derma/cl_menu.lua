@@ -15,6 +15,27 @@ local libs = {
 }
 Quantum.Client.Menu.GetAPI = function( lib ) return include( libs[lib] ) end
 
+Quantum.Client.Menu.Menus = {}
+
+local function getMenuIDbyFileName( file )
+	local str = string.Split( tostring(file), "menu_" )
+	return string.Split( str[2], ".lua" )[1]
+end
+
+Quantum.Client.Menu.Load = function()
+	local files = file.Find( GAMEMODE.FolderName .. "/gamemode/engine/derma/menus/menu_*.lua", "LUA" )
+	Quantum.Debug("Loading menus...")
+	if( !files == nil || #files <= 0 ) then Quantum.Error( "Failed to load menus! Menu files not found. Contact someone important!\nFiles: " .. tostring(files) .. " (" .. tostring(#files) .. ")" ) end
+
+	for i, file in pairs( files ) do -- pretty ineffective but this will only be run ONCE to load all of the menus
+		local id = getMenuIDbyFileName( file ) -- get the menu id by removing ".lua" and "menu_" from it
+		Quantum.Client.Menu.Menus[id] = include( GAMEMODE.FolderName .. "/gamemode/engine/derma/menus/" .. file ) -- put it into the table
+		Quantum.Debug( "Loaded menu: '" .. tostring(id) .. "'" ) -- debug it
+	end
+end
+
+Quantum.Client.Menu.Load() -- load in all of the menus when the player joins (lua autorun)
+
 net.Receive( "quantum_menu_net", function( len, pl ) 
 	local dt = net.ReadTable()
 	if( Quantum.Client.Cache[dt.id] ~= nil && #Quantum.Client.Cache[dt.id] >= 1 ) then 
@@ -25,11 +46,10 @@ net.Receive( "quantum_menu_net", function( len, pl )
 
 	if( Quantum.Client.EnableDebug ) then -- debug
 		Quantum.Debug( "Datatable size: " .. len .. "b (" .. len/8 .. "B)" )
-		Quantum.Debug( "--Datatable contents--")
+		Quantum.Debug( "[Datatable Contents]")
 		PrintTable( dt ) 
-		Quantum.Debug( "--End of datatable contens--" )
+		Quantum.Debug( "[End of Datatable Contens]" )
 	end
 
-	local menu = include( GAMEMODE.FolderName .. "/gamemode/engine/derma/menus/menu_" .. dt.id .. ".lua" )
-	menu.open( dt )
+	Quantum.Client.Menu.Menus[dt.id].open( dt ) -- open the menu
 end)
