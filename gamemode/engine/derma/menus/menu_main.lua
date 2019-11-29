@@ -47,8 +47,6 @@ local scenes = {
 	}
 }
 
-local charmenu = include( GAMEMODE.FolderName .. "/gamemode/engine/derma/menus/menu_character.lua" )
-
 function main.open(dt)
 
 	if( !f ) then
@@ -76,7 +74,7 @@ function main.open(dt)
 		f.OnClose = function( self )
 			--Quantum.Client.IsInMenu = false 
 			--Quantum.Client.Cam.Stop()
-			charmenu.open( dt )
+			Quantum.Client.Menu.Menus["character"].open( dt )
 		end
 
 		Quantum.Client.Cam.Start( scenes[ game.GetMap() ][math.random( 1, table.Count(scenes[ game.GetMap() ])) ], false )

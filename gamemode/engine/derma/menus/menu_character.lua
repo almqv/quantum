@@ -11,8 +11,6 @@ local snm = Quantum.Client.Menu.GetAPI( "net" )
 local page = Quantum.Client.Menu.GetAPI( "page" )
 local theme = Quantum.Client.Menu.GetAPI( "theme" )
 
---local mainmenu = include( GAMEMODE.FolderName .. "/gamemode/engine/derma/menus/menu_main.lua" )
-
 local resScale = Quantum.Client.ResolutionScale
 local sw, sh = ScrW(), ScrH()
 local padding = 10 * resScale
@@ -84,7 +82,7 @@ local pages = {
 			p:Remove()
 		end
 
-		local scene = {
+		p.scene = {
 			["rp_truenorth_v1a_livin"] = { 
 				[1] = {
 					fov = 75,
@@ -94,7 +92,11 @@ local pages = {
 				}
 			}
 		}
-		Quantum.Client.Cam.Start( scene[game.GetMap()], true )
+		Quantum.Client.Cam.Start( p.scene[game.GetMap()], true )
+
+		p.OnRemove = function( self )
+			Quantum.Client.Cam.Start( parent.scene[game.GetMap()], true ) -- switch back to the parents scene
+		end
 
 		local banner = vgui.Create( "DImage", p )
 		banner:SetImage( Quantum.Client.ServerBannerPath )
@@ -448,7 +450,7 @@ function menu.open( dt )
 			Quantum.Client.Cam.Stop()
 		end
 
-		local scene = {
+		f.scene = {
 			["rp_truenorth_v1a_livin"] = { 
 				[1] = {
 					fov = 70,
@@ -458,10 +460,10 @@ function menu.open( dt )
 				}
 			}
 		}
-		Quantum.Client.Cam.Start( scene[game.GetMap()], true )
+		Quantum.Client.Cam.Start( f.scene[game.GetMap()], true )
 
 		local args = {
-			CloseButtonText = "Main Menu",
+			CloseButtonText = "Return",
 			CloseButtonFont = "q_text"
 		}
 		local p, c = page.New( f, args )
@@ -487,7 +489,7 @@ function menu.open( dt )
 		c.DoClick = function() 
 			surface.PlaySound( "UI/buttonclick.wav" )
 			f:Close() 
-			mainmenu.open(dt)
+			Quantum.Client.Menu.Menus["main"].open(dt)
 		end
 		---
 
