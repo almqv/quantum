@@ -305,11 +305,11 @@ local pages = {
 		local cr = vgui.Create( "DButton", p )
 		cr:SetText( "Create Character" )
 		cr:SetFont( "q_button2" )
-		cr:SetTextColor( Color( 0, 0, 0, 255 ) )
+		cr:SetTextColor( Color( 255, 255, 255, 255 ) )
 		cr:SizeToContents()
 		cr.w, cr.h = cr:GetSize()
 		cr:SetPos( name.x + name.w/2 - cr.w/2, name.y + cr.h + padding )
-		cr.Paint = function( self ) theme.sharpbutton( self ) end
+		cr.Paint = function( self ) theme.sharpblurrbutton( self ) end
 		cr.DoClick = function( self )
 			
 			-- create char
@@ -366,7 +366,6 @@ end
 menu.charScroll.add = function( chars, clist, p )
 	local count = 0
 	local cpanels = {}
-	PrintTable(chars)
 	for k, v in pairs( chars ) do
 		count = count + 1
 		cpanels[count] = vgui.Create( "DButton", clist )
@@ -380,12 +379,16 @@ menu.charScroll.add = function( chars, clist, p )
 		cpanels[count].w, cpanels[count].h = cpanels[count]:GetSize()
 		cpanels[count]:SetPos( padding/2, (padding)*count + (cpanels[count].h * (count-1)) )
 		cpanels[count].Paint = function( self, w, h )
+
 			surface.SetDrawColor( 0, 0, 0, 0 )
 			surface.DrawRect( 0, 0, w, h )
+			
 			if( self == Quantum.Client.selectedChar ) then
 				surface.SetDrawColor( 252, 186, 3, 100 )
-				surface.DrawOutlinedRect( 0, 0, w, h )
+			else
+				surface.SetDrawColor( 255, 255, 255, 100 )
 			end
+			surface.DrawOutlinedRect( 0, 0, w, h )
 		end
 		cpanels[count].DoClick = function( self ) -- if you press the char, then select it
 			Quantum.Client.selectedChar = self
@@ -558,26 +561,34 @@ function menu.open( dt )
 			p.mdl:SetCamPos( eyepos - Vector( -10, 0, -2 ) )
 			p.mdl:SetLookAt( eyepos )
 		end
+		-- create char button
+		local cr = vgui.Create( "DButton", p )
+		cr:SetText("Create New Character")
+		cr:SetFont( "q_button" )
+		cr:SetTextColor( Color( 0, 0, 0, 255 ) )
+		cr:SizeToContents()
+		cr.w, cr.h = cr:GetSize()
+		cr:SetPos( Quantum.Client.CharMenuList.x + ( Quantum.Client.CharMenuList.w/2 - cr.w/2 ), Quantum.Client.CharMenuList.y + ( ( Quantum.Client.CharMenuList.h - cr.h ) - padding*2 ) )
+		cr.Paint = function( self ) 
+			theme.sharpbutton( self )
+		end
+		cr.Think = function( self )
+			if( table.Count(Quantum.Client.Chars) >= Quantum.CharacterLimit ) then
+				self:SetVisible( false )
+			else
+				self:SetVisible( true )
+			end
+		end
+		cr.DoClick = function()
+			surface.PlaySound( "UI/buttonclick.wav" )
+			p:SetVisible( false )
+			local crPage = pages.charCreate( f )
+		end
+		
+		cr.OnCursorEntered = function() surface.PlaySound( "UI/buttonrollover.wav" ) end
 
-		if( table.Count( dt.cont ) < Quantum.CharacterLimit ) then
-			-- create char button
-			local cr = vgui.Create( "DButton", p )
-			cr:SetText("Create New Character")
-			cr:SetFont( "q_button" )
-			cr:SetTextColor( Color( 0, 0, 0, 255 ) )
-			cr:SizeToContents()
-			cr.w, cr.h = cr:GetSize()
-			cr:SetPos( Quantum.Client.CharMenuList.x + ( Quantum.Client.CharMenuList.w/2 - cr.w/2 ), Quantum.Client.CharMenuList.y + ( ( Quantum.Client.CharMenuList.h - cr.h ) - padding*2 ) )
-			cr.Paint = function( self ) 
-				theme.sharpbutton( self )
-			end
-			cr.DoClick = function()
-				surface.PlaySound( "UI/buttonclick.wav" )
-				p:SetVisible( false )
-				local crPage = pages.charCreate( f )
-			end
-			
-			cr.OnCursorEntered = function() surface.PlaySound( "UI/buttonrollover.wav" ) end
+		if( table.Count(Quantum.Client.Chars) >= Quantum.CharacterLimit ) then
+			cr:SetVisible( false ) -- hide if max chars are set
 		end
 
 		-- Delete char button

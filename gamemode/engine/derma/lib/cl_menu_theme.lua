@@ -92,6 +92,20 @@ function theme.sharpbutton( b, inClr )
 	surface.DrawRect( padding_s/2, padding_s/2, w - padding_s, h - padding_s )
 end
 
+function theme.sharpblurrbutton( b, inClr )
+	local w, h = b:GetSize()
+	inClr = inClr || Color( 80, 80, 80, 150 )
+	
+	theme.renderblur( b, 4, 8 )
+
+	if( !b:IsHovered() ) then
+		surface.SetDrawColor( 205, 205, 205, 255 )
+	else
+		surface.SetDrawColor( 120, 120, 120, 255 )
+	end
+	surface.DrawOutlinedRect( 0, 0, w, h )
+end
+
 function theme.skipbutton( b, inClr )
 	local w, h = b:GetSize()
 	inClr = inClr || Color( 0, 0, 0, 0 )
