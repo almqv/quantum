@@ -23,8 +23,7 @@ if SERVER then
 	function GM:KeyRelease( ply, key )
 		if( keyfuncs[key] ) then keyfuncs[key]( ply ) end
 	end
-	function GM:ShowHelp( ply ) keyfuncs["openCharMenu"]( ply ) end
-	function GM:ShowTeam( ply ) keyfuncs["mainMenu"]( ply ) end
+	function GM:ShowHelp( ply ) keyfuncs["mainMenu"]( ply ) end
 	function GM:ShowSpare2( ply ) keyfuncs["intro"]( ply ) end
 	
 end

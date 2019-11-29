@@ -18,6 +18,11 @@ Quantum.Server.Settings.Inventory = {
 	Width = 5
 }
 
+Quantum.Server.Settings.InitSpawnLocation = { 
+	pos = Vector( 5054.682617, 3152.809326, 168.031250 ),
+	ang = Angle( 3.009660, 89.639153, 0.000000 )
+}
+
 Quantum.Server.Settings.SpawnLocations = {
 
 	["rp_truenorth_v1a_livin"] = {

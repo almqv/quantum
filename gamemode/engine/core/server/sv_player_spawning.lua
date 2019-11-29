@@ -40,5 +40,8 @@ hook.Add( "PlayerSpawn", "Quantum_Player_Respawn", function( pl )
 		Quantum.Debug( "Respawning player at nearest spawnpoint." )
 		pl:SetPos( spawnpos )
 		pl:SetAngles( spawnangle )
+	elseif( pl.isloaded ) then
+		pl:SetPos( Quantum.Server.Settings.InitSpawnLocation.pos )
+		pl:SetAngles( Quantum.Server.Settings.InitSpawnLocation.ang )
 	end
 end)

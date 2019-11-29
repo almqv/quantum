@@ -60,6 +60,7 @@ end
 
 local function setupCharacter( pl, char )
 	pl.isloaded = true
+	pl.deathpos = nil
 	pl:Spawn()
 	pl:SetMaxHealth( char.maxhealth )
 	pl:SetHealth( char.health )
