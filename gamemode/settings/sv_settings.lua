@@ -18,11 +18,6 @@ Quantum.Server.Settings.Inventory = {
 	Width = 5
 }
 
---- Features to be added ---
-Quantum.Server.Settings.MaxJobLevel = 250
-Quantum.Server.Settings.MaxJobSlots = 2
-Quantum.Server.Settings.MaxSkillLevel = 100
-
 Quantum.Server.Settings.SpawnLocations = {
 
 	["rp_truenorth_v1a_livin"] = {
@@ -32,12 +27,10 @@ Quantum.Server.Settings.SpawnLocations = {
 
 }
 
-Quantum.Server.Settings.Licenses = {
-	Driving = { title = "Driving License", desc = "This permits you to operate and pilot any motorized vehicle in a public area.", cost = 1000 }
-}
-
-Quantum.Server.Settings.Titles = {
-	dev = "Developer,"
+Quantum.Server.Settings.PlayerSpeeds = {
+	walk = 180,
+	run = 280,
+	duck = 50
 }
 
 Quantum.Server.Settings.DamageScale = { -- The scale of the damage for each hitgroup 
@@ -74,4 +67,17 @@ Quantum.Server.Settings.IdlePainSounds.Male = {
 	"vo/npc/male01/moan05.wav"
 }
 
+--- Features to be added ---
+Quantum.Server.Settings.MaxJobLevel = 250
+Quantum.Server.Settings.MaxJobSlots = 2
+Quantum.Server.Settings.MaxSkillLevel = 100
 
+
+
+Quantum.Server.Settings.Licenses = {
+	Driving = { title = "Driving License", desc = "This permits you to operate and pilot any motorized vehicle in a public area.", cost = 1000 }
+}
+
+Quantum.Server.Settings.Titles = {
+	dev = "Developer,"
+}

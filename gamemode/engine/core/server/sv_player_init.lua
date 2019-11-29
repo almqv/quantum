@@ -26,6 +26,13 @@ local function setUpPlayer( ply )
 	if( char ~= nil ) then
 		charnametxt = " spawned as '" .. char.name .. "'." 
 	end
+
+	-- set player speeds
+	ply:SetWalkSpeed( Quantum.Server.Settings.PlayerSpeeds.walk )
+	ply:SetRunSpeed( Quantum.Server.Settings.PlayerSpeeds.run )
+	ply:SetCrouchedWalkSpeed( Quantum.Server.Settings.PlayerSpeeds.duck)
+	ply:SetMaxSpeed( Quantum.Server.Settings.PlayerSpeeds.run )
+
 	Quantum.Debug( tostring( ply ) .. charnametxt  )
 end
 
