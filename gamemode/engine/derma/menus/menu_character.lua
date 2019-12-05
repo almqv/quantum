@@ -643,6 +643,8 @@ function menu.open( dt )
 			f:Close() -- close the frame
 
 			-- Open the intro cinematic
+			runIntroCinematic( Quantum.Client.selectedChar ) -- run the cinematic if it is the first time
+			-- else do nothing
 
 		end
 		p.enter.OnCursorEntered = function() surface.PlaySound( "UI/buttonrollover.wav" ) end
