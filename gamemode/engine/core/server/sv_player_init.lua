@@ -9,6 +9,10 @@ Quantum.Server.Player = {}
 
 local ply = FindMetaTable( "Player" )
 
+function GM:PlayerSelectSpawn( pl )
+	return -- return nothing because we dont wont the player to spawn anywhere
+end
+
 function GM:PlayerInitialSpawn( ply )
 	ply.isloaded = false -- REMOVE THIS WHEN MYSQL DB IS ADDED
 	ply.cache = {}

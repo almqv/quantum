@@ -26,8 +26,8 @@ Quantum.Server.Settings.InitSpawnLocation = {
 Quantum.Server.Settings.SpawnLocations = {
 
 	["rp_truenorth_v1a_livin"] = {
-		["Hospital"] = { pos = Vector( 13526.426758, 13088.842773, 128.031250 ), ang = Angle( 1, 115, 0 ) },
-		["Lake"] = { pos = Vector( 10812, -8319, 5388 ), ang = Angle( 5, -40, 0 ) }
+		["Hospital"] = { pos = Vector( 13526.426758, 13088.842773, 125.031250 ), ang = Angle( 1, -115, 0 ) },
+		["Lake"] = { pos = Vector( 10812, -8319, 5382 ), ang = Angle( 5, -40, 0 ) }
 	}
 
 }
