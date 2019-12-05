@@ -62,6 +62,19 @@ local function checkNameString( name )
 	return table.concat( strTbl ) -- return the "fixed" name
 end
 
+local function isFirstTime(char)
+	return char.runIntro || false
+end
+
+local function runIntroCinematic(char)
+	if( isFirstTime(char) ) then 
+		Quantum.Debug( "Running intro cinematic..." )
+		Quantum.Client.Menu.Menus["intro"].open( dt ) -- run the cinematic
+	else
+		char.runIntro = nil -- remove the unwanted var since it is taking space for no reason
+	end
+end
+
 local pages = {
 	charCreate = function( parent )
 		local pW, pH = parent:GetSize()
@@ -342,8 +355,11 @@ local pages = {
 				eyepos:Add( Vector( 40, 0, -15 ) )
 				parent.page.mdl:SetCamPos( eyepos - Vector( -10, 0, -2 ) )
 				parent.page.mdl:SetLookAt( eyepos )
-				
 
+				-- Initialize intro cinematic vars for later
+				Quantum.Client.Chars[#Quantum.Client.Chars].runIntro = true -- run the intro on first time spawn
+				
+				-- Page switching
 				parent.page.enter:SetVisible(true)
 				parent.page.dl:SetVisible(true)
 
@@ -625,6 +641,9 @@ function menu.open( dt )
 			local dt = { index = Quantum.Client.selectedChar.index }
 			snm.RunNetworkedFunc( "enterWorldChar", dt ) -- FIX CRASH ISSUE ( 0xC00000FD )
 			f:Close() -- close the frame
+
+			-- Open the intro cinematic
+
 		end
 		p.enter.OnCursorEntered = function() surface.PlaySound( "UI/buttonrollover.wav" ) end
 		p.enter:SetVisible(false)
