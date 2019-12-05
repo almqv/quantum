@@ -23,13 +23,13 @@ local function getMenuIDbyFileName( file )
 end
 
 Quantum.Client.Menu.Load = function()
-	local files = file.Find( GAMEMODE.FolderName .. "/gamemode/engine/derma/menus/menu_*.lua", "LUA" )
+	local files = file.Find( GM.FolderName .. "/gamemode/engine/derma/menus/menu_*.lua", "LUA" ) 
 	Quantum.Debug("Loading menus...")
 	if( !files == nil || #files <= 0 ) then Quantum.Error( "Failed to load menus! Menu files not found. Contact someone important!\nFiles: " .. tostring(files) .. " (" .. tostring(#files) .. ")" ) end
 
 	for i, file in pairs( files ) do -- pretty ineffective but this will only be run ONCE to load all of the menus
 		local id = getMenuIDbyFileName( file ) -- get the menu id by removing ".lua" and "menu_" from it
-		Quantum.Client.Menu.Menus[id] = include( GAMEMODE.FolderName .. "/gamemode/engine/derma/menus/" .. file ) -- put it into the table
+		Quantum.Client.Menu.Menus[id] = include( GM.FolderName .. "/gamemode/engine/derma/menus/" .. file ) -- put it into the table
 		Quantum.Debug( "Loaded menu: '" .. tostring(id) .. "'" ) -- debug it
 	end
 end

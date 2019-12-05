@@ -72,8 +72,6 @@ function main.open(dt)
 			theme.renderblur( self, 2, 7 )
 		end
 		f.OnClose = function( self )
-			--Quantum.Client.IsInMenu = false 
-			--Quantum.Client.Cam.Stop()
 			Quantum.Client.Menu.Menus["character"].open( dt )
 		end
 

@@ -72,8 +72,7 @@ local scenes = { -- 5031.821777 3866.334961 120.090790;setang 0.898059 56.421352
 }
 
 
-function intro.open( dt )
-	local chars = dt.cont
+function intro.open()
 	local resScale = Quantum.Client.ResolutionScale
 	local sw, sh = ScrW(), ScrH()
 	local padding = 10 * resScale
