@@ -62,14 +62,16 @@ local function checkNameString( name )
 	return table.concat( strTbl ) -- return the "fixed" name
 end
 
-local function isFirstTime(char)
+local function isFirstTime( char )
 	return char.runIntro || false
 end
 
-local function runIntroCinematic(char)
+local function runIntroCinematic( parent, char )
 	if( isFirstTime(char) ) then 
 		Quantum.Debug( "Running intro cinematic..." )
-		Quantum.Client.Menu.Menus["intro"].open( dt ) -- run the cinematic
+
+		fade.menuTransition( parent, {}, 1, Color( 0,0,0,255 ), true, function() print("START FUNC") end, function() Quantum.Client.Menu.Menus["intro"].open( {} ) end)
+		--Quantum.Client.Menu.Menus["intro"].open( dt ) -- run the cinematic
 	else
 		char.runIntro = nil -- remove the unwanted var since it is taking space for no reason
 	end
@@ -190,7 +192,7 @@ local pages = {
 		gbuttons.female:SetTextColor( Color( 255, 255, 255, 255 ) )
 		gbuttons.female:SetFont( "q_button2" )
 		gbuttons.female.Paint = function( self, w, h ) 
-			theme.sharpbutton( self,  Color( 0, 0, 0, 0 ) ) 
+			theme.sharpblurrbutton( self,  Color( 0, 0, 0, 0 ) ) 
 			renderSelectedButton( self, selectedGenderButton == self ) 
 		end
 		gbuttons.female:SizeToContents()
@@ -215,7 +217,7 @@ local pages = {
 		gbuttons.male:SetPos( padding + gbuttons.male.w/2, rheader.y + gbuttons.male.h + padding )
 
 		gbuttons.male.Paint = function( self, w, h ) 
-			theme.sharpbutton( self,  Color( 0, 0, 0, 0 ) ) 
+			theme.sharpblurrbutton( self,  Color( 0, 0, 0, 0 ) ) 
 			renderSelectedButton( self, selectedGenderButton == self ) 
 		end
 		gbuttons.male.DoClick = function( self )
@@ -249,7 +251,7 @@ local pages = {
 			classButtons[classCount].w, classButtons[classCount].h = classButtons[classCount]:GetSize()
 			classButtons[classCount]:SetPos( cscroll.w/2 - classButtons[classCount].w/2, (classCount-1) * ( padding + classButtons[classCount].h ) )
 			classButtons[classCount].Paint = function( self ) 
-				theme.sharpbutton( self, Color( 0, 0, 0, 0 ) ) 
+				theme.sharpblurrbutton( self, Color( 0, 0, 0, 0 ) ) 
 				renderSelectedButton( self, inputs.class == self.class ) 
 			end
 			classButtons[classCount].DoClick = function( self )
@@ -268,7 +270,7 @@ local pages = {
 		pmodel:SizeToContents()
 		pmodel.w, pmodel.h = pmodel:GetSize()
 		pmodel:SetPos( (mdl.x - pmodel.w) + padding*10, (mdl.y + mdl.h/2) - pmodel.h/2 )
-		pmodel.Paint = function( self ) theme.sharpbutton( self, Color( 0, 0, 0, 100 ) ) end
+		pmodel.Paint = function( self ) theme.sharpblurrbutton( self, Color( 0, 0, 0, 100 ) ) end
 		pmodel.DoClick = function( self )
 			surface.PlaySound( "UI/buttonclick.wav" )
 			inputs.modelIndex = getNextIndex( inputs.modelIndex, false, 1, #getClassModels( inputs.class )[inputs.gender] )
@@ -281,7 +283,7 @@ local pages = {
 		nmodel:SetSize( pmodel.w, pmodel.h )
 		nmodel.w, nmodel.h = nmodel:GetSize()
 		nmodel:SetPos( (mdl.x + mdl.w) - padding*10, (mdl.y + mdl.h/2) - nmodel.h/2 )
-		nmodel.Paint = function( self ) theme.sharpbutton( self, Color( 0, 0, 0, 100 ) ) end
+		nmodel.Paint = function( self ) theme.sharpblurrbutton( self, Color( 0, 0, 0, 100 ) ) end
 		nmodel.DoClick = function( self )
 			surface.PlaySound( "UI/buttonclick.wav" )
 			inputs.modelIndex = getNextIndex( inputs.modelIndex, true, 1, #getClassModels( inputs.class )[inputs.gender] )
@@ -586,7 +588,7 @@ function menu.open( dt )
 		cr.w, cr.h = cr:GetSize()
 		cr:SetPos( Quantum.Client.CharMenuList.x + ( Quantum.Client.CharMenuList.w/2 - cr.w/2 ), Quantum.Client.CharMenuList.y + ( ( Quantum.Client.CharMenuList.h - cr.h ) - padding*2 ) )
 		cr.Paint = function( self ) 
-			theme.sharpbutton( self )
+			theme.sharpblurrbutton( self )
 		end
 		cr.Think = function( self )
 			if( table.Count(Quantum.Client.Chars) >= Quantum.CharacterLimit ) then
@@ -630,11 +632,11 @@ function menu.open( dt )
 		p.enter = vgui.Create( "DButton", p )
 		p.enter:SetText( "Enter World" )
 		p.enter:SetFont( "q_button2" )
-		p.enter:SetTextColor( Color( 0, 0, 0, 255 ) )
+		p.enter:SetTextColor( Color( 255, 255, 255, 255 ) )
 		p.enter:SizeToContents()
 		p.enter.w, p.enter.h = p.enter:GetSize()
 		p.enter:SetPos( p.w/2 - p.enter.w/2, p.h*0.925 - p.enter.h/2 )
-		p.enter.Paint = function( self ) theme.sharpbutton( self ) end
+		p.enter.Paint = function( self ) theme.sharpblurrbutton( self ) end
 		p.enter.DoClick = function() 
 			surface.PlaySound( "UI/buttonclick.wav" ) 
 			-- enter world --
@@ -643,7 +645,7 @@ function menu.open( dt )
 			f:Close() -- close the frame
 
 			-- Open the intro cinematic
-			runIntroCinematic( Quantum.Client.selectedChar.char ) -- run the cinematic if it is the first time
+			runIntroCinematic( f, Quantum.Client.selectedChar.char ) -- run the cinematic if it is the first time
 			-- else do nothing
 
 		end

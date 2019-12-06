@@ -94,14 +94,17 @@ end
 
 function theme.sharpblurrbutton( b, inClr )
 	local w, h = b:GetSize()
-	inClr = inClr || Color( 80, 80, 80, 150 )
+	inClr = inClr || Color( 80, 80, 80, 100 )
 	
+	surface.SetDrawColor( inClr )
+	surface.DrawRect( 0, 0, w, h )
+
 	theme.renderblur( b, 4, 8 )
 
 	if( !b:IsHovered() ) then
 		surface.SetDrawColor( 205, 205, 205, 255 )
 	else
-		surface.SetDrawColor( 120, 120, 120, 255 )
+		surface.SetDrawColor( 116, 185, 255, 255 )
 	end
 	surface.DrawOutlinedRect( 0, 0, w, h )
 end
