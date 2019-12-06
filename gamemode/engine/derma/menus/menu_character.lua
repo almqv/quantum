@@ -71,8 +71,7 @@ local function runIntroCinematic( parent, char )
 	if( isFirstTime(char) ) then 
 		Quantum.Debug( "Running intro cinematic..." )
 
-		fade.menuTransition( parent, {}, 1, Color( 0,0,0,255 ), true, function() print("START FUNC") end, function() Quantum.Client.Menu.Menus["intro"].open( {} ) end)
-		--Quantum.Client.Menu.Menus["intro"].open( dt ) -- run the cinematic
+		fade.transition( parent, {}, 4, 1, 4, Color( 0,0,0,255 ), true, function() Quantum.Client.Menu.Menus["intro"].open( {} ) end, Quantum.EmptyFunction ) -- run the cinematic via fade in thing
 	else
 		char.runIntro = nil -- remove the unwanted var since it is taking space for no reason
 	end
@@ -643,7 +642,7 @@ function menu.open( dt )
 			-- enter world --
 			local dt = { index = Quantum.Client.selectedChar.index }
 			snm.RunNetworkedFunc( "enterWorldChar", dt ) -- FIX CRASH ISSUE ( 0xC00000FD )
-			f:Close() -- close the frame
+			if( !isFirstTime( Quantum.Client.selectedChar.char ) ) then f:Close() end -- close the frame
 
 			-- Open the intro cinematic
 			runIntroCinematic( f, Quantum.Client.selectedChar.char ) -- run the cinematic if it is the first time

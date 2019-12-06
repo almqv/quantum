@@ -11,7 +11,9 @@ GM.Email = "elias@almtech.se"
 GM.Website = "N/A"
 
 Quantum = {}
-Quantum.Version = "v0.1-alpha"
+Quantum.Version = "v0.2-alpha"
+
+Quantum.EmptyFunction = function() end
 
 include( "engine/sh_debug.lua" ) -- add the debug functions and stuff
 
