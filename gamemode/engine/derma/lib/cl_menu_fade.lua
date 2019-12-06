@@ -29,7 +29,7 @@ function fade.menuTransition( parent, dt, delay, inColor, isBlur, startFunc, end
 	p:SetPos( 0, 0 )
 	p.Paint = function( self, w, h )
 
-		if( isBlur ) then theme.renderBlur( self, Lerp( self.frac, 0, 4 ), Lerp( self.frac, 0, 8 ) ) end -- render blur 
+		if( isBlur ) then theme.renderblur( self, Lerp( self.frac, 0, 4 ), Lerp( self.frac, 0, 8 ) ) end -- render blur 
 
 		surface.SetDrawColor( color )
 		surface.SetAlphaMultiplier( self.frac )
