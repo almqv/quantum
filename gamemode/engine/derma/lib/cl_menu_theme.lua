@@ -46,11 +46,10 @@ end
 function theme.blurpanel( p, color )
 	local w, h = p:GetSize()
 	local clr = color || Color( 0, 0, 0, 200 )
-	local bclr = Color( 50, 50, 50, 105 ) 
 	theme.renderblur( p, 2, 7 )
 
-	draw.RoundedBox( 6, 0, 0, w, h, bclr ) -- border
-	draw.RoundedBox( 4, padding_s/2, padding_s/2, w - padding_s, h - padding_s, clr ) -- inner
+	surface.SetDrawColor( clr )
+	surface.DrawRect( 0, 0, w, h )
 end
 
 function theme.sharpblurpanel( p, color )

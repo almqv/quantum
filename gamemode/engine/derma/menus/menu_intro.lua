@@ -9,8 +9,9 @@ local intro = {}
 
 local log = Quantum.Client.Menu.GetAPI( "dialogue" )
 local theme = Quantum.Client.Menu.GetAPI( "theme" )
+local fade = Quantum.Client.Menu.GetAPI( "fade" )
 
-local scenes = { -- 5031.821777 3866.334961 120.090790;setang 0.898059 56.421352 0.000000
+local scenes = { 
 	["rp_truenorth_v1a_livin"] = {
 		[1] = {
 			fov = 70,
@@ -118,7 +119,8 @@ function intro.open()
 		skip.w, skip.h = skip:GetSize()
 		skip:SetPos( f.w - skip.w - padding, f.h - skip.h - padding )
 		skip.DoClick = function( self ) 
-			f:Close()
+			surface.PlaySound( "UI/buttonclick.wav" )
+			fade.transition( f, {}, 1, 1, 2, Color( 0, 0, 0, 255 ), true, Quantum.EmptyFunction, Quantum.EmptyFunction ) -- close the intro but smoothly
 		end
 		skip.OnCursorEntered = function() surface.PlaySound( "UI/buttonrollover.wav" ) end
 

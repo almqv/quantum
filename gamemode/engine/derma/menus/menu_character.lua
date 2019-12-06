@@ -71,7 +71,7 @@ local function runIntroCinematic( parent, char )
 	if( isFirstTime(char) ) then 
 		Quantum.Debug( "Running intro cinematic..." )
 
-		fade.transition( parent, {}, 4, 1, 4, Color( 0,0,0,255 ), true, function() Quantum.Client.Menu.Menus["intro"].open( {} ) end, Quantum.EmptyFunction ) -- run the cinematic via fade in thing
+		fade.transition( parent, {}, 1.5, 2, 2.5, Color( 0,0,0,255 ), true, function() Quantum.Client.Menu.Menus["intro"].open( {} ) end, Quantum.EmptyFunction ) -- run the cinematic via fade in thing
 	else
 		char.runIntro = nil -- remove the unwanted var since it is taking space for no reason
 	end
@@ -134,7 +134,7 @@ local pages = {
 		header:SetTextColor( Color( 255, 255, 255, 255 ) )
 		header:SizeToContents()
 		header.w, header.h = header:GetSize()
-		header:SetPos( (ip.x + ip.w/2) - header.w/2, header.h/2 )
+		header:SetPos( (ip.x + ip.w/2) - header.w/2, header.h/2 + padding )
 
 		-- character model panel
 		local mdl = vgui.Create( "DModelPanel", p )
@@ -165,12 +165,18 @@ local pages = {
 		name.w, name.h = name:GetSize()
 		name:SetPos( p.w/2 - name.w/2, p.h*0.85 - name.h/2 )
 		name.x, name.y = name:GetPos()
+		name.maincolor = Color( 255, 255, 255, 255 )
 		name.Paint = function( self ) 
 			theme.blurpanel( self ) 
-			self:DrawTextEntryText( Color( 255, 255, 255, 255 ), Color( 150, 150, 150, 255 ), Color( 100, 100, 100, 255 ) )
+			self:DrawTextEntryText( name.maincolor, Color( 150, 150, 150, 255 ), Color( 100, 100, 100, 255 ) )
 		end
-		name.OnEnter = function()
-			checkNameString( name:GetText() )
+		name.OnEnter = function() checkNameString( name:GetText() ) end
+		name.OnChange = function( self ) 
+			if( #self:GetText() > Quantum.CharacterNameLimit || #self:GetText() < Quantum.CharacterNameMin ) then
+				self.maincolor = Color( 255, 100, 100, 255 ) 
+			else
+				self.maincolor = Color( 255, 255, 255, 255 ) 
+			end
 		end
 
 		-- input panel contens --
@@ -506,7 +512,7 @@ function menu.open( dt )
 		--- Close/quit button stuff ---
 		local cW, cH = c:GetSize()
 		c:SetPos( (Quantum.Client.CharMenuList.x + Quantum.Client.CharMenuList.w) - cW, Quantum.Client.CharMenuList.y + Quantum.Client.CharMenuList.h + cH )
-		c.Paint = function( self ) theme.button( self ) end
+		c.Paint = function( self ) theme.sharpblurrbutton( self ) end
 		c.DoClick = function() 
 			surface.PlaySound( "UI/buttonclick.wav" )
 			f:Close() 
@@ -583,7 +589,7 @@ function menu.open( dt )
 		local cr = vgui.Create( "DButton", p )
 		cr:SetText("Create New Character")
 		cr:SetFont( "q_button" )
-		cr:SetTextColor( Color( 0, 0, 0, 255 ) )
+		cr:SetTextColor( Color( 255, 255, 255, 255 ) )
 		cr:SizeToContents()
 		cr.w, cr.h = cr:GetSize()
 		cr:SetPos( Quantum.Client.CharMenuList.x + ( Quantum.Client.CharMenuList.w/2 - cr.w/2 ), Quantum.Client.CharMenuList.y + ( ( Quantum.Client.CharMenuList.h - cr.h ) - padding*2 ) )
@@ -618,7 +624,7 @@ function menu.open( dt )
 		p.dl.w, p.dl.h = p.dl:GetSize()
 		p.dl:SetPos( Quantum.Client.CharMenuList.x, Quantum.Client.CharMenuList.y + ( Quantum.Client.CharMenuList.h + p.dl.h ) )
 		p.dl.Paint = function( self ) 
-			theme.button( self )
+			theme.sharpblurrbutton( self )
 		end
 		p.dl.DoClick = function()
 			surface.PlaySound( "UI/buttonclick.wav" )
@@ -641,8 +647,10 @@ function menu.open( dt )
 			surface.PlaySound( "UI/buttonclick.wav" ) 
 			-- enter world --
 			local dt = { index = Quantum.Client.selectedChar.index }
-			snm.RunNetworkedFunc( "enterWorldChar", dt ) -- FIX CRASH ISSUE ( 0xC00000FD )
-			if( !isFirstTime( Quantum.Client.selectedChar.char ) ) then f:Close() end -- close the frame
+			snm.RunNetworkedFunc( "enterWorldChar", dt ) 
+			if( !isFirstTime( Quantum.Client.selectedChar.char ) ) then 
+				fade.transition( f, {}, 1, 2, 1, Color( 0, 0, 0, 255 ), true, Quantum.EmptyFunction, Quantum.EmptyFunction ) -- close the frame
+			end 
 
 			-- Open the intro cinematic
 			runIntroCinematic( f, Quantum.Client.selectedChar.char ) -- run the cinematic if it is the first time

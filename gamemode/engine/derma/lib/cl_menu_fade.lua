@@ -46,6 +46,7 @@ function fade.transition( parent, dt, start_delay, mid_delay, end_delay, inColor
 		if( self.time >= start_delay && self.fadeIn ) then
 
 			parent:Remove() -- remove the parent
+			Quantum.Client.Cam.Stop() -- stop the cinematic (if it exists)
 
 			if( !self.recordedMidStart ) then
 				self.midtrans_start = CurTime()
@@ -59,7 +60,6 @@ function fade.transition( parent, dt, start_delay, mid_delay, end_delay, inColor
 
 					self.fadeIn = false				-- reset the timer and invert the fading process
 					self.time = 0
-					self.frac = 0
 					self.starttime = CurTime()
 				end
 			end
