@@ -17,4 +17,19 @@ local padding = 10 * resScale
 local padding_s = 4 * resScale
 local errorMdl = "models/player.mdl"
 
-function menu.open() end
+function menu.open( dt ) 
+	if( !f ) then
+		local f = vgui.Create( "DFrame" )
+		f:SetSize( sw, sh )
+		f:SetDraggable( false )
+		f:MakePopup()
+		f.Paint = function() end
+		function f:OnClose()
+			Quantum.Client.IsInMenu = false -- show the hud when closed
+			Quantum.Client.Cam.Stop()
+		end
+
+		-- Create the inventory page --
+		f.inv = page.New( f, {} )
+	end
+end
