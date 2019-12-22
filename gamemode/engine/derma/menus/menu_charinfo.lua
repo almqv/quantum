@@ -21,6 +21,7 @@ function menu.open( dt )
 	if( !f ) then
 		local f = vgui.Create( "DFrame" )
 		f:SetSize( sw, sh )
+		f:SetTitle("Character Info")
 		f:SetDraggable( false )
 		f:MakePopup()
 		f.Paint = function() end

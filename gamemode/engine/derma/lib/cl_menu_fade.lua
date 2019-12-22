@@ -74,6 +74,7 @@ function fade.transition( parent, dt, start_delay, mid_delay, end_delay, inColor
 				self.runnedEndFunc = true
 				self:Remove() -- remove the panel when finished
 				Quantum.Debug( "[Fade] Finished transition." )
+				Quantum.Client.IsInMenu = false
 
 			end
 
