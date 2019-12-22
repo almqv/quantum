@@ -37,9 +37,8 @@ function page.New( parent, args )
 
 	local close = vgui.Create( "DButton", p )
 	close:SetText( args.CloseButtonText || "Close" )
-	close:SetTextColor( args.CloseButtonTextColor || Color( 0, 0, 0, 255 ) )
+	close:SetTextColor( args.CloseButtonTextColor || Color( 255, 255, 255, 255 ) )
 	close:SetFont( args.CloseButtonFont || "q_text" )
-	--close:SetSize( args.closeW, args.closeH )
 	close:SizeToContents()
 	local closeW, closeH = close:GetSize()
 	close:SetSize( closeW + padding*2, closeH )
@@ -50,7 +49,7 @@ function page.New( parent, args )
 	end
 	close.OnCursorEntered = function() surface.PlaySound( "UI/buttonrollover.wav" ) end
 	close.Paint = args.CloseButtonPaint || function( self, w, h )
-		theme.sharpbutton( self )
+		theme.sharpblurrbutton( self )
 	end
 	return p, close
 end

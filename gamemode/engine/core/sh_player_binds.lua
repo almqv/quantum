@@ -9,14 +9,11 @@
 if SERVER then
 
 	local keyfuncs = {
-		["openCharMenu"] = function( pl )
-			Quantum.Net.OpenMenu( pl, "character", Quantum.Server.Char.GetPlayerChars_cl( pl ) )
-		end,
 		["mainMenu"] = function( pl )
-			Quantum.Net.OpenMenu( pl, "main", Quantum.Server.Char.GetPlayerChars_cl( pl ) )
+			Quantum.Net.OpenMenu( pl, "main", { chars = Quantum.Server.Char.GetPlayerChars_cl( pl ), resume = true } )
 		end,
-		["intro"] = function( pl )
-			Quantum.Net.OpenMenu( pl, "intro", {} )
+		["charinfo"] = function( pl )
+			Quantum.Net.OpenMenu( pl, "charinfo", {} )
 		end
 	}
 
@@ -24,6 +21,6 @@ if SERVER then
 		if( keyfuncs[key] ) then keyfuncs[key]( ply ) end
 	end
 	function GM:ShowHelp( ply ) keyfuncs["mainMenu"]( ply ) end
-	function GM:ShowSpare2( ply ) keyfuncs["intro"]( ply ) end
+	function GM:ShowSpare2( ply ) keyfuncs["charinfo"]( ply ) end
 	
 end

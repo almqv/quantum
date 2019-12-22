@@ -18,6 +18,7 @@ local padding_s = 4 * resScale
 local errorMdl = "models/player.mdl"
 
 function menu.open( dt ) 
+	local items = dt.cont.items
 	if( !f ) then
 		local f = vgui.Create( "DFrame" )
 		f:SetSize( sw, sh )
@@ -30,7 +31,10 @@ function menu.open( dt )
 			Quantum.Client.Cam.Stop()
 		end
 
-		-- Create the inventory page --
-		f.inv = page.New( f, {} )
+		-- Default is the inventory page --
+
+		--f.inv = page.New( f, {} )
 	end
 end
+
+return menu

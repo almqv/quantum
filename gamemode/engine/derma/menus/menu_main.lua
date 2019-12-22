@@ -72,7 +72,7 @@ function main.open(dt)
 			theme.renderblur( self, 2, 7 )
 		end
 		f.OnClose = function( self )
-			Quantum.Client.Menu.Menus["character"].open( dt )
+			--Quantum.Client.Menu.Menus["character"].open( dt )
 		end
 
 		Quantum.Client.Cam.Start( scenes[ game.GetMap() ][math.random( 1, table.Count(scenes[ game.GetMap() ])) ], false )
@@ -106,19 +106,59 @@ function main.open(dt)
 
 		---- BUTTONS ----
 
+		-- resume button 
+
+		if( dt.cont.resume ) then
+			local res = vgui.Create( "DButton", f )
+			res:SetText( "Resume" )
+			res:SetFont( buttonFont )
+			res:SetTextColor( buttonTextColor )
+
+			res:SizeToContents()
+			res.w, res.h = res:GetSize()
+			res:SetSize( buttonWidth, res.h )
+			res.w, res.h = res:GetSize()
+
+			res:SetPos( sw/2 - res.w/2, sub.y + res.h + padding * 20 )
+			res.x, res.y = res:GetPos()
+
+			res.Paint = function( self )
+				theme.sharpbutton( self, buttonColor )
+			end
+			res.DoClick = function( self )
+				surface.PlaySound( "UI/buttonclick.wav" )
+				f:Close()
+				Quantum.Client.Cam.Stop() 
+			end
+			res.OnCursorEntered = function() surface.PlaySound( "UI/buttonrollover.wav" ) end
+		end
+
 		-- play button
 		local play = vgui.Create( "DButton", f )
+		
 		play:SetText( "Play" )
 		play:SetFont( buttonFont )
-		play:SetTextColor( buttonTextColor )
 
 		play:SizeToContents()
 		play.w, play.h = play:GetSize()
 		play:SetSize( buttonWidth, play.h )
 		play.w, play.h = play:GetSize()
 
-		play:SetPos( sw/2 - play.w/2, sub.y + play.h + padding*20 )
-		play.x, play.y = play:GetPos()
+		play.x, play.y = sw/2 - play.w/2, sub.y + play.h + padding*20
+		if( dt.cont.resume ) then
+			play:SetText( "Change Character" )
+			play:SizeToContents()
+			play.w, play.h = play:GetSize()
+			play:SetSize( buttonWidth, play.h )
+			play.w, play.h = play:GetSize()
+
+			play.y = play.y + play.h + padding*2
+			print( play.y )
+		end
+
+		play:SetTextColor( buttonTextColor )
+
+		play:SetPos( play.x, play.y )
 
 		play.Paint = function( self )
 			theme.sharpbutton( self, buttonColor )
@@ -127,6 +167,7 @@ function main.open(dt)
 		play.DoClick = function( self )
 			surface.PlaySound( "UI/buttonclick.wav" )
 			f:Close()
+			Quantum.Client.Menu.Menus["character"].open( dt )
 		end
 		play.OnCursorEntered = function() surface.PlaySound( "UI/buttonrollover.wav" ) end
 

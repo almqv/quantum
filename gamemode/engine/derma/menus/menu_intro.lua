@@ -120,7 +120,7 @@ function intro.open()
 		skip:SetPos( f.w - skip.w - padding, f.h - skip.h - padding )
 		skip.DoClick = function( self ) 
 			surface.PlaySound( "UI/buttonclick.wav" )
-			fade.transition( f, {}, 1, 1, 2, Color( 0, 0, 0, 255 ), true, Quantum.EmptyFunction, Quantum.EmptyFunction ) -- close the intro but smoothly
+			fade.transition( f, {}, 1, 1, 2, Color( 0, 0, 0, 255 ), true, Quantum.EmptyFunction, function() Quantum.Client.IsInMenu = false end ) -- close the intro but smoothly
 		end
 		skip.OnCursorEntered = function() surface.PlaySound( "UI/buttonrollover.wav" ) end
 

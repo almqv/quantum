@@ -11,8 +11,7 @@ function Quantum.Client.Cam.InvertAngle( ang ) return Angle( -ang.x, ang.y, -ang
 
 function Quantum.Client.Cam.Stop() 
 	hook.Remove( "CalcView", "Quantum_Cinematic" )
-	Quantum.Client.Cam.Temp.scene_index = nil -- remove the var becuase it is unneeded
-	Quantum.Debug( "Stopped cinematic." )
+	Quantum.Client.Cam.Temp = nil -- remove the var becuase it is unneeded
 end
 
 function Quantum.Client.Cam.Start( scene, loop )

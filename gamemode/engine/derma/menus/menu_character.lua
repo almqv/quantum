@@ -459,7 +459,7 @@ end
 
 function menu.open( dt )
 	Quantum.Client.IsInMenu = true -- hide the hud
-	Quantum.Client.Chars = dt.cont
+	Quantum.Client.Chars = dt.cont.chars
 	if( !f ) then
 		local f = vgui.Create( "DFrame" )
 		f:SetTitle( "" )
