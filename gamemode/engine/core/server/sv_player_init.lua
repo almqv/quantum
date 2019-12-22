@@ -47,7 +47,7 @@ function GM:PlayerSpawn( ply )
 		setUpPlayer( ply )
 	else
 		ply:SetPos( Vector( -8936.411133, 8244.439453, 7744.031250 ) )
-		Quantum.Net.OpenMenu( ply, "main", Quantum.Server.Char.GetPlayerChars_cl( ply ) ) -- make the player open the main menu
+		Quantum.Net.OpenMenu( ply, "main", { chars = Quantum.Server.Char.GetPlayerChars_cl( ply ) } ) -- make the player open the main menu
 	end
 
 end
