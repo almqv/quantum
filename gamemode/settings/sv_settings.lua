@@ -13,11 +13,6 @@ Quantum.Server.Settings.MaxHealth = 100
 
 Quantum.Server.Settings.StarterMoney = 0
 
-Quantum.Server.Settings.Inventory = {
-	Height = 5,
-	Width = 5
-}
-
 Quantum.Server.Settings.InitSpawnLocation = { 
 	pos = Vector( 5054.682617, 3152.809326, 168.031250 ),
 	ang = Angle( 3.009660, 89.639153, 0.000000 )

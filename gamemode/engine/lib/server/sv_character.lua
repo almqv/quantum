@@ -94,7 +94,7 @@ function Quantum.Server.Char.GetCharCount( pl )
 	return table.Count( Quantum.Server.Char.GetPlayerChars( pl ) ) || 0
 end
 
-local function getBasicCharInfo( char )
+function Quantum.Server.Char.getBasicCharInfo( char )
 	return {
 		name = char.name,
 		model = char.model,
@@ -108,7 +108,7 @@ function Quantum.Server.Char.GetPlayerChars_cl( pl )
 	local count = 0
 	for id, char in pairs( Quantum.Server.Char.GetPlayerChars( pl ) ) do
 		count = count + 1
-		chars[count] = getBasicCharInfo( char )
+		chars[count] = Quantum.Server.Char.getBasicCharInfo( char )
 	end
 	return chars
 end

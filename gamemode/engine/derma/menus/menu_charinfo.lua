@@ -19,6 +19,7 @@ local errorMdl = "models/player.mdl"
 
 function menu.open( dt ) 
 	local items = dt.cont.items
+	PrintTable(dt)
 	if( !f ) then
 		Quantum.Client.IsInMenu = true
 
@@ -48,11 +49,6 @@ function menu.open( dt )
 		bar.Paint = function( self ) theme.blurpanel( self ) end
 		bar.DoClick = function( self ) f:Close() end
 
-		f.pages = {
-			inventory = { title = "Inventory" },
-			info = { title = "Character Information" }
-		}
-
 		-- Inventory button --
 		title = vgui.Create( "DLabel", bar )
 		title:SetText( "Inventory" )
@@ -66,12 +62,25 @@ function menu.open( dt )
 		title.w, title.h = title:GetSize()
 		title:SetPos( bar.w/2 - title.w/2, bar.h/2 - title.h/2 )
 
-
 		---- Character view ----
 		local char = vgui.Create( "DModelPanel", f )
-		char:SetSize( 500, 500 )
-		--char:SetModel( dt.cont.char.model ) ------------FIX THIS
+		char:SetSize( 550 * resScale, f.h - bar.h )
+		char.w, char.h = char:GetSize()
+		char:SetPos( 0, bar.h )
+		char.x, char.y = char:GetPos()
+		char:SetFOV( 25 )
+		char:SetModel( dt.cont.char.model || errorMdl )
+		char:SetDirectionalLight( BOX_FRONT, Color( 116, 205, 255 ) )
 
+		local ent = char.Entity
+		local eyepos = ent:GetBonePosition( ent:LookupBone( "ValveBiped.Bip01_Head1" ) )
+		eyepos:Add( Vector( 40, 0, -15 ) )
+		char:SetCamPos( eyepos + Vector( 40, -5, 2 ) )
+		char:SetLookAt( eyepos )
+		ent:SetEyeTarget( eyepos + Vector( 40, -5, 2 ) )
+		function char:LayoutEntity( Entity ) return end
+
+		
 		---- TEMPORARY: REMOVE WHEN THE MENU IS DONE ----
 		local close = vgui.Create( "DButton", f )
 		close:SetText( "DEV CLOSE" )
@@ -79,6 +88,67 @@ function menu.open( dt )
 		close.w, close.h = close:GetSize()
 		close:SetPos( 0, f.h - close.h )
 		close.DoClick = function( self ) f:Close() end
+
+		---- Inventory panel ----
+
+		local inv = vgui.Create( "DPanel", f ) -- section for all of the item panels
+		inv:SetSize( f.w - char.w, f.h - bar.h )
+		inv.w, inv.h = inv:GetSize()
+		inv:SetPos( char.w, bar.h )
+		inv.Paint = function( self, w, h ) 
+			surface.SetDrawColor( 0, 0, 0, 0 )
+			surface.DrawRect( 0, 0, w, h )
+		end
+
+		local itemWidth, itemHeight = 70 * resScale, 70 * resScale
+		local maxW, maxH = Quantum.Inventory.Width, Quantum.Inventory.Height
+
+		local itempanels = {}
+				
+		local count = 0
+		local xbasepos, ybasepos = 0, 0
+		local xintervall, yintervall = itemWidth + padding/2, itemHeight + padding/2
+		local xpos, ypos = 0, 0
+		local rows = 0
+
+		local itemframe = vgui.Create( "DPanel", inv ) -- container for all of the item panels
+		itemframe:SetSize( inv:GetSize() )
+		itemframe:SetPos( 0, 0 )
+		itemframe.Paint = function( self, w, h )
+			surface.SetDrawColor( 0, 0, 0, 10 )
+			surface.DrawRect( 0, 0, w, h )
+		end
+
+		for ii=1, maxW * maxH, 1 do -- create all of the item panels
+			if( ii != 1 ) then count = count + 1 end
+
+			itempanels[ii] = vgui.Create( "DPanel", itemframe )
+			itempanels[ii]:SetSize( itemWidth, itemHeight )
+			if( count >= maxW ) then
+				ypos = ypos + yintervall
+				xpos = xbasepos
+				count = 0
+				rows = rows + 1
+			else
+				if( count != 0 ) then
+					xpos = xpos + xintervall
+				else
+					xpos = 0
+				end
+			end
+			itempanels[ii]:SetPos( xpos, ypos )
+			itempanels[ii].x, itempanels[ii].y = itempanels[ii]:GetPos()
+
+			itempanels[ii].Paint = function( self ) 
+				theme.itempanel( self )
+			end
+		end
+		
+		-- get the width and height of all of the items
+		local iwidth, iheight = (itempanels[maxW].x - xbasepos) + itemWidth, (itempanels[#itempanels].y - ybasepos) + itemHeight 
+		itemframe:SetSize( iwidth, iheight ) -- set the frames dimensions to all of the items dimensions combined.
+		itemframe.w, itemframe.h = itemframe:GetSize()
+		itemframe:SetPos( inv.w/2 - itemframe.w/2, inv.h/2 - itemframe.h/2 ) -- center the item panels
 
 	end
 end

@@ -10,12 +10,12 @@ Quantum.Server.Inventory = {}
 function Quantum.Server.Inventory.Create( char )
 	char.inventory = {}
 
-	for i = 1, Quantum.Server.Settings.Inventory.Width do
+	for i = 1, Quantum.Inventory.Width do
 		char.inventory[i] = {}
 	end
 
 	for h, v in pairs( char.inventory ) do
-		for w = 1, Quantum.Server.Settings.Inventory.Height do
+		for w = 1, Quantum.Inventory.Height do
 			char.inventory[h][w] = 0
 		end
 	end

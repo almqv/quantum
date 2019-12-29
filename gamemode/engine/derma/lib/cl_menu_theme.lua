@@ -135,4 +135,16 @@ function theme.pagetitle( b )
 	surface.DrawRect( 0, 0, w, h )
 end
 
+function theme.itempanel( p )
+	local w, h = p:GetSize()
+	surface.SetDrawColor( 0, 0, 0, 120 )
+	surface.DrawRect( 0, 0, w, h )
+
+	if( p:IsHovered() ) then
+		theme.borderpanel( p, Color( 116, 185, 255, 90 ) )
+	else
+		theme.borderpanel( p, Color( 255, 255, 255, 150 ) )
+	end
+end
+
 return theme

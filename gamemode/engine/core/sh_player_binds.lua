@@ -13,7 +13,7 @@ if SERVER then
 			Quantum.Net.OpenMenu( pl, "main", { chars = Quantum.Server.Char.GetPlayerChars_cl( pl ), resume = true } )
 		end,
 		["charinfo"] = function( pl )
-			Quantum.Net.OpenMenu( pl, "charinfo", {} )
+			Quantum.Net.OpenMenu( pl, "charinfo", { char = Quantum.Server.Char.getBasicCharInfo( Quantum.Server.Char.GetCurrentCharacter( pl ) ) } )
 		end
 	}
 
