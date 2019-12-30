@@ -10,16 +10,6 @@ Quantum.Server.Inventory = {}
 function Quantum.Server.Inventory.Create( char )
 	char.inventory = {}
 
-	for i = 1, Quantum.Inventory.Width do
-		char.inventory[i] = {}
-	end
-
-	for h, v in pairs( char.inventory ) do
-		for w = 1, Quantum.Inventory.Height do
-			char.inventory[h][w] = 0
-		end
-	end
-
 	return char.inventory
 end
 
@@ -27,13 +17,13 @@ local function isEquippable( item )
 	return item.equipable || false
 end
 
-function Quantum.Server.Inventory.SetSlotItem( char, x, y, item, amount ) 
+function Quantum.Server.Inventory.SetSlotItem( char, pos, item, amount ) 
 	if( isEquippable( item ) ) then 
 		amount = 1
-		char.inventory[x][y] = { item }
+		char.inventory[pos] = { item }
 	else
 		amount = amount || 1
-		char.inventory[x][y] = { item, amount }
+		char.inventory[pos] = { item, amount }
 	end
 	Quantum.Debug( "Gave " .. char.name .. " " .. amount .. " [" .. item.name .. "]" )
 	return 

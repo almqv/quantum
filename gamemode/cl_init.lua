@@ -7,7 +7,6 @@
 
 if CLIENT then
 	include( "shared.lua" )
-	--local gmfolder = GAMEMODE.FolderName || GM.FolderName
 	Quantum.Client = {}
 	Quantum.Client.Cache = {}
 	Quantum.Client.ResolutionScale = ScrH() / 1080
@@ -47,6 +46,10 @@ if CLIENT then
 		include( fol .. "cl_menu.lua" )
 	end
 
+	local function loadAllItems()
+		include( "settings/sh_items.lua" )
+	end
+
 	function Quantum.Client.Load()
 		local fol = GM.FolderName .. "/gamemode/engine/core/"
 		
@@ -55,6 +58,10 @@ if CLIENT then
 		loadAllDermaMenus()
 
 		Quantum.Debug( "Loaded all files." )
+
+		-- add all of the items
+		loadAllItems()
+		Quantum.Debug( "Loaded all items." )
 	end
 
 	Quantum.Client.Load() 

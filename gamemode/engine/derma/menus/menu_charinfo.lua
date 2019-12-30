@@ -19,7 +19,7 @@ local errorMdl = "models/player.mdl"
 
 function menu.open( dt ) 
 	local items = dt.cont.items
-	PrintTable(dt)
+
 	if( !f ) then
 		Quantum.Client.IsInMenu = true
 
@@ -111,6 +111,10 @@ function menu.open( dt )
 			if( ii != 1 ) then count = count + 1 end
 
 			itempanels[ii] = vgui.Create( "DPanel", itemframe )
+
+			itempanels[ii].index = ii -- set the vars
+			if( items[ii] ) then itempanels[ii].item = Quantum.Item.Get( items[ii][1] ) end -- get the items info through its id 
+
 			itempanels[ii]:SetSize( itemWidth, itemHeight )
 			if( count >= maxW ) then
 				ypos = ypos + yintervall
@@ -127,9 +131,19 @@ function menu.open( dt )
 			itempanels[ii]:SetPos( xpos, ypos )
 			itempanels[ii].x, itempanels[ii].y = itempanels[ii]:GetPos()
 
-			itempanels[ii].Paint = function( self ) 
-				theme.itempanel( self, Quantum.Rarity.Rare.color )
+			if( itempanels[ii].item == nil ) then -- get the items rarity color
+				itempanels[ii].itemcolor = Quantum.Rarity.None.color 
+				print( ii, "is nil", itemcolor )
+			else 
+				itempanels[ii].itemcolor = itempanels[ii].item.rarity.color
+				print( ii, "is an item", itemcolor )
 			end
+
+			itempanels[ii].Paint = function( self ) 
+				theme.itempanel( self, self.itemcolor )
+			end
+
+			
 		end
 		
 		-- get the width and height of all of the items

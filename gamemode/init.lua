@@ -8,6 +8,7 @@
 if SERVER then
 	AddCSLuaFile( "engine/sh_debug.lua" )
 	AddCSLuaFile( "settings/sh_settings.lua" )
+	AddCSLuaFile( "settings/sh_items.lua" )
 	AddCSLuaFile( "cl_init.lua" )
 	AddCSLuaFile( "shared.lua" )
 
@@ -99,12 +100,19 @@ if SERVER then
 		end
 
 	end
+
+	local function loadAllItems()
+		include( "settings/sh_items.lua" )
+	end
 	
 	function Quantum.Server.Load()
 		-- Add all of the base files
 		loadCoreFiles()
 		loadLibFiles()
 		addAllDermaMenus()
+
+		-- Creation of stuff
+		loadAllItems() -- load the items
 	end
 	
 	Quantum.Server.Load() 

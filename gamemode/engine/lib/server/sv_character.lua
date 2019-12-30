@@ -113,3 +113,7 @@ function Quantum.Server.Char.GetPlayerChars_cl( pl )
 	end
 	return chars
 end
+
+function Quantum.Server.Char.GetInventory( char )
+	return char.inventory
+end
