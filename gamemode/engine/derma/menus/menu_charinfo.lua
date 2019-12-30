@@ -105,10 +105,7 @@ function menu.open( dt )
 		local itemframe = vgui.Create( "DPanel", inv ) -- container for all of the item panels
 		itemframe:SetSize( inv:GetSize() )
 		itemframe:SetPos( 0, 0 )
-		itemframe.Paint = function( self, w, h )
-			surface.SetDrawColor( 0, 0, 0, 0 )
-			surface.DrawRect( 0, 0, w, h )
-		end
+		itemframe.Paint = function( self, w, h ) end
 
 		for ii=1, maxW * maxH, 1 do -- create all of the item panels
 			if( ii != 1 ) then count = count + 1 end
@@ -131,7 +128,7 @@ function menu.open( dt )
 			itempanels[ii].x, itempanels[ii].y = itempanels[ii]:GetPos()
 
 			itempanels[ii].Paint = function( self ) 
-				theme.itempanel( self )
+				theme.itempanel( self, Quantum.Rarity.Rare.color )
 			end
 		end
 		

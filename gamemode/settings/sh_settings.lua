@@ -22,6 +22,14 @@ Quantum.Money = {
 	Surfix = ""
 }
 
+Quantum.Rarity = {
+	Trash = { txt = "Trash", color = Color( 100, 100, 100, 100 ) },
+	Common = { txt = "Common", color = Color( 250, 250, 250, 100 ) },
+	Rare = { txt = "Rare", color = Color( 48, 163, 230, 100 ) },
+	Epic = { txt = "Epic", color = Color( 220, 90, 90, 100 ) },
+	Legendary = { txt = "Legendary", color = Color( 235, 125, 52, 100 ) }
+}
+
 Quantum.Models = {
 	NPC = {},
 	Player = {

@@ -135,9 +135,9 @@ function theme.pagetext( p )
 	surface.DrawRect( 0, 0, w, h )
 end
 
-function theme.itempanel( p )
+function theme.itempanel( p, rarecolor )
 	local w, h = p:GetSize()
-	surface.SetDrawColor( 0, 0, 0, 120 )
+	surface.SetDrawColor( rarecolor || Color( 0, 0, 0, 120 ) )
 	surface.DrawRect( 0, 0, w, h )
 
 	if( p:IsHovered() ) then
