@@ -18,7 +18,7 @@ if SERVER then
 				name = Quantum.Server.Char.getBasicCharInfo( Quantum.Server.Char.GetCurrentCharacter( pl ) ).name,
 				money = Quantum.Server.Char.getBasicCharInfo( Quantum.Server.Char.GetCurrentCharacter( pl ) ).money
 
-			}, items = { [1] = {"test", 1} } })
+			}, items = { [1] = {"test", 1}, [2] = {"test2", Quantum.Inventory.MaxStackSize} } })
 		end
 	}
 

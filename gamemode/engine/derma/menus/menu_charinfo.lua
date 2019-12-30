@@ -115,7 +115,7 @@ function menu.open( dt )
 			itempanels[ii].index = ii -- set the vars
 			if( items[ii] ) then 
 				itempanels[ii].item = Quantum.Item.Get( items[ii][1] ) -- get the items info through its id 
-				itempanels[ii].item.amount = Quantum.Item.Get( items[ii][2] ) || 1 -- get the amount
+				itempanels[ii].item.amount = items[ii][2] || 1 -- get the amount
 			end 
 
 			itempanels[ii]:SetSize( itemWidth, itemHeight )
@@ -148,6 +148,7 @@ function menu.open( dt )
 			if( itempanels[ii].item != nil && itempanels[ii].item.model != nil ) then
 				itempanels[ii].icon = vgui.Create( "DModelPanel", itempanels[ii] )
 				itempanels[ii].icon:SetSize( itempanels[ii]:GetSize() )
+				itempanels[ii].icon.w, itempanels[ii].icon.h = itempanels[ii].icon:GetSize()
 				itempanels[ii].icon:SetPos( 0, 0 )
 				itempanels[ii].icon:SetModel( itempanels[ii].item.model )
 				itempanels[ii].icon:SetFOV( 45 )
@@ -165,7 +166,21 @@ function menu.open( dt )
 				itempanels[ii].icon:SetCamPos( Vector( size/2, size, size ) )
 				itempanels[ii].icon:SetLookAt( ( mn + mx )/2 )
 
-				iteminfo.givetooltip( itempanels[ii].icon ) -- give the item a tooltip
+				---- Amount Text ----
+				if( itempanels[ii].item.amount > 1 ) then
+					itempanels[ii].icon.amountpanel = vgui.Create( "DLabel", itempanels[ii].icon )
+					itempanels[ii].icon.amountpanel:SetText( tostring( itempanels[ii].item.amount ) )
+					itempanels[ii].icon.amountpanel:SetTextColor( Color( 205, 205, 205, 255 ) )
+					itempanels[ii].icon.amountpanel:SetFont( "q_item_amount" )
+					itempanels[ii].icon.amountpanel:SizeToContents()
+					itempanels[ii].icon.amountpanel.w, itempanels[ii].icon.amountpanel.h = itempanels[ii].icon.amountpanel:GetSize()
+					itempanels[ii].icon.amountpanel:SetPos( ( itempanels[ii].icon.w - itempanels[ii].icon.amountpanel.w ) - padding_s, itempanels[ii].icon.h - itempanels[ii].icon.amountpanel.h )
+				end
+
+				---- Tooltip ----
+				itempanels[ii].icon.tooltip = iteminfo.givetooltip( itempanels[ii].icon, f ) -- give the item a tooltip
+				itempanels[ii].icon.tooltip:CreateInfo() -- create the labels for the tooltip & such
+				----
 
 			end
 

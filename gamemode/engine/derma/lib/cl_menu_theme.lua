@@ -151,8 +151,21 @@ end
 
 function theme.itemtooltip( p, item )
 	local w, h = p:GetSize()
-	surface.SetDrawColor( Color( 0, 0, 0, 255 ) )
+
+	theme.renderblur( p, 4, 5 )
+
+	surface.SetDrawColor( Color( 20, 20, 20, 190 ) )
 	surface.DrawRect( 0, 0, w, h )
+
+	theme.borderpanel( p, Color( 205, 205, 205, 200 ) )
 end
+
+---- Color Manipulation ----
+theme.color = {}
+
+function theme.color.setalpha( color, alpha )
+	return Color( color.r, color.g, color.b, alpha )
+end
+
 
 return theme

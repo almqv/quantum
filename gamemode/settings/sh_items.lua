@@ -14,5 +14,19 @@ Quantum.Item.Create( "test", {
 	equipable = false, 
 	rarity = Quantum.Rarity.Legendary, 
 	usefunction = function() print( "Test!" ) end,  
-	consumefunction = function() print( "Test 2!" ) end, 
+	consumefunction = function() print( "Test 2!" ) end
+} )
+
+Quantum.Item.Create( "test2", {
+	name = "Trash Item Test", 
+	desc = "This is literall trash\nLine breaker test :D\n\nTest",
+	model = "models/props_phx/gears/bevel12.mdl",
+	stack = true,
+	soulbound = true, 
+	equipable = false, 
+	rarity = Quantum.Rarity.Trash, 
+	consumefunction = function( user )  
+		user:Kill()
+		user:PrintChat( "You consumed trash and died!" )
+	end 
 } )

@@ -90,3 +90,27 @@ surface.CreateFont( "q_money", {
 	size = 42 * Quantum.Client.ResolutionScale,
 	antialias = true
 })
+
+surface.CreateFont( "q_tooltip_title", {
+	font = "Cambria Bold",
+	size = 24 * Quantum.Client.ResolutionScale,
+	antialias = true
+})
+
+surface.CreateFont( "q_tooltip_desc", {
+	font = "Cambria",
+	size = 20 * Quantum.Client.ResolutionScale,
+	antialias = true
+})
+
+surface.CreateFont( "q_tooltip_rarity", {
+	font = "Cambria",
+	size = 18 * Quantum.Client.ResolutionScale,
+	antialias = true
+})
+
+surface.CreateFont( "q_item_amount", {
+	font = "Cambria Bold",
+	size = 22 * Quantum.Client.ResolutionScale,
+	antialias = true
+})

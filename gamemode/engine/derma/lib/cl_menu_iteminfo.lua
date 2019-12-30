@@ -13,33 +13,69 @@ local padding_s = math.Round( 4 * scale )
 
 local theme = Quantum.Client.Menu.GetAPI( "theme" )
 
-function iteminfo.givetooltip( p )
+function iteminfo.givetooltip( p, page )
 	local item = p:GetParent().item
 	local parWidth, parHeight = p:GetParent():GetSize()
-	local amountStr = ""
+	
 
-	local tooltip = vgui.Create( "DPanel" )
-	tooltip:SetSize( 100 * scale, 80 * scale )
+	local tooltip = vgui.Create( "DPanel", page )
+	tooltip:SetSize( 100 * scale, 80 * scale ) -- placeholder size
+	tooltip.w, tooltip.h = tooltip:GetSize()
+	tooltip.item = item
 	tooltip:SetVisible( false )
 	tooltip.Paint = function( self )
 		theme.itemtooltip( self, item )
 	end
 
-	if( item.amount > 1 ) then amountStr =  "x" .. tostring( item.amount ) end
+	function tooltip:CreateInfo()
+		local pw, ph = self:GetSize()
+		local amountStr = ""
+		if( self.item.amount > 1 ) then amountStr = " (x" .. tostring( self.item.amount ) .. ")" end
 
-	p.ItemInfoPanel = tooltip -- set the tooltip
+		local title = vgui.Create( "DLabel", self ) -- title label of the item
+		title:SetText( self.item.name .. amountStr || "ERROR TITLE" )
+		title:SetFont( "q_tooltip_title" )
+		title:SetTextColor( theme.color.setalpha( self.item.rarity.color || Color( 255, 255, 255, 255 ), 255 ) )
+		title:SizeToContents()
+		title.w, title.h = title:GetSize()
+		title:SetPos( padding_s, padding_s )
+		title.x, title.y = title:GetPos() 
+
+		local rare = vgui.Create( "DLabel", self )
+		rare:SetText( self.item.rarity.txt || "ERROR RARITY" )
+		rare:SetFont( "q_tooltip_rarity" )
+		rare:SetTextColor( theme.color.setalpha( self.item.rarity.color || Color( 255, 255, 255, 255 ), 255 ) )
+		rare:SizeToContents()
+		rare.w, rare.h = rare:GetSize()
+		rare:SetPos( title.x, title.y + title.h + padding_s )
+		rare.x, rare.y = rare:GetPos()
+
+		local desc = vgui.Create( "DLabel", self )
+		desc:SetText( self.item.desc || "ERROR DESC" )
+		desc:SetFont( "q_tooltip_desc" )
+		desc:SetTextColor( Color( 205, 205, 205, 255 ) )
+		desc:SizeToContents()
+		desc.w, desc.h = desc:GetSize()
+		desc:SetPos( title.x, rare.y + rare.h + padding_s )
+		
+
+		-- Correct the tooltips size so its content fits inside of it
+		self:SizeToChildren( true, true )
+		self.w, self.h = self:GetSize() 
+		self:SetSize( self.w + padding_s, self.h + padding_s )
+		self.w, self.h = self:GetSize()
+	end
+
+	p.ItemTooltipPanel = tooltip -- set the tooltip
 
 	p.Think = function( self )
-		self.ItemInfoPanel:SetVisible( self:IsHovered() )
+		self.ItemTooltipPanel:SetVisible( self:IsHovered() )
 		if( self:IsHovered() ) then
-			self.ItemInfoPanel:SetPos( gui.MouseX(), gui.MouseY() - ( parHeight + padding )*2 )
+			self.ItemTooltipPanel:SetPos( gui.MouseX() - tooltip.w/2, gui.MouseY() - ( tooltip.h + padding ) )
 		end
 	end
 
-	--p:SetToolTip( item.name .. " " .. amountStr .. "\n\n" .. item.desc )
-	--p:SetTooltipPanel( tooltip )
-	--p.pnlTooltipPanel = tooltip -- overwrite the default tooltip
-	--p.strTooltipText = ""
+	return tooltip
 end
 
 return iteminfo
