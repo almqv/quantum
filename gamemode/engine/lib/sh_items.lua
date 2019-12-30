@@ -13,9 +13,9 @@ function Quantum.Item.Create( id, args )
 		name = args.name || "ERROR", -- items name
 		desc = args.desc || "ERROR: Some idiot forgot to give this item a description.", -- items description
 		model = args.model || "models/props_phx/gears/bevel12.mdl", -- items model
-		stack = args.stack || false, -- items max stack size
-		soulbound = args.soulbound || true, -- if item could be dropped/traded to other players
-		equipable = args.equipable || false, -- equipable or not
+		stack = args.stack, -- items max stack size
+		soulbound = args.soulbound, -- if item could be dropped/traded to other players
+		equipable = args.equipable, -- equipable or not
 		rarity = args.rarity || Quantum.Rarity.Trash, -- rarity of the item
 		usefunction = args.usefunction, -- use function 
 		consumefunction = args.consumefunction --consume function

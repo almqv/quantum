@@ -57,8 +57,18 @@ function iteminfo.givetooltip( p, page )
 		desc:SizeToContents()
 		desc.w, desc.h = desc:GetSize()
 		desc:SetPos( title.x, rare.y + rare.h + padding_s )
-		
+		desc.x, desc.y = desc:GetPos()
 
+		if( self.item.soulbound == true ) then
+			local sb = vgui.Create( "DLabel", self )
+			sb:SetText( "Soulbound" )
+			sb:SetFont( "q_tooltip_rarity" )
+			sb:SetTextColor( Color( 235, 64, 52, 255 ) )
+			sb:SizeToContents()
+			sb.w, sb.h = sb:GetSize()
+			sb:SetPos( title.x, desc.y + desc.h + padding_s )
+		end
+		
 		-- Correct the tooltips size so its content fits inside of it
 		self:SizeToChildren( true, true )
 		self.w, self.h = self:GetSize() 
