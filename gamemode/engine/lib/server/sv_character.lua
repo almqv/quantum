@@ -99,7 +99,8 @@ function Quantum.Server.Char.getBasicCharInfo( char )
 		name = char.name,
 		model = char.model,
 		class = char.class.Name,
-		job = char.jobs[1]
+		job = char.jobs[1],
+		money = char.money
 	}
 end
 

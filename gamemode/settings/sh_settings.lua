@@ -13,8 +13,13 @@ Quantum.DiscordInvite = "https://discord.gg/heUJB4B"
 Quantum.WorkshopLink = "https://steamcommunity.com/sharedfiles/filedetails/?id=1842234130"
 
 Quantum.Inventory = {
-	Height = 12, -- NOTE: MAX HEIGHT=12
-	Width = 18 -- NOTE: MAX WIDTH=18
+	Height = 10, -- NOTE: MAX HEIGHT=12
+	Width = 16 -- NOTE: MAX WIDTH=18
+}
+
+Quantum.Money = {
+	Prefix = "$",
+	Surfix = ""
 }
 
 Quantum.Models = {

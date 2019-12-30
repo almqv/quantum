@@ -126,10 +126,10 @@ function theme.skipbutton( b, inClr )
 	surface.DrawRect( padding_s/2, padding_s/2, w - padding_s, h - padding_s )
 end
 
-function theme.pagetitle( b )
-	local w, h = b:GetSize()
+function theme.pagetext( p )
+	local w, h = p:GetSize()
 
-	b:SetTextColor( Color( 205, 205, 205, 255 ) )
+	p:SetTextColor( Color( 205, 205, 205, 255 ) )
 
 	surface.SetDrawColor( Color( 0, 0, 0, 0 ) )
 	surface.DrawRect( 0, 0, w, h )
@@ -143,7 +143,7 @@ function theme.itempanel( p )
 	if( p:IsHovered() ) then
 		theme.borderpanel( p, Color( 116, 185, 255, 90 ) )
 	else
-		theme.borderpanel( p, Color( 255, 255, 255, 150 ) )
+		theme.borderpanel( p, Color( 255, 255, 255, 200 ) )
 	end
 end
 

@@ -13,7 +13,12 @@ if SERVER then
 			Quantum.Net.OpenMenu( pl, "main", { chars = Quantum.Server.Char.GetPlayerChars_cl( pl ), resume = true } )
 		end,
 		["charinfo"] = function( pl )
-			Quantum.Net.OpenMenu( pl, "charinfo", { char = Quantum.Server.Char.getBasicCharInfo( Quantum.Server.Char.GetCurrentCharacter( pl ) ) } )
+			Quantum.Net.OpenMenu( pl, "charinfo", { char = { 
+				model = Quantum.Server.Char.getBasicCharInfo( Quantum.Server.Char.GetCurrentCharacter( pl ) ).model,
+				name = Quantum.Server.Char.getBasicCharInfo( Quantum.Server.Char.GetCurrentCharacter( pl ) ).name,
+				money = Quantum.Server.Char.getBasicCharInfo( Quantum.Server.Char.GetCurrentCharacter( pl ) ).money
+
+			}, items = {} } )
 		end
 	}
 

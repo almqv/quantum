@@ -55,7 +55,7 @@ function menu.open( dt )
 		title:SetFont( "q_header_s" )
 		title:SetTextColor( Color( 255, 255, 255, 255 ) )
 		title.Paint = function( self )
-			theme.pagetitle( self )
+			theme.pagetext( self )
 		end
 
 		title:SizeToContents()
@@ -80,15 +80,6 @@ function menu.open( dt )
 		ent:SetEyeTarget( eyepos + Vector( 40, -5, 2 ) )
 		function char:LayoutEntity( Entity ) return end
 
-		
-		---- TEMPORARY: REMOVE WHEN THE MENU IS DONE ----
-		local close = vgui.Create( "DButton", f )
-		close:SetText( "DEV CLOSE" )
-		close:SizeToContents()
-		close.w, close.h = close:GetSize()
-		close:SetPos( 0, f.h - close.h )
-		close.DoClick = function( self ) f:Close() end
-
 		---- Inventory panel ----
 
 		local inv = vgui.Create( "DPanel", f ) -- section for all of the item panels
@@ -100,7 +91,7 @@ function menu.open( dt )
 			surface.DrawRect( 0, 0, w, h )
 		end
 
-		local itemWidth, itemHeight = 70 * resScale, 70 * resScale
+		local itemWidth, itemHeight = 65 * resScale, 65 * resScale
 		local maxW, maxH = Quantum.Inventory.Width, Quantum.Inventory.Height
 
 		local itempanels = {}
@@ -115,7 +106,7 @@ function menu.open( dt )
 		itemframe:SetSize( inv:GetSize() )
 		itemframe:SetPos( 0, 0 )
 		itemframe.Paint = function( self, w, h )
-			surface.SetDrawColor( 0, 0, 0, 10 )
+			surface.SetDrawColor( 0, 0, 0, 0 )
 			surface.DrawRect( 0, 0, w, h )
 		end
 
@@ -148,7 +139,44 @@ function menu.open( dt )
 		local iwidth, iheight = (itempanels[maxW].x - xbasepos) + itemWidth, (itempanels[#itempanels].y - ybasepos) + itemHeight 
 		itemframe:SetSize( iwidth, iheight ) -- set the frames dimensions to all of the items dimensions combined.
 		itemframe.w, itemframe.h = itemframe:GetSize()
-		itemframe:SetPos( inv.w/2 - itemframe.w/2, inv.h/2 - itemframe.h/2 ) -- center the item panels
+		itemframe:SetPos( inv.w/2 - itemframe.w/2, inv.h/2 - itemframe.h/2 + padding*8 ) -- center the item panels
+		itemframe.x, itemframe.y = itemframe:GetPos()
+
+		----CHAR INFO----
+
+		--Money text
+		local money = vgui.Create( "DLabel", inv )
+		money:SetText( Quantum.Format.Money( dt.cont.char.money ) )
+		money:SetFont( "q_money" )
+		money:SetTextColor( Color( 90, 218, 132, 255 ) )
+		money:SizeToContents()
+		money.w, money.h = money:GetSize()
+		money:SetPos( itemframe.x, itemframe.y - money.h - padding )
+		money.x, money.y = money:GetPos()
+		money.Paint = function( self, w, h ) 
+			draw.RoundedBox( 5, 0, 0, w, h, Color( 0, 0, 0, 90 ) )
+		end
+
+
+		--Name text
+		local name = vgui.Create( "DLabel", inv )
+		name:SetText( dt.cont.char.name || "ERROR: NAME=nil" )
+		name:SetFont( "q_name" )
+		name:SizeToContents()
+		name.w, name.h = name:GetSize()
+		name:SetPos( itemframe.x, money.y - name.h - padding )
+		name.Paint = function( self, w, h ) 
+			draw.RoundedBox( 5, 0, 0, w, h, Color( 0, 0, 0, 90 ) )
+			theme.pagetext( self ) 
+		end
+
+		---- TEMPORARY: REMOVE WHEN THE MENU IS DONE ----
+		local close = vgui.Create( "DButton", f )
+		close:SetText( "DEV CLOSE" )
+		close:SizeToContents()
+		close.w, close.h = close:GetSize()
+		close:SetPos( 0, f.h - close.h )
+		close.DoClick = function( self ) f:Close() end
 
 	end
 end
