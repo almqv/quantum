@@ -55,7 +55,14 @@ function GM:HUDPaint()
 			end
 		end
 	end
+end
 
+function GM:Think()
+	if( Quantum.Client.IsInMenu ) then
+		if( gui.IsGameUIVisible() ) then -- hides the main menu for the player
+			gui.HideGameUI() 
+		end
+	end
 end
 
 hook.Add( "RenderScreenspaceEffects", "Quantum_HUD_RenderLowHealth", function() 

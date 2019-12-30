@@ -13,7 +13,8 @@ local libs = {
 	["theme"] = GM.FolderName .. "/gamemode/engine/derma/lib/cl_menu_theme.lua",
 	["dialogue"] = GM.FolderName .. "/gamemode/engine/derma/lib/cl_menu_dialogueBox.lua",
 	["sure"] = GM.FolderName .. "/gamemode/engine/derma/lib/cl_menu_areusure.lua",
-	["fade"] = GM.FolderName .. "/gamemode/engine/derma/lib/cl_menu_fade.lua"
+	["fade"] = GM.FolderName .. "/gamemode/engine/derma/lib/cl_menu_fade.lua",
+	["iteminfo"] = GM.FolderName .. "/gamemode/engine/derma/lib/cl_menu_iteminfo.lua"
 }
 Quantum.Client.Menu.GetAPI = function( lib ) return include( libs[lib] ) end
 

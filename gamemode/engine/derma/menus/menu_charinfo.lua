@@ -8,8 +8,8 @@
 local menu = {}
 
 local snm = Quantum.Client.Menu.GetAPI( "net" )
-local page = Quantum.Client.Menu.GetAPI( "page" )
 local theme = Quantum.Client.Menu.GetAPI( "theme" )
+local iteminfo = Quantum.Client.Menu.GetAPI( "iteminfo" )
 
 local resScale = Quantum.Client.ResolutionScale
 local sw, sh = ScrW(), ScrH()
@@ -113,7 +113,10 @@ function menu.open( dt )
 			itempanels[ii] = vgui.Create( "DPanel", itemframe )
 
 			itempanels[ii].index = ii -- set the vars
-			if( items[ii] ) then itempanels[ii].item = Quantum.Item.Get( items[ii][1] ) end -- get the items info through its id 
+			if( items[ii] ) then 
+				itempanels[ii].item = Quantum.Item.Get( items[ii][1] ) -- get the items info through its id 
+				itempanels[ii].item.amount = Quantum.Item.Get( items[ii][2] ) || 1 -- get the amount
+			end 
 
 			itempanels[ii]:SetSize( itemWidth, itemHeight )
 			if( count >= maxW ) then
@@ -133,14 +136,37 @@ function menu.open( dt )
 
 			if( itempanels[ii].item == nil ) then -- get the items rarity color
 				itempanels[ii].itemcolor = Quantum.Rarity.None.color 
-				print( ii, "is nil", itemcolor )
 			else 
 				itempanels[ii].itemcolor = itempanels[ii].item.rarity.color
-				print( ii, "is an item", itemcolor )
 			end
 
 			itempanels[ii].Paint = function( self ) 
 				theme.itempanel( self, self.itemcolor )
+			end
+
+			---- Create the model icon for the item panel ----
+			if( itempanels[ii].item != nil && itempanels[ii].item.model != nil ) then
+				itempanels[ii].icon = vgui.Create( "DModelPanel", itempanels[ii] )
+				itempanels[ii].icon:SetSize( itempanels[ii]:GetSize() )
+				itempanels[ii].icon:SetPos( 0, 0 )
+				itempanels[ii].icon:SetModel( itempanels[ii].item.model )
+				itempanels[ii].icon:SetFOV( 45 )
+
+				-- get the dimensions of the models entity
+				local mn, mx = itempanels[ii].icon.Entity:GetRenderBounds()
+				local size = 0
+
+				-- calculate the vector axises so that the view doesn't go outside of the models renderbounds --
+				size = math.max( size, math.abs( mn.x ) + math.abs( mx.x ) )
+				size = math.max( size, math.abs( mn.y ) + math.abs( mx.y ) )
+				size = math.max( size, math.abs( mn.z ) + math.abs( mx.z ) )
+
+				-- Apply the new "data" --
+				itempanels[ii].icon:SetCamPos( Vector( size/2, size, size ) )
+				itempanels[ii].icon:SetLookAt( ( mn + mx )/2 )
+
+				iteminfo.givetooltip( itempanels[ii].icon ) -- give the item a tooltip
+
 			end
 
 			

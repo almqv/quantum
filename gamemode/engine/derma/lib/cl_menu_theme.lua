@@ -137,14 +137,22 @@ end
 
 function theme.itempanel( p, rarecolor )
 	local w, h = p:GetSize()
+	local icon = p.icon || p
+
 	surface.SetDrawColor( rarecolor || Color( 0, 0, 0, 120 ) )
 	surface.DrawRect( 0, 0, w, h )
 
-	if( p:IsHovered() ) then
+	if( icon:IsHovered() ) then
 		theme.borderpanel( p, Color( 116, 185, 255, 90 ) )
 	else
 		theme.borderpanel( p, Color( 255, 255, 255, 200 ) )
 	end
+end
+
+function theme.itemtooltip( p, item )
+	local w, h = p:GetSize()
+	surface.SetDrawColor( Color( 0, 0, 0, 255 ) )
+	surface.DrawRect( 0, 0, w, h )
 end
 
 return theme
