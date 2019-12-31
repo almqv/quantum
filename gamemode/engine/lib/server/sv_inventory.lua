@@ -70,7 +70,6 @@ local function sortItem( char, itemid, amount )
 	local itemInSlot = Quantum.Server.Inventory.GetSlotItem( char, index )
 
 	while( rest > stacksize ) do
-		print("######## rest:", rest )
 		count = count + 1
 		
 		if( count == 1 ) then
@@ -100,7 +99,6 @@ local function sortItem( char, itemid, amount )
 			end
 		end
 	end
-	print("######## rest:", rest )
 
 	Quantum.Server.Inventory.SetSlotItem( char, #inv + 1, itemid, rest ) 
 end
@@ -114,9 +112,6 @@ function Quantum.Server.Inventory.GiveItem( pl, itemid, amount )
 		
 		sortItem( char, itemid, amount )
 		-- send net message to client about item update 
-
-		Quantum.Debug( "Inventory Result" )
-		PrintTable( inv )
 	else
 		Quantum.Debug( "Tried to give " .. tostring(pl) ..  " a item but their inventory is full!" )
 	end
