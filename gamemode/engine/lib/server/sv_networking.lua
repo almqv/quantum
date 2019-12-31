@@ -69,8 +69,6 @@ local function SendDatatableToClient( client, dt, type )
 	local net_start = net.Start( "quantum_menu_net" )
 		if( net_start ) then Quantum.Debug( "Sending net message to " .. tostring(client) .. "..." ) end
 		if( table.Count(datatable) > 0 ) then -- if it's empty just dont send it because we will save 8 bits 
-			Quantum.Debug( "###### DT: " .. tostring(datatable) )
-			PrintTable( datatable )
 			net.WriteTable( datatable ) -- send the data to the player
 		end
 	net.Send( client )
