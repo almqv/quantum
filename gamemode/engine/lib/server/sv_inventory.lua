@@ -108,6 +108,8 @@ function Quantum.Server.Inventory.GiveItem( pl, itemid, amount )
 	local inv = Quantum.Server.Char.GetInventory( char )
 	local item = Quantum.Item.Get( itemid )
 
+	if( item == nil ) then Quantum.Error( "Tried to give " .. tostring(pl) .. " a non-existent item! Item '" .. tostring(itemid) .. "' does not exist." ) return end
+
 	if( #inv + 1 <= Quantum.Inventory.Width * Quantum.Inventory.Height || Quantum.Server.Inventory.FindStackable( char, item ) != nil ) then
 		
 		sortItem( char, itemid, amount )

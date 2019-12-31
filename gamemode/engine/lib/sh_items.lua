@@ -21,7 +21,7 @@ function Quantum.Item.Create( itemid, args )
 		usefunction = args.usefunction, -- use function 
 		consumefunction = args.consumefunction --consume function
 	}
-	math.Clamp( item.stack, 1, Quantum.Inventory.MaxStackSize ) -- clamp it so it does not go over the max size
+	item.stack = math.Clamp( item.stack, 1, Quantum.Inventory.MaxStackSize ) -- clamp it so it does not go over the max size
 	Quantum.Items[itemid] = item
 	return item
 end
