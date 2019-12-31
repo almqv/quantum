@@ -11,7 +11,7 @@ GM.Email = "elias@almtech.se"
 GM.Website = "N/A"
 
 Quantum = {}
-Quantum.Version = "v0.2-alpha"
+Quantum.Version = "v0.3-alpha"
 
 Quantum.EmptyFunction = function() end
 
