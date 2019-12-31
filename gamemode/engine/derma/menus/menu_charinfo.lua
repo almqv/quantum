@@ -107,6 +107,14 @@ function menu.open( dt )
 		itemframe:SetPos( 0, 0 )
 		itemframe.Paint = function( self, w, h ) end
 
+		---- TEMPORARY: REMOVE WHEN THE MENU IS DONE ----
+		local close = vgui.Create( "DButton", f )
+		close:SetText( "DEV CLOSE" )
+		close:SizeToContents()
+		close.w, close.h = close:GetSize()
+		close:SetPos( 0, f.h - close.h )
+		close.DoClick = function( self ) f:Close() end
+
 		for ii=1, maxW * maxH, 1 do -- create all of the item panels
 			if( ii != 1 ) then count = count + 1 end
 
@@ -114,7 +122,7 @@ function menu.open( dt )
 
 			itempanels[ii].index = ii -- set the vars
 			if( items[ii] ) then 
-				itempanels[ii].item = Quantum.Item.Get( items[ii][1] ) -- get the items info through its id 
+				itempanels[ii].item = Quantum.Item.Get( items[ii][1]) -- get the items info through its id 
 				itempanels[ii].item.amount = items[ii][2] || 1 -- get the amount
 			end 
 
@@ -222,13 +230,7 @@ function menu.open( dt )
 			theme.pagetext( self ) 
 		end
 
-		---- TEMPORARY: REMOVE WHEN THE MENU IS DONE ----
-		local close = vgui.Create( "DButton", f )
-		close:SetText( "DEV CLOSE" )
-		close:SizeToContents()
-		close.w, close.h = close:GetSize()
-		close:SetPos( 0, f.h - close.h )
-		close.DoClick = function( self ) f:Close() end
+		
 
 	end
 end

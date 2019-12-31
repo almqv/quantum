@@ -15,7 +15,7 @@ Quantum.WorkshopLink = "https://steamcommunity.com/sharedfiles/filedetails/?id=1
 Quantum.Inventory = {
 	Height = 10, -- NOTE: MAX HEIGHT=12
 	Width = 16, -- NOTE: MAX WIDTH=18
-	MaxStackSize = 99 -- NOTE: MAX MaxStackSize=99
+	MaxStackSize = 20 -- NOTE: MAX MaxStackSize=99
 }
 
 Quantum.Money = {

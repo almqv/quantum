@@ -17,16 +17,107 @@ local function isEquippable( item )
 	return item.equipable || false
 end
 
-function Quantum.Server.Inventory.SetSlotItem( char, pos, item, amount ) 
-	if( isEquippable( item ) ) then 
-		amount = 1
-		char.inventory[pos] = { item }
-	else
-		amount = amount || 1
-		char.inventory[pos] = { item, amount }
-	end
-	Quantum.Debug( "Gave " .. char.name .. " " .. amount .. " [" .. item.name .. "]" )
-	return 
+local function isStackable( item )
+	return item.stack || false
 end
 
-function Quantum.Server.Inventory.GetSlotItem( char, x, y ) return char.inventory[x][y] end
+function Quantum.Server.Inventory.SetSlotItem( char, pos, itemid, amount ) 
+	local item = Quantum.Item.Get( itemid )
+	if( isEquippable( item ) || !isStackable( item ) ) then 
+		amount = 1
+		char.inventory[pos] = { itemid }
+	else
+		amount = amount || 1
+		char.inventory[pos] = { itemid, amount }
+	end
+	Quantum.Debug( "Gave " .. char.name .. " " .. amount .. "x [" .. item.name .. "] at " .. tostring(pos) )
+end
+
+function Quantum.Server.Inventory.GetSlotItem( char, pos ) return char.inventory[pos] end
+
+function Quantum.Server.Inventory.FindStackable( char, item )
+	if( item.stack ) then
+		local inv = Quantum.Server.Char.GetInventory( char ) 
+		for i, item2 in pairs( inv ) do
+			if( item2[1] == item.id ) then -- if the item is stackable and it is the same item
+				return i -- return its index
+			end
+		end
+	else
+		return
+	end
+end
+
+local function getStackSize( char, item )
+	return item.stack || 1
+end
+
+local function sortItem( char, itemid, amount )
+
+	local item = Quantum.Item.Get( itemid )
+	local slotitem = Quantum.Server.Inventory.GetSlotItem( char, index ) 
+	local inv = Quantum.Server.Char.GetInventory( char )
+
+	local stacksize = getStackSize( char, item )
+
+	local index = Quantum.Server.Inventory.FindStackable( char, item ) || #inv + 1
+
+	local rest = amount
+	if( slotitem != nil ) then rest = rest + slotitem[2] end
+
+	local count = 0
+
+	local itemInSlot = Quantum.Server.Inventory.GetSlotItem( char, index )
+
+	while( rest > stacksize ) do
+		print("######## rest:", rest )
+		count = count + 1
+		
+		if( count == 1 ) then
+			if( itemInSlot != nil ) then 
+				rest = rest - ( stacksize - itemInSlot[2] )
+			else
+				rest = rest - stacksize 
+			end
+			Quantum.Server.Inventory.SetSlotItem( char, index, itemid, stacksize )
+		else
+			index = index + 1
+			itemInSlot = Quantum.Server.Inventory.GetSlotItem( char, index )
+
+			if( itemInSlot != nil ) then
+				if( itemInSlot[1] == itemid && itemInSlot[2] < stacksize ) then
+					rest = rest - ( stacksize - itemInSlot[2] )
+					Quantum.Server.Inventory.SetSlotItem( char, index, itemid, stacksize )
+					
+					if( rest <= 0 ) then 
+						rest = 0
+						break
+					end
+				end
+			else
+				rest = rest - stacksize
+				Quantum.Server.Inventory.SetSlotItem( char, index, itemid, stacksize )
+			end
+		end
+	end
+	print("######## rest:", rest )
+
+	Quantum.Server.Inventory.SetSlotItem( char, #inv + 1, itemid, rest ) 
+end
+
+function Quantum.Server.Inventory.GiveItem( pl, itemid, amount )
+	local char = Quantum.Server.Char.GetCurrentCharacter( pl )
+	local inv = Quantum.Server.Char.GetInventory( char )
+	local item = Quantum.Item.Get( itemid )
+
+	if( #inv + 1 <= Quantum.Inventory.Width * Quantum.Inventory.Height || Quantum.Server.Inventory.FindStackable( char, item ) != nil ) then
+		
+		sortItem( char, itemid, amount )
+		-- send net message to client about item update 
+
+		Quantum.Debug( "Inventory Result" )
+		PrintTable( inv )
+	else
+		Quantum.Debug( "Tried to give " .. tostring(pl) ..  " a item but their inventory is full!" )
+	end
+end

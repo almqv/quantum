@@ -9,7 +9,6 @@ Quantum.Item.Create( "test", {
 	name = "Test Item", 
 	desc = "This is a test item!",
 	model = "models/props_phx/gears/bevel12.mdl",
-	stack = false,
 	soulbound = true, 
 	equipable = false, 
 	rarity = Quantum.Rarity.Legendary, 
@@ -21,7 +20,7 @@ Quantum.Item.Create( "test2", {
 	name = "Trash Item Test", 
 	desc = "This is literall trash\nLine breaker test :D\n\nTest :D",
 	model = "models/props_phx/gears/bevel12.mdl",
-	stack = true,
+	stack = 25, --wrong change later to 10 or something
 	soulbound = false, 
 	equipable = false, 
 	rarity = Quantum.Rarity.Trash, 

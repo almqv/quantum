@@ -117,3 +117,11 @@ end
 function Quantum.Server.Char.GetInventory( char )
 	return char.inventory
 end
+
+function Quantum.Server.Char.GetInventory_cl( char )
+	local inv = Quantum.Server.Char.GetInventory( char )
+	local returninv = {}
+
+	for i, item in pairs( inv ) do returninv[i] = { id = item.id, amount = item.amount } end
+	return returninv
+end
