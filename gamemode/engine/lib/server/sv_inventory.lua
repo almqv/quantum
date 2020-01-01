@@ -87,10 +87,9 @@ local function sortItem( char, itemid, amount )
 
 	local itemInSlot = Quantum.Server.Inventory.GetSlotItem( char, index )
 
-	print( "--", amount, "--" )
-
 	if( itemInSlot != nil ) then
 		if( itemInSlot[1] == itemid && itemInSlot[2] < stacksize ) then
+
 			local add = itemInSlot[2] + amount
 			if( add > stacksize ) then
 				rest = rest - ( stacksize - itemInSlot[2] )
@@ -98,19 +97,14 @@ local function sortItem( char, itemid, amount )
 				rest = rest - amount
 			end
 			local setAmt = math.Clamp( add, 1, stacksize )
-			--local diff = amount - setAmt
-			--rest = rest - diff ------------------------------------------------------ FIX THIS (DIFF IS WRONG)
 			Quantum.Server.Inventory.SetSlotItem( char, index, itemid, setAmt )
 
-			print( "1", setAmt, rest, index )
 		end
 	else
 		local setAmt = math.Clamp( amount, 1, stacksize )
 		local pos = Quantum.Server.Inventory.FindItemSpot( char )
 		rest = rest - setAmt
 		Quantum.Server.Inventory.SetSlotItem( char, pos, itemid, setAmt )
-
-		print( "2", setAmt, rest, pos )
 	end
 
 	while( rest >= stacksize ) do
@@ -127,8 +121,6 @@ local function sortItem( char, itemid, amount )
 
 			local pos = Quantum.Server.Inventory.FindItemSpot( char )
 			Quantum.Server.Inventory.SetSlotItem( char, pos, itemid, setAmt )
-
-			print( "3", setAmt, rest, pos )
 		else
 			index = index + 1
 			itemInSlot = Quantum.Server.Inventory.GetSlotItem( char, index )
@@ -137,9 +129,7 @@ local function sortItem( char, itemid, amount )
 				if( itemInSlot[1] == itemid && itemInSlot[2] < stacksize ) then
 					rest = rest - ( stacksize - itemInSlot[2] )
 					Quantum.Server.Inventory.SetSlotItem( char, index, itemid, stacksize )
-
-					print( "4", stacksize, rest, index )
-					
+	
 					if( rest <= 0 ) then 
 						rest = 0
 						break
@@ -148,8 +138,6 @@ local function sortItem( char, itemid, amount )
 			else
 				rest = rest - stacksize
 				Quantum.Server.Inventory.SetSlotItem( char, index, itemid, stacksize )
-
-				print( "5", stacksize, rest, index )
 			end
 		end
 	end
@@ -159,8 +147,6 @@ local function sortItem( char, itemid, amount )
 	if( stackIndex == nil ) then
 		pos = Quantum.Server.Inventory.FindItemSpot( char )
 		Quantum.Server.Inventory.SetSlotItem( char, pos, itemid, rest ) 
-
-		print( "6", rest, rest - rest, pos )
 	else
 		if( rest > 0 ) then
 			pos = stackIndex
@@ -172,8 +158,6 @@ local function sortItem( char, itemid, amount )
 
 			if( rest <= 0 ) then
 				Quantum.Server.Inventory.SetSlotItem( char, pos, itemid, setAmt ) 
-
-				print( "7", setAmt, rest, pos )
 			end
 		end
 	end
