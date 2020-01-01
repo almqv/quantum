@@ -251,7 +251,6 @@ function iteminfo.giveoptions( p, page )
 	-- center all of the option panels --
 	options.w, options.h = resizePanel( options )
 	for i, optionPanel in pairs( op ) do
-		print( optionPanel )
 		optionPanel:SetPos( options.w/2 - optionPanel.w/2, optionPanel.y )
 	end
 	options.w, options.h = resizePanel( options )

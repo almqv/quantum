@@ -21,7 +21,7 @@ include( "settings/sh_settings.lua" )
 
 
 Quantum.IntCode = {
-	SEND_ITEM = 0,
+	SET_ITEM = 0,
 	DROP_ITEM = 1,
 	USE_ITEM = 2,
 	EAT_ITEM = 3,

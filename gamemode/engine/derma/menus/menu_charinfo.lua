@@ -28,8 +28,16 @@ local function createItemAmountLabel( icon, item )
 	return icon.amountpanel
 end
 
-function menu.open( dt ) 
-	local items = dt.cont.items
+function menu.open( dt )
+	local items = {}
+	if( dt.cont.items == nil ) then
+		if( Quantum.Client.Inventory == nil ) then Quantum.Client.Inventory = {} end
+		items = Quantum.Client.Inventory -- dynamic networking
+	else
+		items = dt.cont.items -- static, only sent when menu opens which is rareley in this case
+		Quantum.Client.Inventory = items
+	end
+	-- The dynamic part will be used more often, but sometimes we need the static/old method 
 
 	if( !f ) then
 		Quantum.Client.IsInMenu = true

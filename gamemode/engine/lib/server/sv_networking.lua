@@ -119,11 +119,16 @@ end)
 
 Quantum.Net.Inventory = {}
 
+local function calculateNeededBits( n ) return math.ceil( math.log( n, 2 ) ) end
+
 local function WriteIntcode( intcode ) net.WriteInt( intcode, Quantum.IntCode.BIT_SIZE ) end
 
-function Quantum.Net.Inventory.SendItem( pl, index, itemid, amount ) -- sends a item to the client with amount of it, this is a DYNAMIC networking solution
+function Quantum.Net.Inventory.SetItem( pl, index, itemid, amount ) -- sends a item to the client with amount of it, this is a DYNAMIC networking solution
 	net.Start( "quantum_item_action" )
-		WriteIntcode( Quantum.IntCode.SEND_ITEM )
-		net.WriteInt( index, 8 )
+		WriteIntcode( Quantum.IntCode.SET_ITEM ) -- write the opcode first
+		net.WriteInt( index, calculateNeededBits( Quantum.Inventory.Size ) )
+		net.WriteString( itemid )
+		net.WriteInt( amount, calculateNeededBits( Quantum.Inventory.MaxStackSize ) )
+
 	net.Send( pl )
 end
