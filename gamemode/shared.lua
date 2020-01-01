@@ -18,3 +18,14 @@ Quantum.EmptyFunction = function() end
 include( "engine/sh_debug.lua" ) -- add the debug functions and stuff
 
 include( "settings/sh_settings.lua" )
+
+
+Quantum.IntCode = {
+	SEND_ITEM = 0,
+	DROP_ITEM = 1,
+	USE_ITEM = 2,
+	EAT_ITEM = 3,
+	EQUIP_ITEM = 4,
+	DESTROY_ITEM = 5,
+	BIT_SIZE = 3
+}

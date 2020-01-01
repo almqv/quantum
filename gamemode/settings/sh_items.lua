@@ -11,7 +11,7 @@ Quantum.Item.Create( "test", {
 	model = "models/props_phx/gears/bevel12.mdl",
 	soulbound = true, 
 	equipable = false, 
-	rarity = Quantum.Rarity.Legendary, 
+	rarity = Quantum.Rarity.Rare, 
 	usefunction = function() print( "Test!" ) end,  
 	consumefunction = function() print( "Test 2!" ) end
 } )

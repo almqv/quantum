@@ -8,6 +8,7 @@
 Quantum.Net = {}
 util.AddNetworkString( "quantum_menu_net" )
 util.AddNetworkString( "quantum_menu_button_net" )
+util.AddNetworkString( "quantum_item_action" )
 
 local function checkCacheTable( ply, cache_id, dt )
 	Quantum.Debug( "Checking cache tables (" .. tostring(ply) .. " | " .. tostring(cache_id) .. " | " .. tostring(dt) .. ")" )
@@ -114,3 +115,15 @@ net.Receive( "quantum_menu_button_net", function( len, pl )
 	local args = net.ReadTable()
 	runNetFunc( pl, funcid, args )
 end)
+
+
+Quantum.Net.Inventory = {}
+
+local function WriteIntcode( intcode ) net.WriteInt( intcode, Quantum.IntCode.BIT_SIZE ) end
+
+function Quantum.Net.Inventory.SendItem( pl, index, itemid, amount ) -- sends a item to the client with amount of it, this is a DYNAMIC networking solution
+	net.Start( "quantum_item_action" )
+		WriteIntcode( Quantum.IntCode.SEND_ITEM )
+		net.WriteInt( index, 8 )
+	net.Send( pl )
+end
