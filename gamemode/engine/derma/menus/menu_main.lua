@@ -129,6 +129,7 @@ function main.open(dt)
 				surface.PlaySound( "UI/buttonclick.wav" )
 				f:Close()
 				Quantum.Client.Cam.Stop() 
+				Quantum.Client.IsInMenu = false
 			end
 			res.OnCursorEntered = function() surface.PlaySound( "UI/buttonrollover.wav" ) end
 		end
