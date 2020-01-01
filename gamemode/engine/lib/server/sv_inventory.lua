@@ -71,7 +71,6 @@ local function sortItem( char, itemid, amount )
 	local itemInSlot = Quantum.Server.Inventory.GetSlotItem( char, index )
 
 	if( itemInSlot != nil ) then
-		print( itemInSlot[2] < stacksize, "##", itemInSlot[2], stacksize, index )
 		if( itemInSlot[2] < stacksize ) then
 			rest = rest - ( stacksize - itemInSlot[2] )
 			Quantum.Server.Inventory.SetSlotItem( char, index, itemid, stacksize )
