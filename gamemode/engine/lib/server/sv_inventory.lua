@@ -173,7 +173,7 @@ function Quantum.Server.Inventory.GiveItem( pl, itemid, amount ) -- Quantum.Serv
 	if( #inv + 1 <= Quantum.Inventory.Width * Quantum.Inventory.Height || Quantum.Server.Inventory.FindStackable( char, item ) != nil ) then
 		
 		sortItem( char, itemid, amount )
-		Quantum.Debug( "Gave " .. char.name .. " " .. amount .. "x [" .. item.name .. "]" )
+		-- Quantum.Debug( "Gave " .. char.name .. " " .. amount .. "x [" .. item.name .. "]" )
 		-- Send net message to client about item update 
 		-- ############################################
 		-- ############################################

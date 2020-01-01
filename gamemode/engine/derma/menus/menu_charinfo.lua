@@ -17,6 +17,17 @@ local padding = 10 * resScale
 local padding_s = 4 * resScale
 local errorMdl = "models/player.mdl"
 
+local function createItemAmountLabel( icon, item )
+	icon.amountpanel = vgui.Create( "DLabel", icon )
+	icon.amountpanel:SetText( tostring( item.amount ) )
+	icon.amountpanel:SetTextColor( Color( 205, 205, 205, 255 ) )
+	icon.amountpanel:SetFont( "q_item_amount" )
+	icon.amountpanel:SizeToContents()
+	icon.amountpanel.w, icon.amountpanel.h = icon.amountpanel:GetSize()
+	icon.amountpanel:SetPos( ( icon.w - icon.amountpanel.w ) - padding_s, icon.h - icon.amountpanel.h )
+	return icon.amountpanel
+end
+
 function menu.open( dt ) 
 	local items = dt.cont.items
 
@@ -152,6 +163,31 @@ function menu.open( dt )
 				theme.itempanel( self, self.itemcolor )
 			end
 
+			itempanels[ii].RemoveItem = function()
+				itempanels[ii].itemcolor = nil
+				if( itempanels[ii].icon:IsValid() ) then itempanels[ii].icon:SetVisible( false ) end
+			end
+
+			itempanels[ii].SetItemAmount = function( amount )
+				if( amount < 1 ) then itempanels[ii].RemoveItem() return end
+				itempanels[ii].item.amount = amount
+
+				if( itempanels[ii].icon != nil ) then
+					if( IsValid( itempanels[ii].icon.amountpanel ) ) then
+						itempanels[ii].icon.amountpanel:Remove()
+					end
+					if( itempanels[ii].item.amount > 1 ) then
+						itempanels[ii].icon.amountpanel = createItemAmountLabel( itempanels[ii].icon, itempanels[ii].item )
+					end
+
+					---- Create new options panel for it ----
+					if( IsValid( itempanels[ii].icon.options ) ) then
+						itempanels[ii].icon.options:Remove()
+						itempanels[ii].icon.options = iteminfo.giveoptions( itempanels[ii].icon, f, itempanels[ii].item.amount )
+					end
+				end
+			end
+
 			---- Create the model icon for the item panel ----
 			if( itempanels[ii].item != nil && itempanels[ii].item.model != nil ) then
 				itempanels[ii].icon = vgui.Create( "DModelPanel", itempanels[ii] )
@@ -176,19 +212,21 @@ function menu.open( dt )
 
 				---- Amount Text ----
 				if( itempanels[ii].item.amount > 1 ) then
-					itempanels[ii].icon.amountpanel = vgui.Create( "DLabel", itempanels[ii].icon )
-					itempanels[ii].icon.amountpanel:SetText( tostring( itempanels[ii].item.amount ) )
-					itempanels[ii].icon.amountpanel:SetTextColor( Color( 205, 205, 205, 255 ) )
-					itempanels[ii].icon.amountpanel:SetFont( "q_item_amount" )
-					itempanels[ii].icon.amountpanel:SizeToContents()
-					itempanels[ii].icon.amountpanel.w, itempanels[ii].icon.amountpanel.h = itempanels[ii].icon.amountpanel:GetSize()
-					itempanels[ii].icon.amountpanel:SetPos( ( itempanels[ii].icon.w - itempanels[ii].icon.amountpanel.w ) - padding_s, itempanels[ii].icon.h - itempanels[ii].icon.amountpanel.h )
+					itempanels[ii].icon.amountpanel = createItemAmountLabel( itempanels[ii].icon, itempanels[ii].item )
 				end
 
 				---- Tooltip ----
 				itempanels[ii].icon.tooltip = iteminfo.givetooltip( itempanels[ii].icon, f ) -- give the item a tooltip
 				itempanels[ii].icon.tooltip:CreateInfo() -- create the labels for the tooltip & such
 				----
+
+				---- Click Options ---- 
+				itempanels[ii].icon.options = iteminfo.giveoptions( itempanels[ii].icon, f, itempanels[ii].item.amount )
+
+				itempanels[ii].icon.DoClick = function( self )
+					surface.PlaySound( "UI/buttonclick.wav" )
+					self.options.Open()	
+				end
 
 			end
 

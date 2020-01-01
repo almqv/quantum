@@ -137,9 +137,14 @@ end
 
 function theme.itempanel( p, rarecolor )
 	local w, h = p:GetSize()
-	local icon = p.icon || p
+	local icon
+	if( p.icon == nil || !p.icon:IsValid() || !p.icon:IsVisible() ) then 
+		icon = p 
+	else
+		icon = p.icon
+	end
 
-	surface.SetDrawColor( rarecolor || Color( 0, 0, 0, 120 ) )
+	surface.SetDrawColor( theme.color.setalpha( rarecolor || Color( 0, 0, 0, 120 ), 150 ) )
 	surface.DrawRect( 0, 0, w, h )
 
 	if( icon:IsHovered() ) then
@@ -149,15 +154,26 @@ function theme.itempanel( p, rarecolor )
 	end
 end
 
-function theme.itemtooltip( p, item )
+function theme.iteminfopanel( p )
 	local w, h = p:GetSize()
 
 	theme.renderblur( p, 4, 5 )
 
-	surface.SetDrawColor( Color( 20, 20, 20, 190 ) )
+	surface.SetDrawColor( Color( 20, 20, 20, 220 ) )
 	surface.DrawRect( 0, 0, w, h )
 
 	theme.borderpanel( p, Color( 205, 205, 205, 200 ) )
+end
+
+function theme.iteminfobutton( b, txtClr )
+	local w, h = b:GetSize()
+	txtClr = txtClr || Color( 255, 255, 255, 255 )
+
+	if( !b:IsHovered() ) then
+		b:SetTextColor( txtClr )
+	else
+		b:SetTextColor( Color( 116, 185, 255, 255 ) )
+	end
 end
 
 ---- Color Manipulation ----

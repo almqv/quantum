@@ -7,7 +7,7 @@
 
 Quantum.Item.Create( "test", {
 	name = "Test Item", 
-	desc = "This is a test item!",
+	desc = "This is a test item!\nDoes not stack.",
 	model = "models/props_phx/gears/bevel12.mdl",
 	soulbound = true, 
 	equipable = false, 

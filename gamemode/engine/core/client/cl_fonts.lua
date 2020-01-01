@@ -114,3 +114,21 @@ surface.CreateFont( "q_item_amount", {
 	size = 22 * Quantum.Client.ResolutionScale,
 	antialias = true
 })
+
+surface.CreateFont( "q_item_option_button", {
+	font = "Cambria",
+	size = 24 * Quantum.Client.ResolutionScale,
+	antialias = true
+})
+
+surface.CreateFont( "q_item_option_dropbutton", {
+	font = "Cambria",
+	size = 28 * Quantum.Client.ResolutionScale,
+	antialias = true
+})
+
+surface.CreateFont( "q_item_option_dropval", {
+	font = "Cambria",
+	size = 40 * Quantum.Client.ResolutionScale,
+	antialias = true
+})
