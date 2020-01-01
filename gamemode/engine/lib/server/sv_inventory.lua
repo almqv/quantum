@@ -22,7 +22,10 @@ local function isStackable( item )
 end
 
 function Quantum.Server.Inventory.SetSlotItem( char, pos, itemid, amount ) 
-	if( amount < 1 ) then return end
+	if( amount < 1 ) then 
+		char.inventory[pos] = nil -- remove the item
+		return 
+	end
 	local item = Quantum.Item.Get( itemid )
 	if( isEquippable( item ) || !isStackable( item ) ) then 
 		amount = 1
@@ -31,7 +34,6 @@ function Quantum.Server.Inventory.SetSlotItem( char, pos, itemid, amount )
 		amount = amount || 1
 		char.inventory[pos] = { itemid, amount }
 	end
-	Quantum.Debug( "Gave " .. char.name .. " " .. amount .. "x [" .. item.name .. "] at " .. tostring(pos) )
 end
 
 function Quantum.Server.Inventory.GetSlotItem( char, pos ) return char.inventory[pos] end
@@ -112,7 +114,7 @@ local function sortItem( char, itemid, amount )
 end
 
 function Quantum.Server.Inventory.GiveItem( pl, itemid, amount ) -- Quantum.Server.Inventory.GiveItem( Entity(1), "test2", 21 )
-	local char = Quantum.Server.Char.GetCurrentCharacter( pl )
+	local char = Quantum.Server.Char.GetCurrentCharacter( pl ) -- Quantum.Server.Inventory.GiveItem( Entity(1), "test", 1 )
 	local inv = Quantum.Server.Char.GetInventory( char )
 	local item = Quantum.Item.Get( itemid )
 
@@ -121,8 +123,55 @@ function Quantum.Server.Inventory.GiveItem( pl, itemid, amount ) -- Quantum.Serv
 	if( #inv + 1 <= Quantum.Inventory.Width * Quantum.Inventory.Height || Quantum.Server.Inventory.FindStackable( char, item ) != nil ) then
 		
 		sortItem( char, itemid, amount )
-		-- send net message to client about item update 
+		Quantum.Debug( "Gave " .. char.name .. " " .. amount .. "x [" .. item.name .. "]" )
+		-- Send net message to client about item update 
+		-- ############################################
+		-- ############################################
+		-- ############################################
+		-- ############################################
 	else
 		Quantum.Debug( "Tried to give " .. tostring(pl) ..  " a item but their inventory is full!" )
+	end
+end
+
+function Quantum.Server.Inventory.DropItem( pl, index, amount ) -- Quantum.Server.Inventory.DropItem( Entity(1), 1, 9 )
+	local char = Quantum.Server.Char.GetCurrentCharacter( pl ) -- Quantum.Server.Inventory.DropItem( Entity(1), 4, 1 )
+	local inv = Quantum.Server.Char.GetInventory( char )
+
+	if( inv[index] != nil ) then
+		local itemid = inv[index][1] 
+
+		local item = Quantum.Item.Get( itemid )
+
+		if( item.soulbound == true ) then 
+			Quantum.Notify.Deny( pl, "You can not drop that item!" )
+			return 
+		end -- players cant drop soulbound items
+
+		local am_diff = inv[index][2] - amount
+
+		if( am_diff >= 0 ) then -- drop the item from the players inv
+			-- remove the items am_diff from its stack
+			Quantum.Server.Inventory.SetSlotItem( char, index, itemid, am_diff )
+
+			-- spawn the item infront of the player
+			local itemEnt = ents.Create( "q_item" )
+			if( IsValid( itemEnt ) ) then
+				itemEnt:SetModel( item.model )
+				itemEnt:SetPos( pl:GetPos() )
+				itemEnt.amount = amount
+				itemEnt.itemid = itemid
+				itemEnt:Spawn()
+
+				timer.Simple( math.Clamp( Quantum.Server.Settings.ItemDespawnTimer, 1, 600 ), function()
+					if( IsValid( itemEnt ) ) then
+						Quantum.Debug( "Despawned item " .. tostring(itemEnt) .. " [" .. itemEnt.itemid .. "]" )
+						itemEnt:Remove()
+					end
+				end)
+			end
+		end
+	else
+		Quantum.Error( "Player " .. tostring( pl ) .. " tried to drop a something from index=" .. tostring(index) .. " where there exists no item." )
 	end
 end
