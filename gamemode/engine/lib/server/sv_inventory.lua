@@ -22,6 +22,7 @@ local function isStackable( item )
 end
 
 function Quantum.Server.Inventory.SetSlotItem( char, pos, itemid, amount ) 
+	if( amount < 1 ) then return end
 	local item = Quantum.Item.Get( itemid )
 	if( isEquippable( item ) || !isStackable( item ) ) then 
 		amount = 1
@@ -39,7 +40,7 @@ function Quantum.Server.Inventory.FindStackable( char, item )
 	if( item.stack ) then
 		local inv = Quantum.Server.Char.GetInventory( char ) 
 		for i, item2 in pairs( inv ) do
-			if( item2[1] == item.id ) then -- if the item is stackable and it is the same item
+			if( item2[1] == item.id && item2[2] < item.stack ) then -- if the item is stackable and it is the same item
 				return i -- return its index
 			end
 		end
@@ -69,7 +70,15 @@ local function sortItem( char, itemid, amount )
 
 	local itemInSlot = Quantum.Server.Inventory.GetSlotItem( char, index )
 
-	while( rest > stacksize ) do
+	if( itemInSlot != nil ) then
+		print( itemInSlot[2] < stacksize, "##", itemInSlot[2], stacksize, index )
+		if( itemInSlot[2] < stacksize ) then
+			rest = rest - ( stacksize - itemInSlot[2] )
+			Quantum.Server.Inventory.SetSlotItem( char, index, itemid, stacksize )
+		end
+	end
+
+	while( rest >= stacksize ) do
 		count = count + 1
 		
 		if( count == 1 ) then
@@ -103,7 +112,7 @@ local function sortItem( char, itemid, amount )
 	Quantum.Server.Inventory.SetSlotItem( char, #inv + 1, itemid, rest ) 
 end
 
-function Quantum.Server.Inventory.GiveItem( pl, itemid, amount )
+function Quantum.Server.Inventory.GiveItem( pl, itemid, amount ) -- Quantum.Server.Inventory.GiveItem( Entity(1), "test2", 21 )
 	local char = Quantum.Server.Char.GetCurrentCharacter( pl )
 	local inv = Quantum.Server.Char.GetInventory( char )
 	local item = Quantum.Item.Get( itemid )
