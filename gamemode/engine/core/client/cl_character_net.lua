@@ -34,10 +34,10 @@ net.Receive( "quantum_item_action", function( len, pl ) -- used for updating the
 	intcodeFunctions[intcode]( index, itemid, amount )
 end)
 
-net.Receive( "quantum_item_update", function( len, pl ) 
-	local dtInv = net.ReadTable()
-	Quantum.Client.Inventory = dtInv || {}
-	Quantum.Debug( "Updated inventory." )
+net.Receive( "quantum_char_update", function( len, pl ) 
+	Quantum.Client.Inventory = net.ReadTable() || {}
+	Quantum.Client.Character = net.ReadTable()
+	Quantum.Debug( "Updated character." )
 end)
 
 function Quantum.Client.InventoryNet.DropItem( itemid, index, amount )

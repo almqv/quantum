@@ -7,6 +7,8 @@
 
 			Quantum.Server.Settings = {}
 
+Quantum.Server.Settings.DeveloperMode = false
+
 Quantum.Server.Settings.VoiceChatRange = 400
 
 Quantum.Server.Settings.MaxHealth = 100

@@ -50,6 +50,8 @@ local scenes = {
 function main.open(dt)
 
 	if( !f ) then
+		
+		if( IsValid( Quantum.Client.CurMenu ) ) then Quantum.Client.CurMenu:Close() end
 		Quantum.Client.IsInMenu = true -- hide the hud
 
 		local resScale = Quantum.Client.ResolutionScale

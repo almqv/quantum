@@ -9,7 +9,7 @@ Quantum.Net = {}
 util.AddNetworkString( "quantum_menu_net" )
 util.AddNetworkString( "quantum_menu_button_net" )
 util.AddNetworkString( "quantum_item_action" )
-util.AddNetworkString( "quantum_item_update" )
+util.AddNetworkString( "quantum_char_update")
 
 local function checkCacheTable( ply, cache_id, dt )
 	Quantum.Debug( "Checking cache tables (" .. tostring(ply) .. " | " .. tostring(cache_id) .. " | " .. tostring(dt) .. ")" )
@@ -132,9 +132,14 @@ function Quantum.Net.Inventory.SetItem( pl, index, itemid, amount ) -- sends a i
 end
 
 function Quantum.Net.Inventory.Update( pl )
-	Quantum.Debug( "Updating " .. tostring(pl) .. " inventory." )
-	net.Start( "quantum_item_update" )
-		net.WriteTable( Quantum.Server.Char.GetInventory( Quantum.Server.Char.GetCurrentCharacter( pl ) ) )
+	Quantum.Debug( "Updating " .. tostring(pl) .. " character." )
+
+	local charTbl = Quantum.Server.Char.GetCurrentCharacter( pl )
+	local char = { money = charTbl.money, model = charTbl.model, name = charTbl.name }
+
+	net.Start( "quantum_char_update" )
+		net.WriteTable( Quantum.Server.Char.GetInventory( charTbl ) )
+		net.WriteTable( char )
 	net.Send( pl )
 end
 
@@ -156,3 +161,17 @@ net.Receive( "quantum_item_action", function( len, pl )
 
 	intcodeFunctions[intcode]( pl, index, itemid, amount )
 end)
+
+
+local function UpdateAllPlayers()
+	for i, pl in pairs( player.GetHumans() ) do
+		pl.isloaded = false
+		pl:KillSilent()
+		pl:Spawn()
+		Quantum.Net.Inventory.Update( pl )
+	end
+end
+
+if( !Quantum.Server.Settings.DeveloperMode ) then
+	UpdateAllPlayers() -- Update the players on auto-refresh / lua-refresh
+end

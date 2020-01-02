@@ -29,15 +29,7 @@ local function createItemAmountLabel( icon, item )
 end
 
 function menu.open( dt )
-	local items = {}
-	if( dt.cont.items == nil ) then
-		if( Quantum.Client.Inventory == nil ) then Quantum.Client.Inventory = {} end
-		items = Quantum.Client.Inventory -- dynamic networking
-	else
-		items = dt.cont.items -- static, only sent when menu opens which is rareley in this case
-		Quantum.Client.Inventory = items
-	end
-	-- The dynamic part will be used more often, but sometimes we need the static/old method 
+	local items = Quantum.Client.Inventory 
 
 	if( !f ) then
 		Quantum.Client.IsInMenu = true
@@ -57,6 +49,18 @@ function menu.open( dt )
 		function f:OnClose()
 			Quantum.Client.IsInMenu = false -- show the hud when closed
 			Quantum.Client.Cam.Stop()
+		end
+
+		local keycodesClose = {
+			[KEY_ESCAPE] = true,
+			[KEY_F2] = true,
+			[KEY_TAB] = true
+		}
+
+		function f:OnKeyCodeReleased( keyCode )
+			if( keycodesClose[keyCode] ) then
+				self:Close()	
+			end
 		end
 
 		Quantum.Client.CurMenu = f
@@ -90,7 +94,7 @@ function menu.open( dt )
 		char:SetPos( 0, bar.h )
 		char.x, char.y = char:GetPos()
 		char:SetFOV( 25 )
-		char:SetModel( dt.cont.char.model || errorMdl )
+		char:SetModel( Quantum.Client.Character.model || errorMdl )
 		char:SetDirectionalLight( BOX_FRONT, Color( 116, 205, 255 ) )
 
 		local ent = char.Entity
@@ -127,14 +131,6 @@ function menu.open( dt )
 		itemframe:SetSize( inv:GetSize() )
 		itemframe:SetPos( 0, 0 )
 		itemframe.Paint = function( self, w, h ) end
-
-		---- TEMPORARY: REMOVE WHEN THE MENU IS DONE ----
-		local close = vgui.Create( "DButton", f )
-		close:SetText( "DEV CLOSE" )
-		close:SizeToContents()
-		close.w, close.h = close:GetSize()
-		close:SetPos( 0, f.h - close.h )
-		close.DoClick = function( self ) f:Close() end
 
 		for ii=1, maxW * maxH, 1 do -- create all of the item panels
 			if( ii != 1 ) then count = count + 1 end
@@ -254,7 +250,7 @@ function menu.open( dt )
 
 		--Money text
 		local money = vgui.Create( "DLabel", inv )
-		money:SetText( Quantum.Format.Money( dt.cont.char.money ) )
+		money:SetText( Quantum.Format.Money( Quantum.Client.Character.money ) )
 		money:SetFont( "q_money" )
 		money:SetTextColor( Color( 90, 218, 132, 255 ) )
 		money:SizeToContents()
@@ -265,10 +261,9 @@ function menu.open( dt )
 			draw.RoundedBox( 5, 0, 0, w, h, Color( 0, 0, 0, 90 ) )
 		end
 
-
 		--Name text
 		local name = vgui.Create( "DLabel", inv )
-		name:SetText( dt.cont.char.name || "ERROR: NAME=nil" )
+		name:SetText( Quantum.Client.Character.name || "ERROR: NAME=nil" )
 		name:SetFont( "q_name" )
 		name:SizeToContents()
 		name.w, name.h = name:GetSize()
@@ -278,9 +273,23 @@ function menu.open( dt )
 			theme.pagetext( self ) 
 		end
 
-		
-
 	end
 end
+
+hook.Add("ScoreboardShow", "Quantum_Menu_CharInfo_Open", function() --Quantum.Server.Inventory.GiveItem( Entity(1), "test2", 21 )
+	-- if( InventoryStartTime == nil ) then
+	-- 	InventoryStartTime = CurTime()
+	-- end
+
+	-- if( InventoryStartTime + 1 <= CurTime() ) then 
+	-- 	menu.open() 
+	-- 	InventoryStartTime = nil
+	-- end -- open the menu
+
+	menu.open() 
+	
+	return false
+end)
+
 
 return menu

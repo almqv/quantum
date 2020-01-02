@@ -7,8 +7,8 @@
 
 if CLIENT then
 	include( "shared.lua" )
-	Quantum.Client = {}
-	Quantum.Client.Cache = {}
+	Quantum.Client = Quantum.Client || {}
+	Quantum.Client.Cache = Quantum.Client.Cache || {}
 	Quantum.Client.ResolutionScale = ScrH() / 1080
 	Quantum.Client.ServerBannerPath = "gamemodes/" .. GM.FolderName .. "/gamemode/content/materials/quantum/server_banner.png" 
 
