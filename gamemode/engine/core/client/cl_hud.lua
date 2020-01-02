@@ -59,8 +59,12 @@ end
 
 function GM:Think()
 	if( Quantum.Client.IsInMenu ) then
-		if( gui.IsGameUIVisible() ) then -- hides the main menu for the player
-			gui.HideGameUI() 
+		if( gui.IsGameUIVisible() ) then gui.HideGameUI() end -- hides the main menu for the player
+
+		if( !LocalPlayer():Alive() ) then
+			if( IsValid( Quantum.Client.CurMenu ) ) then 
+				Quantum.Client.CurMenu:Close() -- closes the current open menu on death
+			end
 		end
 	end
 end

@@ -14,7 +14,7 @@ local function CreateCharTable( args )
 		class = Quantum.Classes[args.class] || Quantum.Classes[1],
 		maxhealth = Quantum.Server.Settings.MaxHealth,
 		health = args.health || Quantum.Server.Settings.MaxHealth,
-		model = Quantum.Classes[args.class].Models[args.gender][args.modelIndex] || "models/player.mdl",
+		model = Quantum.Classes[args.class].Models[args.gender][args.modelIndex] || Quantum.Classes[args.class].Models[args.gender][1] || "models/player.mdl",
 		money = args.money || Quantum.Server.Settings.StarterMoney,
 		inventory = args.inventory || {}, -- create new inventory later
 		jobs = args.jobs || {
@@ -72,6 +72,7 @@ function Quantum.Server.Char.SetCurrentCharacter( pl, index )
 	if( Quantum.Server.Char.Players[ id ] ) then 
 		pl.character = Quantum.Server.Char.Players[ id ]
 		pl.charindex = index
+		Quantum.Net.Inventory.Update( pl ) -- update the players inventory on char change
 		setupCharacter( pl, pl.character )
 		return pl.character
 	else

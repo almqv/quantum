@@ -9,6 +9,7 @@ Quantum.Net = {}
 util.AddNetworkString( "quantum_menu_net" )
 util.AddNetworkString( "quantum_menu_button_net" )
 util.AddNetworkString( "quantum_item_action" )
+util.AddNetworkString( "quantum_item_update" )
 
 local function checkCacheTable( ply, cache_id, dt )
 	Quantum.Debug( "Checking cache tables (" .. tostring(ply) .. " | " .. tostring(cache_id) .. " | " .. tostring(dt) .. ")" )
@@ -119,17 +120,39 @@ end)
 
 Quantum.Net.Inventory = {}
 
-local function calculateNeededBits( n ) return math.ceil( math.log( n, 2 ) ) end
-
-local function WriteIntcode( intcode ) net.WriteInt( intcode, Quantum.IntCode.BIT_SIZE ) end
-
 function Quantum.Net.Inventory.SetItem( pl, index, itemid, amount ) -- sends a item to the client with amount of it, this is a DYNAMIC networking solution
 	net.Start( "quantum_item_action" )
 	
-		WriteIntcode( Quantum.IntCode.SET_ITEM ) -- write the opcode first
-		net.WriteInt( index, calculateNeededBits( Quantum.Inventory.Size ) )
+		Quantum.WriteIntcode( Quantum.IntCode.SET_ITEM ) -- write the opcode first
+		net.WriteInt( index, Quantum.calculateNeededBits( Quantum.Inventory.Size ) )
 		net.WriteString( itemid )
-		net.WriteInt( amount, calculateNeededBits( Quantum.Inventory.MaxStackSize ) )
+		net.WriteInt( amount, Quantum.calculateNeededBits( Quantum.Inventory.MaxStackSize ) )
 
 	net.Send( pl )
 end
+
+function Quantum.Net.Inventory.Update( pl )
+	Quantum.Debug( "Updating " .. tostring(pl) .. " inventory." )
+	net.Start( "quantum_item_update" )
+		net.WriteTable( Quantum.Server.Char.GetInventory( Quantum.Server.Char.GetCurrentCharacter( pl ) ) )
+	net.Send( pl )
+end
+
+local intcodeFunctions = {
+	[Quantum.IntCode.SET_ITEM] = function( pl, index, itemid, amount ) -- if the client is trying to set an item then kick the player
+		Quantum.Warn( "Player [" .. pl:Nick() .. " | " .. pl:SteamID() .. "] tried to use a blacklisted Intcode function called from the client!" )
+		pl:Kick( "[Quantum Security] Tried to use a invalid Intcode function. Nice try." ) 
+	end,
+	[Quantum.IntCode.DROP_ITEM] = function( pl, index, itemid, amount )
+		Quantum.Server.Inventory.DropItem( pl, index, amount )
+	end
+}
+
+net.Receive( "quantum_item_action", function( len, pl )
+	local intcode = net.ReadInt( Quantum.IntCode.BIT_SIZE )
+	local index = net.ReadInt( Quantum.calculateNeededBits( Quantum.Inventory.Size ) ) 
+	local itemid = net.ReadString()
+	local amount = net.ReadInt( Quantum.calculateNeededBits( Quantum.Inventory.MaxStackSize ) ) 
+
+	intcodeFunctions[intcode]( pl, index, itemid, amount )
+end)

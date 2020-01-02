@@ -82,7 +82,7 @@ function iteminfo.dropamount( p, page, itemPanel )
 			itemPanel.SetItemAmount( amountInSlot - dropAmount )
 		end
 
-		---- DROP NET HERE ----
+		Quantum.Client.InventoryNet.DropItem( item.id, index, dropAmount )
 		
 	end
 
@@ -226,6 +226,7 @@ function iteminfo.giveoptions( p, page )
 			else
 				p:GetParent().RemoveItem()
 				---- DROP NET HERE ----
+				Quantum.Client.InventoryNet.DropItem( item.id, index, amount )
 
 			end
 		end

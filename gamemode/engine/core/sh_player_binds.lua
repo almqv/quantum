@@ -33,7 +33,6 @@ if SERVER then
 		if( keyfuncs[key] ) then keyfuncs[key]( ply ) end
 	end
 	function GM:ShowHelp( ply ) keyfuncs["mainMenu"]( ply ) end
-	function GM:ShowSpare1( ply ) keyfuncs["charinfo_DYNAMIC"]( ply ) end
-	function GM:ShowSpare2( ply ) keyfuncs["charinfo"]( ply ) end
+	function GM:ShowTeam( ply ) keyfuncs["charinfo_DYNAMIC"]( ply ) end
 	
 end

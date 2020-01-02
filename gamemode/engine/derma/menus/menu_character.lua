@@ -344,7 +344,7 @@ local pages = {
 				snm.RunNetworkedFunc( "createChar", inputs )
 
 				---- save it on the client
-				inputs.model = Quantum.Classes[inputs.class].Models[inputs.gender][inputs.modelIndex]
+				inputs.model = Quantum.Classes[inputs.class].Models[inputs.gender][inputs.modelIndex] || Quantum.Classes[inputs.class].Models[inputs.gender][1]
 
 				Quantum.Client.Chars[#Quantum.Client.Chars + 1] = inputs
 

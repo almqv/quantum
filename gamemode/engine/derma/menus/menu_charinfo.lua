@@ -59,6 +59,8 @@ function menu.open( dt )
 			Quantum.Client.Cam.Stop()
 		end
 
+		Quantum.Client.CurMenu = f
+
 		-- Default is the inventory page --
 
 		local bar = vgui.Create( "DPanel", f )

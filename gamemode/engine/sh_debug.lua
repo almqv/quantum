@@ -23,3 +23,11 @@ function Quantum.Error( txt )
 		return 
 	end
 end
+
+function Quantum.Warn( txt )
+	if( txt ) then
+		MsgC( Color( 255, 10, 10 ), prefix .. "[WARNING] " .. txt .. "\n"  ) 
+	else
+		return
+	end
+end
