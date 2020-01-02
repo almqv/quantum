@@ -24,26 +24,23 @@ local function isStackable( item )
 end
 
 function Quantum.Server.Inventory.SetSlotItem( pl, char, pos, itemid, amount ) 
+	local setItemTbl = {}
 	if( amount < 1 ) then 
-		char.inventory[pos] = nil -- remove the item
-
-		-- Sent the new data to the client
-		Quantum.Net.Inventory.SetItem( pl, pos, itemid, amount )
-
-		return 
-	end
-	local item = Quantum.Item.Get( itemid )
-	if( isEquippable( item ) || !isStackable( item ) ) then 
-		amount = 1
-		char.inventory[pos] = { itemid }
-		-- Sent the new data to the client
-		Quantum.Net.Inventory.SetItem( pl, pos, itemid, amount )
+		setItemTbl = nil 
 	else
-		amount = amount || 1
-		char.inventory[pos] = { itemid, amount }
-		-- Sent the new data to the client
-		Quantum.Net.Inventory.SetItem( pl, pos, itemid, amount )
+		local item = Quantum.Item.Get( itemid )
+		if( isEquippable( item ) || !isStackable( item ) ) then 
+			amount = nil
+			setItemTbl = { itemid }
+		else
+			amount = amount || 1
+			setItemTbl = { itemid, amount } 
+		end
 	end
+	
+	char.inventory[pos] = setItemTbl -- remove the item
+	-- Sent the new data to the client
+	Quantum.Net.Inventory.SetItem( pl, pos, itemid, amount )
 end
 
 function Quantum.Server.Inventory.GetSlotItem( char, pos ) return char.inventory[pos] end

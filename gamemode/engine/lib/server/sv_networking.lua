@@ -125,6 +125,7 @@ local function WriteIntcode( intcode ) net.WriteInt( intcode, Quantum.IntCode.BI
 
 function Quantum.Net.Inventory.SetItem( pl, index, itemid, amount ) -- sends a item to the client with amount of it, this is a DYNAMIC networking solution
 	net.Start( "quantum_item_action" )
+	
 		WriteIntcode( Quantum.IntCode.SET_ITEM ) -- write the opcode first
 		net.WriteInt( index, calculateNeededBits( Quantum.Inventory.Size ) )
 		net.WriteString( itemid )
