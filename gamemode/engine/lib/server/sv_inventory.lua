@@ -221,10 +221,9 @@ function Quantum.Server.Inventory.DropItem( pl, index, amount ) -- Quantum.Serve
 			-- spawn the item infront of the player
 			local itemEnt = ents.Create( "q_item" )
 			if( IsValid( itemEnt ) ) then
-				itemEnt:SetModel( item.model )
+
 				itemEnt:SetPos( pl:GetPos() + ( pl:GetForward() * 40 ) + Vector( 0, 0, 40 )  )
-				itemEnt.amount = amount
-				itemEnt.itemid = itemid
+				itemEnt:InitializeItem( itemid, amount )
 				itemEnt:Spawn()
 
 				timer.Simple( math.Clamp( Quantum.Server.Settings.ItemDespawnTimer, 1, 600 ), function()
@@ -233,6 +232,7 @@ function Quantum.Server.Inventory.DropItem( pl, index, amount ) -- Quantum.Serve
 						itemEnt:Remove()
 					end
 				end)
+				
 			end
 		end
 	else

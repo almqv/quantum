@@ -12,7 +12,6 @@ include( "shared.lua" )
  
 function ENT:Initialize()
  
-	self:SetModel( "models/props_phx/gears/bevel12.mdl" )
 	self:PhysicsInit( SOLID_VPHYSICS )
 	self:SetMoveType( MOVETYPE_VPHYSICS )
 	self:SetSolid( SOLID_VPHYSICS )
@@ -33,4 +32,13 @@ function ENT:Use( activator, caller )
 			self:EmitSound( Quantum.Server.Settings.ItemPickupSound ) -- make a pickup sound
 		end
 	end
+end
+
+function ENT:InitializeItem( itemid, amount )
+	self:SetModel( Quantum.Item.Get( itemid).model )
+	self.itemid = itemid
+	self.amount = amount
+
+	self:SetNWString( "q_item_id", itemid )
+	self:SetNWInt( "q_item_amount", amount )
 end

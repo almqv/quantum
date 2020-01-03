@@ -20,7 +20,7 @@ Quantum.Item.Create( "test2", {
 	name = "Trash Item Test", 
 	desc = "This is literall trash\nLine breaker test :D\n\nTest :D",
 	model = "models/props_phx/gears/bevel12.mdl",
-	stack = 10, --wrong change later to 10 or something
+	stack = 10, 
 	soulbound = false, 
 	equipable = false, 
 	rarity = Quantum.Rarity.Trash, 
@@ -28,4 +28,14 @@ Quantum.Item.Create( "test2", {
 		user:Kill()
 		user:PrintChat( "You consumed trash and died!" )
 	end 
+} )
+
+Quantum.Item.Create( "bomb", {
+	name = "WW2 Bomb", 
+	desc = "Not a real item but okay.",
+	model = "models/props_phx/ww2bomb.mdl",
+	stack = 2, 
+	soulbound = false, 
+	equipable = false, 
+	rarity = Quantum.Rarity.Epic
 } )

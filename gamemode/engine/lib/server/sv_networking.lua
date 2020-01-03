@@ -165,9 +165,6 @@ end)
 
 local function UpdateAllPlayers()
 	for i, pl in pairs( player.GetHumans() ) do
-		pl.isloaded = false
-		pl:KillSilent()
-		pl:Spawn()
 		Quantum.Net.Inventory.Update( pl )
 	end
 end

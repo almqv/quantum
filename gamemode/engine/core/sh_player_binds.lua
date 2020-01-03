@@ -17,5 +17,9 @@ if SERVER then
 	function GM:KeyRelease( ply, key )
 		if( keyfuncs[key] ) then keyfuncs[key]( ply ) end
 	end
+
+	function GM:ShowHelp( ply )
+		keyfuncs["mainMenu"]( ply )
+	end
 	
 end

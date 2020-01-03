@@ -276,7 +276,7 @@ function menu.open( dt )
 	end
 end
 
-hook.Add("ScoreboardShow", "Quantum_Menu_CharInfo_Open", function() --Quantum.Server.Inventory.GiveItem( Entity(1), "test2", 21 )
+hook.Add("ScoreboardShow", "Quantum_Menu_CharInfo_Open", function() 
 	-- if( InventoryStartTime == nil ) then
 	-- 	InventoryStartTime = CurTime()
 	-- end
