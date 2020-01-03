@@ -18,6 +18,9 @@ Quantum.Inventory = {
 	MaxStackSize = 20 -- NOTE: MAX MaxStackSize=99
 }
 
+Quantum.ItemPickupTime = 0.5 -- seconds
+Quantum.ItemInfoDisplayMaxDistance = 200
+
 Quantum.Money = {
 	Prefix = "$",
 	Surfix = ""

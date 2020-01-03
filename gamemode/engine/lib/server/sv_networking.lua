@@ -169,6 +169,6 @@ local function UpdateAllPlayers()
 	end
 end
 
-if( !Quantum.Server.Settings.DeveloperMode ) then
+if( Quantum.Server.Settings.DeveloperMode == false ) then
 	UpdateAllPlayers() -- Update the players on auto-refresh / lua-refresh
 end

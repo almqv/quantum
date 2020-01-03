@@ -22,14 +22,22 @@ function ENT:Initialize()
 
 end
  
+local useStartTime
+local useDelay = Quantum.ItemPickupTime
+
 function ENT:Use( activator, caller )
 	if( activator:IsPlayer() ) then
 		if( self.itemid != nil && self.amount != nil ) then
-			self:Remove()
-			-- add item to players inventory
-			Quantum.Server.Inventory.GiveItem( activator, self.itemid, self.amount )
-			Quantum.Notify.ItemPickup( activator, Quantum.Item.Get( self.itemid ), self.amount ) -- notify the player
-			self:EmitSound( Quantum.Server.Settings.ItemPickupSound ) -- make a pickup sound
+			useStartTime = useStartTime || CurTime()
+
+			if( CurTime() - useStartTime >= useDelay ) then
+				useStartTime = nil
+				self:Remove()
+				-- add item to players inventory
+				Quantum.Server.Inventory.GiveItem( activator, self.itemid, self.amount )
+				Quantum.Notify.ItemPickup( activator, Quantum.Item.Get( self.itemid ), self.amount ) -- notify the player
+				self:EmitSound( Quantum.Server.Settings.ItemPickupSound ) -- make a pickup sound
+			end
 		end
 	end
 end

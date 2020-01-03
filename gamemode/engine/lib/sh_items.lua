@@ -29,3 +29,33 @@ end
 function Quantum.Item.Get( id )
 	return Quantum.Items[id]
 end
+
+if SERVER then
+	Quantum.Server.Item = {}
+	function Quantum.Server.Item.SpawnItem( pos, itemid, amount )
+		if( pos == nil || itemid == nil || amount == nil ) then return end
+
+		if( Quantum.Item.Get( itemid ) != nil ) then
+			local itemEnt = ents.Create( "q_item" )
+
+			if( IsValid( itemEnt ) ) then
+
+				itemEnt:SetPos( pos  )
+				itemEnt:InitializeItem( itemid, amount )
+				itemEnt:Spawn()
+
+				timer.Simple( math.Clamp( Quantum.Server.Settings.ItemDespawnTimer, 1, 600 ), function()
+					if( IsValid( itemEnt ) ) then
+						Quantum.Debug( "Despawned item " .. tostring(itemEnt) .. " [" .. itemEnt.itemid .. "]" )
+						itemEnt:Remove()
+					end
+				end)
+				
+			end
+		end
+	end
+
+	function Quantum.Server.Item.SpawnItemAtPlayer( pl, itemid, amount ) --
+		Quantum.Server.Item.SpawnItem( pl:GetPos() + ( pl:GetForward() * 40 ) + Vector( 0, 0, 40 ), itemid, amount )
+	end
+end

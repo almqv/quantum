@@ -31,6 +31,12 @@ end
 function menu.open( dt )
 	local items = Quantum.Client.Inventory 
 
+	if( Quantum.Client.Character == nil ) then 
+		chat.AddText( Color( 255, 25, 25 ), "[Quantum] - [ERROR] Check console for details.\n" )
+		Quantum.Error( "\nCharacter could not be found. Can not open inventory!\nGive this message to someone important: Quantum.Client.Character=nil\nTry rejoining the server and this should be fixed." ) 
+		return 
+	end
+
 	if( !f ) then
 		Quantum.Client.IsInMenu = true
 

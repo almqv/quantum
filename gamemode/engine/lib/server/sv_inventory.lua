@@ -219,21 +219,7 @@ function Quantum.Server.Inventory.DropItem( pl, index, amount ) -- Quantum.Serve
 			Quantum.Server.Inventory.SetSlotItem( pl, char, index, itemid, am_diff )
 
 			-- spawn the item infront of the player
-			local itemEnt = ents.Create( "q_item" )
-			if( IsValid( itemEnt ) ) then
-
-				itemEnt:SetPos( pl:GetPos() + ( pl:GetForward() * 40 ) + Vector( 0, 0, 40 )  )
-				itemEnt:InitializeItem( itemid, amount )
-				itemEnt:Spawn()
-
-				timer.Simple( math.Clamp( Quantum.Server.Settings.ItemDespawnTimer, 1, 600 ), function()
-					if( IsValid( itemEnt ) ) then
-						Quantum.Debug( "Despawned item " .. tostring(itemEnt) .. " [" .. itemEnt.itemid .. "]" )
-						itemEnt:Remove()
-					end
-				end)
-				
-			end
+			Quantum.Server.Item.SpawnItemAtPlayer( pl, itemid, amount ) 
 		end
 	else
 		Quantum.Error( "Player " .. tostring( pl ) .. " tried to drop a something from index=" .. tostring(index) .. " where there exists no item." )

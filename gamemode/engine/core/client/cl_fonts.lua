@@ -132,3 +132,21 @@ surface.CreateFont( "q_item_option_dropval", {
 	size = 40 * Quantum.Client.ResolutionScale,
 	antialias = true
 })
+
+surface.CreateFont( "q_item_hud_title", {
+	font = "Cambria",
+	size = 28 * Quantum.Client.ResolutionScale,
+	antialias = true
+})
+
+surface.CreateFont( "q_item_hud_rarity", {
+	font = "Cambria",
+	size = 21 * Quantum.Client.ResolutionScale,
+	antialias = true
+})
+
+surface.CreateFont( "q_item_hud_soulbound", {
+	font = "Cambria",
+	size = 20 * Quantum.Client.ResolutionScale,
+	antialias = true
+})
