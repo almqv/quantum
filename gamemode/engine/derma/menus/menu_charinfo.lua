@@ -145,7 +145,7 @@ function menu.open( dt )
 
 			itempanels[ii].index = ii -- set the vars
 			if( items[ii] ) then 
-				itempanels[ii].item = Quantum.Item.Get( items[ii][1]) -- get the items info through its id 
+				itempanels[ii].item = Quantum.Item.Get( items[ii][1] ) -- get the items info through its id 
 				itempanels[ii].item.amount = items[ii][2] || 1 -- get the amount
 			end 
 
@@ -292,9 +292,26 @@ hook.Add("ScoreboardShow", "Quantum_Menu_CharInfo_Open", function()
 	-- 	InventoryStartTime = nil
 	-- end -- open the menu
 
-	menu.open() 
+	-- menu.open() 
 	
 	return false
+end)
+
+local startTime
+
+hook.Add( "Think", "Quantum_Menu_CharInfo_Think", function()
+	if( !Quantum.Client.IsInMenu ) then
+		if( input.IsButtonDown( Quantum.Bind.OpenInventory ) ) then
+			startTime = startTime || CurTime()
+
+			if( CurTime() - startTime >= Quantum.InventoryOpenDelay ) then
+				startTime = nil
+				menu.open()
+			end
+		else
+			startTime = nil
+		end
+	end
 end)
 
 

@@ -39,3 +39,13 @@ Quantum.Item.Create( "bomb", {
 	equipable = false, 
 	rarity = Quantum.Rarity.Epic
 } )
+
+Quantum.Item.Create( "potatoe", {
+	name = "Legendary Potatoe", 
+	desc = "The most legendary potatoe in existance. Don't eat it!",
+	model = "models/props_phx/misc/potato.mdl",
+	stack = 1, 
+	soulbound = false, 
+	equipable = false, 
+	rarity = Quantum.Rarity.Legendary
+} )

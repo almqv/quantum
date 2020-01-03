@@ -20,16 +20,14 @@ local radius = 1.05 * scale
 local padding = 5 * scale
 local sw, sh = ScrW(), ScrH()
 
-local client = LocalPlayer()
-
 local function SetAlpha( color, alpha )
 	return Color( color.r, color.g, color.b, alpha )
 end
 
 local function renderStatHUD()
-	local hp = client:Health()
+	local hp = LocalPlayer():Health()
 	local lasthp = hp
-	local maxhp = client:GetMaxHealth()
+	local maxhp = LocalPlayer():GetMaxHealth()
 
 	-- Health border
 	surface.SetDrawColor( 0, 0, 0, 200 )
@@ -55,47 +53,76 @@ local function renderStatHUD()
 end
 
 local function renderItemInfoHUD()
-	local trace = client:GetEyeTraceNoCursor() 
-	if( trace.Entity:GetClass() == "q_item" ) then
-		local distance = client:GetPos():Distance( trace.Entity:GetPos() )
-		local distFrac = Lerp( distance/Quantum.ItemInfoDisplayMaxDistance, 1, 0 )
+	local trace = LocalPlayer():GetEyeTraceNoCursor() 
+	local entsNear = ents.FindInSphere( LocalPlayer():GetPos(), Quantum.ItemInfoDisplayMaxDistance )
 
-		if( distance <= Quantum.ItemInfoDisplayMaxDistance ) then
-			local item = Quantum.Item.Get( trace.Entity:GetNWString( "q_item_id" ) ) || { name="ERROR" }
-			local amount = trace.Entity:GetNWInt( "q_item_amount" ) || 1
-
-			local pos = trace.Entity:GetPos()
-			pos.z = pos.z + 20
-
-			local screenPos = pos:ToScreen()
-
-			local txtPadding = 20 * scale
-			local itemAmountTxt = ""
-			if( amount > 1 ) then itemAmountTxt = amount .. "x " end
-
-			local alphaFrac = distFrac
-
-
-			draw.SimpleText( itemAmountTxt .. item.name, "q_item_hud_title", screenPos.x, screenPos.y, SetAlpha( item.rarity.color, 255 * alphaFrac ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-			draw.SimpleText( "Rarity: " .. item.rarity.txt, "q_item_hud_rarity", screenPos.x, screenPos.y + txtPadding, SetAlpha( item.rarity.color, 255 *alphaFrac ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-			if( item.soulbound ) then
-				draw.SimpleText( "Soulbound", "q_item_hud_soulbound", screenPos.x, screenPos.y + txtPadding*2, Color( 235, 64, 52, 255 * alphaFrac ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+	for i, ent in pairs( entsNear ) do
+		if( ent:GetClass() == "q_item" ) then
+			local distance = LocalPlayer():GetPos():Distance( ent:GetPos() )
+			local distFrac = Lerp( distance/Quantum.ItemInfoDisplayMaxDistance, 1, 0 )
+	
+			if( distance <= Quantum.ItemInfoDisplayMaxDistance ) then
+				local item = Quantum.Item.Get( ent:GetNWString( "q_item_id" ) ) || { name = "", rarity = { txt = "", color = Color( 0, 0, 0, 0 ) } }
+				local amount = ent:GetNWInt( "q_item_amount" ) || 1
+	
+				local pos = ent:GetPos()
+				pos.z = pos.z + 20
+	
+				local screenPos = pos:ToScreen()
+	
+				local txtPadding = 20 * scale
+				local itemAmountTxt = ""
+				if( amount > 1 ) then itemAmountTxt = amount .. "x " end
+	
+				local alphaFrac = distFrac
+	
+	
+				draw.SimpleText( itemAmountTxt .. item.name, "q_item_hud_title", screenPos.x, screenPos.y, SetAlpha( item.rarity.color, 255 * alphaFrac ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+				draw.SimpleText( "Rarity: " .. item.rarity.txt, "q_item_hud_rarity", screenPos.x, screenPos.y + txtPadding, SetAlpha( item.rarity.color, 255 *alphaFrac ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+				if( item.soulbound ) then
+					draw.SimpleText( "Soulbound", "q_item_hud_soulbound", screenPos.x, screenPos.y + txtPadding*2, Color( 235, 64, 52, 255 * alphaFrac ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+				end
 			end
 		end
 	end
 end
 
-function GM:HUDPaint()
-	if( !Quantum.Client.IsInMenu ) then
-		if( !client:Alive() ) then 
-			surface.SetDrawColor( 0, 0, 0, 255 )
-			surface.DrawRect( 0, 0, sw, sh )
+local showRarities = {
+	[Quantum.Rarity.Rare] = true,
+	[Quantum.Rarity.Epic] = true,
+	[Quantum.Rarity.Legendary] = true
+}
+
+local function renderHaloAroundItems()
+	for i, item in pairs( ents.FindByClass( "q_item" ) ) do
+		local itemid = item:GetNWString( "q_item_id" )
+		local itemTbl = Quantum.Item.Get(itemid) || { rarity = Quantum.Rarity.Rare }
+
+		if( itemTbl != nil ) then
+			if( showRarities[itemTbl.rarity] ) then
+				halo.Add( { item }, SetAlpha( itemTbl.rarity.color, 255 ), 0, 0, 2, true, false )
+			end
 		end
-		
-		if( Quantum.Client.Config.EnableHUD ) then
-			if( client:Alive() ) then
-				renderStatHUD()
-				renderItemInfoHUD()
+	end
+end
+
+hook.Add( "PreDrawHalos", "Quantum_Item_Halos", function() 
+	renderHaloAroundItems()
+end)
+
+function GM:HUDPaint()
+	if( LocalPlayer():IsValid() ) then
+		if( !Quantum.Client.IsInMenu ) then
+			if( !LocalPlayer():Alive() ) then 
+				surface.SetDrawColor( 0, 0, 0, 255 )
+				surface.DrawRect( 0, 0, sw, sh )
+			end
+			
+			if( Quantum.Client.Config.EnableHUD ) then
+				if( LocalPlayer():Alive() ) then
+					renderStatHUD()
+					renderItemInfoHUD()
+				end
 			end
 		end
 	end
