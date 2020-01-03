@@ -26,6 +26,7 @@ local useStartTime
 local useDelay = Quantum.ItemPickupTime
 
 function ENT:Use( activator, caller )
+	-- FIX reset start time POST use
 	if( activator:IsPlayer() ) then
 		if( self.itemid != nil && self.amount != nil ) then
 			useStartTime = useStartTime || CurTime()
