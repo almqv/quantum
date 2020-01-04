@@ -49,6 +49,17 @@ Quantum.Server.Settings.DamageScale = { -- The scale of the damage for each hitg
 	[HITGROUP_RIGHTLEG] = 1
 }
 
+Quantum.Server.Settings.BotChars = {
+	civ1 = {
+		name = "John Doe",
+		gender = "Male"
+	},
+	civ2 = {
+		name = "Jane Doe",
+		gender = "Female"
+	}
+}
+
 Quantum.Server.Settings.PainSounds = {}
 Quantum.Server.Settings.PainSounds.Male = {
 	"vo/npc/male01/pain01.wav",

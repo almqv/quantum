@@ -87,6 +87,61 @@ local function renderItemInfoHUD()
 	end
 end
 
+local handle
+
+local function renderCharNamesHUD()
+	local trace = LocalPlayer():GetEyeTraceNoCursor() 
+	
+
+	local entsNear = ents.FindInSphere( LocalPlayer():GetPos(), Quantum.CharInfoDisplayDistance )
+
+	for i, ent in pairs( entsNear ) do
+		if( ent:IsPlayer() && ent != LocalPlayer() ) then
+			local distance = LocalPlayer():GetPos():Distance( ent:GetPos() )
+			local distFrac = Lerp( distance/Quantum.CharInfoDisplayDistance, 1, 0 )
+			
+			if( distance <= Quantum.CharInfoDisplayDistance ) then
+				handle = util.GetPixelVisibleHandle() 
+				local pixelVis = util.PixelVisible( ent:GetPos(), 20, handle )
+				print( ent:Nick(), pixelVis, ent:GetPos() )
+				--if( util.PixelVisible( ent:GetPos(), 5, handle ) > 0  ) then
+					local name = ent:GetNWString( "q_char_name" )
+					local pos = ent:GetPos()
+					pos.z = pos.z + 75
+				
+					local screenPos = pos:ToScreen()
+		
+					local txtPadding = 20 * scale
+					local alphaFrac = distFrac
+				
+			
+					draw.SimpleText( name, "q_char_hud_name", screenPos.x, screenPos.y, Color( 225, 225, 225, 255 * distFrac ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+				--end
+			end
+		end
+	end
+
+	-- local ent = trace.Entity
+	-- if( ent:IsPlayer() ) then
+	-- 	local distance = LocalPlayer():GetPos():Distance( ent:GetPos() )
+	-- 	local distFrac = Lerp( distance/Quantum.CharInfoDisplayDistance, 1, 0 )
+	
+	-- 	if( distance <= Quantum.CharInfoDisplayDistance ) then
+	-- 		local name = ent:GetNWString( "q_char_name" )
+	-- 		local pos = ent:GetPos()
+	-- 		pos.z = pos.z + 20
+	
+	-- 		local screenPos = pos:ToScreen()
+
+	-- 		local txtPadding = 20 * scale
+	-- 		local alphaFrac = distFrac
+	
+
+	-- 		draw.SimpleText( name, "q_char_hud_name", screenPos.x, screenPos.y, Color( 225, 225, 225, 255 * distFrac ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+	-- 	end
+	-- end
+end
+
 local showRarities = {
 	[Quantum.Rarity.Rare] = true,
 	[Quantum.Rarity.Epic] = true,
@@ -122,6 +177,7 @@ function GM:HUDPaint()
 				if( LocalPlayer():Alive() ) then
 					renderStatHUD()
 					renderItemInfoHUD()
+					renderCharNamesHUD()
 				end
 			end
 		end

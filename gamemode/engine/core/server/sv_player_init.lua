@@ -42,12 +42,24 @@ end
 
 function GM:PlayerSpawn( ply )
 
-	if( ply.isloaded == true ) then -- replace logic ( reversed )
-		ply:UnSpectate() 
-		setUpPlayer( ply )
+	if( !ply:IsBot() ) then
+		if( ply.isloaded == true ) then -- replace logic ( reversed )
+			ply:UnSpectate() 
+			setUpPlayer( ply )
+		else
+			ply:SetPos( Vector( -8936.411133, 8244.439453, 7744.031250 ) )
+			Quantum.Net.OpenMenu( ply, "main", { chars = Quantum.Server.Char.GetPlayerChars_cl( ply ) } ) -- make the player open the main menu
+		end
 	else
-		ply:SetPos( Vector( -8936.411133, 8244.439453, 7744.031250 ) )
-		Quantum.Net.OpenMenu( ply, "main", { chars = Quantum.Server.Char.GetPlayerChars_cl( ply ) } ) -- make the player open the main menu
+		if( !ply.isloaded ) then
+			local selectedChar = table.Random( Quantum.Server.Settings.BotChars )
+			ply.isbot = true
+			ply.isloaded = true
+			local botCharCount = table.Count(Quantum.Server.Char.GetPlayerChars( ply ))
+			Quantum.Server.Char.Load( ply, botCharCount + 1, selectedChar )
+			Quantum.Server.Char.SetCurrentCharacter( ply, botCharCount + 1 )
+		else
+			setUpPlayer( ply )
+		end
 	end
-
 end

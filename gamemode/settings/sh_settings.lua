@@ -18,9 +18,18 @@ Quantum.Inventory = {
 	MaxStackSize = 20 -- NOTE: MAX MaxStackSize=99
 }
 
+Quantum.EquipSlots = {
+	Head = "",
+	Chest = "",
+	Legs = "",
+	Boots = ""
+}
+
 Quantum.InventoryOpenDelay = 0.35
 Quantum.ItemPickupTime = 0.5 -- seconds
 Quantum.ItemInfoDisplayMaxDistance = 200
+
+Quantum.CharInfoDisplayDistance = 400
 
 Quantum.Money = {
 	Prefix = "$",
