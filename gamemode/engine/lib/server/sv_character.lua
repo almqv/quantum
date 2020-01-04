@@ -12,8 +12,12 @@ local function CreateCharTable( args )
 	local rand = table.Random(Quantum.Classes)
 	local randMdl = rand.Models[ args.gender ][ math.random(1, #rand.Models[ args.gender ]) ]
 	local setMdl 
-	if( args.class == nil ) then setMdl = randMdl end
-
+	if( args.class == nil ) then 
+		setMdl = randMdl 
+	else
+		setMdl = Quantum.Classes[args.class].Models[args.gender][args.modelIndex]
+	end
+	
 	return {
 		name = args.name || "UNKNOWN",
 		class = Quantum.Classes[args.class] || Quantum.Classes[1],

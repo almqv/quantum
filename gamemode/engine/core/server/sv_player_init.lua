@@ -43,7 +43,7 @@ end
 function GM:PlayerSpawn( ply )
 
 	if( !ply:IsBot() ) then
-		if( ply.isloaded == true ) then -- replace logic ( reversed )
+		if( ply.isloaded == true ) then 
 			ply:UnSpectate() 
 			setUpPlayer( ply )
 		else
