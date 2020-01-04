@@ -153,6 +153,6 @@ surface.CreateFont( "q_item_hud_soulbound", {
 
 surface.CreateFont( "q_char_hud_name", {
 	font = "Cambria",
-	size = 28 * Quantum.Client.ResolutionScale,
+	size = 40 * Quantum.Client.ResolutionScale,
 	antialias = true
 })

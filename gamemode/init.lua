@@ -16,6 +16,9 @@ if SERVER then
 	local path = "gamemodes/" .. GM.FolderName .. "/gamemode/content/materials/quantum/server_banner.png"
 	resource.AddSingleFile( path )
 
+	resource.AddSingleFile( "materials/quantum/mic_icon48.png" ) -- add the mic icon
+	resource.AddSingleFile( "materials/quantum/mic_icon24.png" )
+
 	include( "shared.lua" ) -- 
 
 	Quantum.Server = {}

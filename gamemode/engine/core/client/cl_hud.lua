@@ -11,7 +11,7 @@ local enabledHUDs = {
 }
 
 hook.Add( "HUDShouldDraw", "Quantum_RemoveDefualtHUD", function( hudid ) 
-	return enabledHUDs[hudid] ~= nil
+	return enabledHUDs[hudid] == true
 end)
 
 local scale = Quantum.Client.ResolutionScale
@@ -55,6 +55,7 @@ end
 local function renderItemInfoHUD()
 	local trace = LocalPlayer():GetEyeTraceNoCursor() 
 	local entsNear = ents.FindInSphere( LocalPlayer():GetPos(), Quantum.ItemInfoDisplayMaxDistance )
+	local txtPadding = 24 * scale
 
 	for i, ent in pairs( entsNear ) do
 		if( ent:GetClass() == "q_item" ) then
@@ -70,7 +71,6 @@ local function renderItemInfoHUD()
 	
 				local screenPos = pos:ToScreen()
 	
-				local txtPadding = 20 * scale
 				local itemAmountTxt = ""
 				if( amount > 1 ) then itemAmountTxt = amount .. "x " end
 	
@@ -87,13 +87,9 @@ local function renderItemInfoHUD()
 	end
 end
 
-local handle
-
-local function renderCharNamesHUD()
-	local trace = LocalPlayer():GetEyeTraceNoCursor() 
-	
-
+local function renderCharNamesHUD3D2D()
 	local entsNear = ents.FindInSphere( LocalPlayer():GetPos(), Quantum.CharInfoDisplayDistance )
+	local txtPadding = 32 * scale
 
 	for i, ent in pairs( entsNear ) do
 		if( ent:IsPlayer() && ent != LocalPlayer() ) then
@@ -101,45 +97,87 @@ local function renderCharNamesHUD()
 			local distFrac = Lerp( distance/Quantum.CharInfoDisplayDistance, 1, 0 )
 			
 			if( distance <= Quantum.CharInfoDisplayDistance ) then
-				handle = util.GetPixelVisibleHandle() 
-				local pixelVis = util.PixelVisible( ent:GetPos(), 20, handle )
-				print( ent:Nick(), pixelVis, ent:GetPos() )
-				--if( util.PixelVisible( ent:GetPos(), 5, handle ) > 0  ) then
-					local name = ent:GetNWString( "q_char_name" )
-					local pos = ent:GetPos()
-					pos.z = pos.z + 75
+				local name = ent:GetNWString( "q_char_name" )
+				local pos = ent:GetPos()
+				pos.z = pos.z + 75
+
+				local ang = ent:GetAngles()
+				ang:RotateAroundAxis( ang:Forward(), 90 )
+
+				ang.y = LocalPlayer():EyeAngles().y - 90
+
+				local isServerMasterOnDuty = ent:GetNWBool( "q_servermaster_onduty" )
+				if( isServerMasterOnDuty ) then pos.z = pos.z + 4 end
 				
-					local screenPos = pos:ToScreen()
-		
-					local txtPadding = 20 * scale
-					local alphaFrac = distFrac
-				
-			
-					draw.SimpleText( name, "q_char_hud_name", screenPos.x, screenPos.y, Color( 225, 225, 225, 255 * distFrac ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-				--end
+				cam.Start3D2D( pos, ang, 0.125 )
+					draw.SimpleText( name, "q_char_hud_name", 0, 0, Color( 245, 245, 245, 255 * distFrac ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+
+					if( isServerMasterOnDuty ) then
+						draw.SimpleText( "<Server Master>", "q_char_hud_name", 0, txtPadding, Color( 100, 150, 245, 255 * distFrac ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+					end
+				cam.End3D2D()
+			end
+		end
+	end
+end
+
+hook.Add( "PostDrawOpaqueRenderables", "Quantum_HUD_PlayerNames", function() 
+	renderCharNamesHUD3D2D()
+end)
+
+local function createTalkingPanel()
+	local mat = "materials/quantum/mic_icon48.png"
+
+	local icon = vgui.Create( "Material" )
+	icon:SetSize( 48 * scale, 48 * scale )
+	icon.w, icon.h = icon:GetSize()
+	icon:SetPos( ( sw - icon.w ) - padding*25, sh*0.65 - icon.h/2 )
+	icon:SetMaterial( mat )
+
+	icon.frac = 0
+	icon.fadein = true
+	icon.startTime = CurTime()
+	local intervall = 1.25
+	local midIntervall = 0.2
+
+	icon.Think = function( self )
+		if( icon.fadein ) then
+			if( self.startTime == nil ) then self.startTime = CurTime() end
+			self.frac = Lerp( (CurTime() - self.startTime ) / intervall, 0, 1 )
+			self:SetAlpha( math.Clamp( 255 * self.frac, 5, 255 ) )
+			if( self.frac >= 1 ) then 
+				self.fadein = false 
+				self.startTime = nil
+				self.frac = 1
+			end
+		else
+			if( self.startTime == nil ) then self.startTime = CurTime() end
+			self.frac = Lerp( (CurTime() - self.startTime ) / intervall, 1, 0 )
+			self:SetAlpha( math.Clamp( 255 * self.frac, 5, 255 ) )
+			if( self.frac <= 0 ) then 
+				self.fadein = true
+				self.startTime = nil
+				self.frac = 1
 			end
 		end
 	end
 
-	-- local ent = trace.Entity
-	-- if( ent:IsPlayer() ) then
-	-- 	local distance = LocalPlayer():GetPos():Distance( ent:GetPos() )
-	-- 	local distFrac = Lerp( distance/Quantum.CharInfoDisplayDistance, 1, 0 )
-	
-	-- 	if( distance <= Quantum.CharInfoDisplayDistance ) then
-	-- 		local name = ent:GetNWString( "q_char_name" )
-	-- 		local pos = ent:GetPos()
-	-- 		pos.z = pos.z + 20
-	
-	-- 		local screenPos = pos:ToScreen()
+	return icon
+end
 
-	-- 		local txtPadding = 20 * scale
-	-- 		local alphaFrac = distFrac
-	
+function GM:PlayerStartVoice( cl ) -- replace the ugly voice panel
+	if( cl == LocalPlayer() ) then
+		cl.talkicon = createTalkingPanel()
+	end
+	return 
+end 
 
-	-- 		draw.SimpleText( name, "q_char_hud_name", screenPos.x, screenPos.y, Color( 225, 225, 225, 255 * distFrac ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-	-- 	end
-	-- end
+function GM:PlayerEndVoice( cl )
+	if( cl == LocalPlayer() ) then
+		if( IsValid( cl.talkicon ) ) then
+			cl.talkicon:Remove()
+		end
+	end
 end
 
 local showRarities = {
@@ -177,7 +215,6 @@ function GM:HUDPaint()
 				if( LocalPlayer():Alive() ) then
 					renderStatHUD()
 					renderItemInfoHUD()
-					renderCharNamesHUD()
 				end
 			end
 		end
