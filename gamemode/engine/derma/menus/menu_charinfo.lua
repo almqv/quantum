@@ -200,6 +200,10 @@ function menu.open( dt )
 				end
 			end
 
+			itempanels[ii].GetItemAmount = function()
+				return itempanels[ii].item.amount
+			end
+
 			---- Create the model icon for the item panel ----
 			if( itempanels[ii].item != nil && itempanels[ii].item.model != nil ) then
 				itempanels[ii].icon = vgui.Create( "DModelPanel", itempanels[ii] )
@@ -283,17 +287,6 @@ function menu.open( dt )
 end
 
 hook.Add("ScoreboardShow", "Quantum_Menu_CharInfo_Open", function() 
-	-- if( InventoryStartTime == nil ) then
-	-- 	InventoryStartTime = CurTime()
-	-- end
-
-	-- if( InventoryStartTime + 1 <= CurTime() ) then 
-	-- 	menu.open() 
-	-- 	InventoryStartTime = nil
-	-- end -- open the menu
-
-	-- menu.open() 
-	
 	return false
 end)
 

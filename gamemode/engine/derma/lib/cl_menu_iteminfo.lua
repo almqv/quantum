@@ -182,8 +182,10 @@ function iteminfo.giveoptions( p, page )
 			---- EQUIP NET HERE ----
 		end
 		ypos = ypos + op.equip.h + yspacing
+	
+	end
 
-	elseif( item.usefunction != nil ) then
+	if( item.usefunction != nil ) then -- USE
 
 		op.use = vgui.Create( "DButton", options )
 		op.use:SetText( "Use Item" )
@@ -198,15 +200,42 @@ function iteminfo.giveoptions( p, page )
 		op.use.DoClick = function( self )
 			surface.PlaySound( "UI/buttonclick.wav" )
 
-			p:GetParent().RemoveItem()
+			p:GetParent().SetItemAmount( amount - 1 )
 
 			options.Close()
 			
-			---- USE NET HERE ----
+			---- USE NET ----
+			Quantum.Client.InventoryNet.UseItem( index )
 		end
 		ypos = ypos + op.use.h + yspacing
+	end
 
-	elseif( !item.soulbound ) then -- Drop
+	if( item.consumefunction ) then -- EAT
+
+		op.eat = vgui.Create( "DButton", options )
+		op.eat:SetText( "Consume" )
+		op.eat:SetFont( "q_item_option_button" )
+		op.eat:SizeToContents()
+		op.eat.w, op.eat.h = op.eat:GetSize()
+		op.eat:SetPos( xbasepos, ypos )
+		op.eat.x, op.eat.y = op.eat:GetPos()
+		op.eat.Paint = function( self )
+			theme.iteminfobutton( self )
+		end
+		op.eat.DoClick = function( self )
+			surface.PlaySound( "UI/buttonclick.wav" )
+
+			p:GetParent().SetItemAmount( amount - 1 )
+
+			options.Close()
+			
+			---- EAT NET ----
+			Quantum.Client.InventoryNet.EatItem( index )
+		end
+		ypos = ypos + op.eat.h + yspacing
+	end
+	
+	if( !item.soulbound ) then -- Drop
 		op.drop = vgui.Create( "DButton", options )
 		op.drop:SetText( "Drop" )
 		op.drop:SetFont( "q_item_option_button" )
@@ -231,7 +260,6 @@ function iteminfo.giveoptions( p, page )
 			end
 		end
 		ypos = ypos + op.drop.h + yspacing
-
 	end
 
 	op.close = vgui.Create( "DButton", options )

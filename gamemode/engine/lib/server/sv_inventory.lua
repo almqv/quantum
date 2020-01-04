@@ -225,3 +225,33 @@ function Quantum.Server.Inventory.DropItem( pl, index, amount ) -- Quantum.Serve
 		Quantum.Error( "Player " .. tostring( pl ) .. " tried to drop a something from index=" .. tostring(index) .. " where there exists no item." )
 	end
 end
+
+function Quantum.Server.Inventory.UseItem( pl, index )
+	local char = Quantum.Server.Char.GetCurrentCharacter( pl ) 
+	local inv = Quantum.Server.Char.GetInventory( char )
+
+	local item = inv[index]
+
+	if( item != nil || #item > 0 ) then
+		local itemTbl = Quantum.Item.Get( item[1] )
+		if( itemTbl.usefunction != nil ) then
+			Quantum.Server.Inventory.SetSlotItem( pl, char, index, item[1], item[2] - 1 )
+			itemTbl.usefunction(pl) -- call the function
+		end
+	end
+end
+
+function Quantum.Server.Inventory.EatItem( pl, index )
+	local char = Quantum.Server.Char.GetCurrentCharacter( pl ) 
+	local inv = Quantum.Server.Char.GetInventory( char )
+
+	local item = inv[index]
+
+	if( item != nil || #item > 0 ) then
+		local itemTbl = Quantum.Item.Get( item[1] )
+		if( itemTbl.consumefunction != nil ) then
+			Quantum.Server.Inventory.SetSlotItem( pl, char, index, item[1], item[2] - 1 )
+			itemTbl.consumefunction( pl ) 
+		end
+	end
+end

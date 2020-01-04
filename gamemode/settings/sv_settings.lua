@@ -15,7 +15,7 @@ Quantum.Server.Settings.MaxHealth = 100
 
 Quantum.Server.Settings.StarterMoney = 0
 
-Quantum.Server.Settings.ItemDespawnTimer = 3000
+Quantum.Server.Settings.ItemDespawnTimer = 300
 
 Quantum.Server.Settings.ItemPickupSound = "physics/cardboard/cardboard_box_impact_hard2.wav"
 

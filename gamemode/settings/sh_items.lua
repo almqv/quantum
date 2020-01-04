@@ -25,8 +25,8 @@ Quantum.Item.Create( "test2", {
 	equipable = false, 
 	rarity = Quantum.Rarity.Trash, 
 	consumefunction = function( user )  
+		Quantum.Notify.Info( user, "You consumed trash and therefore died!" )
 		user:Kill()
-		user:PrintChat( "You consumed trash and died!" )
 	end 
 } )
 
@@ -47,5 +47,10 @@ Quantum.Item.Create( "potatoe", {
 	stack = 1, 
 	soulbound = false, 
 	equipable = false, 
-	rarity = Quantum.Rarity.Legendary
+	rarity = Quantum.Rarity.Legendary,
+	consumefunction = function( user )
+		Quantum.Notify.Info( user, "You consumed a legendary potatoe! You now have 1000 health for 10 seconds!" )
+		user:SetHealth( 1000 )
+		timer.Simple( 10, function() user:SetHealth( user:GetMaxHealth() ) end)
+	end
 } )

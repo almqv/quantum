@@ -150,13 +150,19 @@ local intcodeFunctions = {
 	end,
 	[Quantum.IntCode.DROP_ITEM] = function( pl, index, itemid, amount )
 		Quantum.Server.Inventory.DropItem( pl, index, amount )
+	end,
+	[Quantum.IntCode.USE_ITEM] = function( pl, index, itemid, amount )
+		Quantum.Server.Inventory.UseItem( pl, index )
+	end,
+	[Quantum.IntCode.EAT_ITEM] = function( pl, index, itemid, amount )
+		Quantum.Server.Inventory.EatItem( pl, index )
 	end
 }
 
 net.Receive( "quantum_item_action", function( len, pl )
 	local intcode = net.ReadInt( Quantum.IntCode.BIT_SIZE )
 	local index = net.ReadInt( Quantum.calculateNeededBits( Quantum.Inventory.Size ) ) 
-	local itemid = net.ReadString()
+	local itemid = net.ReadString() 
 	local amount = net.ReadInt( Quantum.calculateNeededBits( Quantum.Inventory.MaxStackSize ) ) 
 
 	intcodeFunctions[intcode]( pl, index, itemid, amount )

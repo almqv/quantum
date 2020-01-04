@@ -33,3 +33,10 @@ function Quantum.Notify.Deny( pl, text )
 
 	pl:SendLua( luaFunc ) 
 end
+
+function Quantum.Notify.Info( pl, text )
+	local luaArgs = makeColorAString( Color( 245, 245, 245 ) ) .. ",'" .. tostring( text ) .. "'"
+	local luaFunc = "chat.AddText(" .. luaArgs .. ")"
+
+	pl:SendLua( luaFunc ) 
+end

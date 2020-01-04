@@ -49,3 +49,37 @@ function Quantum.Client.InventoryNet.DropItem( itemid, index, amount )
 		net.WriteInt( amount, Quantum.calculateNeededBits( Quantum.Inventory.MaxStackSize ) )
 	net.SendToServer()
 end
+
+function Quantum.Client.InventoryNet.UseItem( index )
+	local item = Quantum.Client.Inventory[index]
+	local itemTbl = Quantum.Item.Get( item[1] )
+	if( itemTbl != nil && item[2] > 0 ) then
+		if( itemTbl.usefunction != nil ) then
+
+			Quantum.Client.InventoryNet.SetItem( index, item[1], item[2] - 1 ) -- remove one from the inventory on the client 
+
+			net.Start( "quantum_item_action" )
+				Quantum.WriteIntcode( Quantum.IntCode.USE_ITEM )
+				net.WriteInt( index, Quantum.calculateNeededBits( Quantum.Inventory.Size ) )
+			net.SendToServer()
+
+		end
+	end
+end
+
+function Quantum.Client.InventoryNet.EatItem( index )
+	local item = Quantum.Client.Inventory[index]
+	local itemTbl = Quantum.Item.Get( item[1] )
+	if( itemTbl != nil && item[2] > 0 ) then
+		if( itemTbl.consumefunction != nil ) then
+
+			Quantum.Client.InventoryNet.SetItem( index, item[1], item[2] - 1 ) -- remove one from the inventory on the client 
+
+			net.Start( "quantum_item_action" )
+				Quantum.WriteIntcode( Quantum.IntCode.EAT_ITEM )
+				net.WriteInt( index, Quantum.calculateNeededBits( Quantum.Inventory.Size ) )
+			net.SendToServer()
+
+		end
+	end
+end
