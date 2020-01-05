@@ -37,6 +37,7 @@ end)
 net.Receive( "quantum_char_update", function( len, pl ) 
 	Quantum.Client.Inventory = net.ReadTable() || {}
 	Quantum.Client.Character = net.ReadTable()
+	Quantum.Client.Equipped = net.ReadTable()
 	Quantum.Debug( "Updated character." )
 end)
 

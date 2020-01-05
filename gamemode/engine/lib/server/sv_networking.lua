@@ -140,6 +140,7 @@ function Quantum.Net.Inventory.Update( pl )
 	net.Start( "quantum_char_update" )
 		net.WriteTable( Quantum.Server.Char.GetInventory( charTbl ) )
 		net.WriteTable( char )
+		net.WriteTable( charTbl.equipped )
 	net.Send( pl )
 end
 

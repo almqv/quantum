@@ -109,6 +109,12 @@ surface.CreateFont( "q_tooltip_rarity", {
 	antialias = true
 })
 
+surface.CreateFont( "q_tooltip_equiptype", {
+	font = "Cambria",
+	size = 18 * Quantum.Client.ResolutionScale,
+	antialias = true
+})
+
 surface.CreateFont( "q_item_amount", {
 	font = "Cambria Bold",
 	size = 22 * Quantum.Client.ResolutionScale,

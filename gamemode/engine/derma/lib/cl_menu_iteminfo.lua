@@ -166,7 +166,7 @@ function iteminfo.giveoptions( p, page )
 	if( item.equipslot != nil ) then -- Equip
 
 		op.equip = vgui.Create( "DButton", options )
-		op.equip:SetText( "Equip" )
+		op.equip:SetText( "Equip (" .. Quantum.EquipSlotsNames[item.equipslot] .. ")" )
 		op.equip:SetFont( "q_item_option_button" )
 		op.equip:SizeToContents()
 		op.equip.w, op.equip.h = op.equip:GetSize()
@@ -178,6 +178,8 @@ function iteminfo.giveoptions( p, page )
 		op.equip.DoClick = function( self )
 			surface.PlaySound( "UI/buttonclick.wav" )
 			options.Close()
+
+			page.equippanels[item.equipslot].SetItem( item.id ) -- set its item
 
 			---- EQUIP NET HERE ----
 		end
@@ -332,13 +334,22 @@ function iteminfo.givetooltip( p, page )
 		rare:SetPos( title.x, title.y + title.h + padding_s )
 		rare.x, rare.y = rare:GetPos()
 
+		local equip = vgui.Create( "DLabel", self )
+		equip:SetText( Quantum.EquipSlotsNames[self.item.equipslot] || "ERROR EQUIPTYPE" )
+		equip:SetFont( "q_tooltip_equiptype" )
+		equip:SetTextColor( Color( 255, 255, 255, 255 ) )
+		equip:SizeToContents()
+		equip.w, equip.h = equip:GetSize()
+		equip:SetPos( title.x, rare.y + rare.h + padding_s )
+		equip.x, equip.y = equip:GetPos()
+
 		local desc = vgui.Create( "DLabel", self )
 		desc:SetText( self.item.desc || "ERROR DESC" )
 		desc:SetFont( "q_tooltip_desc" )
 		desc:SetTextColor( Color( 205, 205, 205, 255 ) )
 		desc:SizeToContents()
 		desc.w, desc.h = desc:GetSize()
-		desc:SetPos( title.x, rare.y + rare.h + padding_s )
+		desc:SetPos( title.x, equip.y + equip.h + padding_s )
 		desc.x, desc.y = desc:GetPos()
 
 		if( self.item.soulbound == true ) then

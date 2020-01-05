@@ -7,3 +7,11 @@
 
 Quantum.Client.ResolutionScale = ScrH() / 1080
 Quantum.Client.ServerBannerPath = "gamemodes/" .. GM.FolderName .. "/gamemode/content/materials/quantum/server_banner.png" 
+
+Quantum.EquipSlotsNames = {
+	[Quantum.EquipSlots.Head] = "Helmet",
+	[Quantum.EquipSlots.Chest] = "Chest",
+	[Quantum.EquipSlots.Legs] = "Legs",
+	[Quantum.EquipSlots.Boots] = "Boots",
+	[Quantum.EquipSlots.Weapon] = "Weapon",
+}

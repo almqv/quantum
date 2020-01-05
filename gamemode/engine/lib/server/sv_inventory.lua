@@ -11,13 +11,7 @@ Quantum.Inventory.Size = Quantum.Inventory.Width * Quantum.Inventory.Height
 
 function Quantum.Server.Inventory.Create( char )
 	char.inventory = {}
-	char.equipped = {
-		[Quantum.EquipSlots.Head] = -1, -- -1 means that it is empty
-		[Quantum.EquipSlots.Chest] = -1,
-		[Quantum.EquipSlots.Legs] = -1,
-		[Quantum.EquipSlots.Boots] = -1,
-		[Quantum.EquipSlots.Weapon] = -1
-	}
+	char.equipped = {}
 	char.effects = {}
 
 	return char.inventory

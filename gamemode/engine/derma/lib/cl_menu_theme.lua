@@ -135,7 +135,7 @@ function theme.pagetext( p )
 	surface.DrawRect( 0, 0, w, h )
 end
 
-function theme.itempanel( p, rarecolor )
+function theme.itempanel( p, rarecolor, disableHover )
 	local w, h = p:GetSize()
 	local icon
 	if( p.icon == nil || !p.icon:IsValid() || !p.icon:IsVisible() ) then 
@@ -147,7 +147,7 @@ function theme.itempanel( p, rarecolor )
 	surface.SetDrawColor( theme.color.setalpha( rarecolor || Color( 0, 0, 0, 120 ), 150 ) )
 	surface.DrawRect( 0, 0, w, h )
 
-	if( icon:IsHovered() ) then
+	if( icon:IsHovered() && !disableHover ) then
 		theme.borderpanel( p, Color( 116, 185, 255, 90 ) )
 	else
 		theme.borderpanel( p, Color( 255, 255, 255, 200 ) )

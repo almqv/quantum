@@ -17,6 +17,8 @@ local padding = 10 * resScale
 local padding_s = 4 * resScale
 local errorMdl = "models/player.mdl"
 
+local itemWidth, itemHeight = 65 * resScale, 65 * resScale
+
 local function createItemAmountLabel( icon, item )
 	icon.amountpanel = vgui.Create( "DLabel", icon )
 	icon.amountpanel:SetText( tostring( item.amount ) )
@@ -28,8 +30,86 @@ local function createItemAmountLabel( icon, item )
 	return icon.amountpanel
 end
 
+local function configureCamLookPos( icon )
+	local mn, mx = icon.Entity:GetRenderBounds()
+	local size = 0
+
+	size = math.max( size, math.abs( mn.x ) + math.abs( mx.x ) )
+	size = math.max( size, math.abs( mn.y ) + math.abs( mx.y ) )
+	size = math.max( size, math.abs( mn.z ) + math.abs( mx.z ) )
+	icon:SetCamPos( Vector( size/2, size, size ) )
+	icon:SetLookAt( ( mn + mx )/2 )
+end
+
+local function createEquipSlotPanel( equiptype, x, y, scale, parent )
+	local p = vgui.Create( "DPanel", parent )
+	p:SetSize( itemWidth * scale, itemHeight * scale )
+	p.w, p.h = p:GetSize()
+	p:SetPos( x - p.w/2, y - p.h/2 )
+	p.x, p.y = p:GetPos()
+
+	p.Paint = function( self ) 
+		theme.itempanel( self, self.itemcolor, true )
+	end
+
+	function p.SetItem( itemid )
+		--local itemid = itempanel.item.id
+		local itemTbl = Quantum.Item.Get( itemid )
+		if( itemTbl != nil ) then
+			--itempanel:Remove()
+			p.itemid = itemid -- give it its equipped item
+			p.itemcolor = itemTbl.rarity.color -- give it its color
+
+			p.item = itemTbl
+			p.item.amount = 1
+
+			if( IsValid( p.icon.tooltip ) ) then
+				p.icon.tooltip:Remove() -- remove the old
+			end
+
+			p.icon.tooltip = iteminfo.givetooltip( p.icon, parent ) -- create a new
+			p.icon.tooltip:CreateInfo() 
+
+			p.icon:SetVisible( true )
+			p.icon:SetModel( itemTbl.model )
+			configureCamLookPos( p.icon )
+		else
+			print( "REMOVE" )
+			p.icon:SetVisible( false ) -- hide it if there is no item
+			if( IsValid( p.icon.tooltip ) ) then
+				p.icon.tooltip:Remove()
+			end
+			p.itemid = nil -- remove its item id
+			p.itemcolor = nil -- remove the background color
+		end
+	end
+
+	p.icon = vgui.Create( "DModelPanel", p )
+	p.icon:SetSize( p:GetSize() )
+	p.icon.w, p.icon.h = p.icon:GetSize()
+	p.icon:SetPos( 0, 0 )
+	p.icon:SetFOV( 45 )
+
+	p.title = vgui.Create( "DLabel", parent )
+	p.title:SetText( Quantum.EquipSlotsNames[equiptype] )
+	p.title:SetFont( "q_tooltip_equiptype" )
+	p.title:SetEnabled( false ) 
+	p.title:SetTextColor( Color( 255, 255, 255, 255 ) )
+	p.title:SizeToContents()
+	p.title.w, p.title.h = p.title:GetSize()
+
+	p.title:SetPos( p.x, ( p.y - p.title.h ) - padding_s ) -- move it over the slot
+
+	p.title.Paint = function( self, w, h )
+		draw.RoundedBox( 5, 0, 0, w, h, Color( 0, 0, 0, 90 ) )
+	end
+
+	return p
+end
+
 function menu.open( dt )
 	local items = Quantum.Client.Inventory 
+	local equipped = Quantum.Client.Equipped
 
 	if( Quantum.Client.Character == nil ) then 
 		chat.AddText( Color( 255, 25, 25 ), "[Quantum] - [ERROR] Check console for details.\n" )
@@ -111,6 +191,16 @@ function menu.open( dt )
 		ent:SetEyeTarget( eyepos + Vector( 40, -5, 2 ) )
 		function char:LayoutEntity( Entity ) return end
 
+		---- EQUIP INFO----
+
+		f.equippanels = {} -- so we can access it later
+		
+		local slotScale = 1.2
+		local slotXpos = char.x + char.w*0.75 + padding*4
+
+		f.equippanels[Quantum.EquipSlots.Head] = createEquipSlotPanel( Quantum.EquipSlots.Head, slotXpos, char.y + char.h/5, slotScale, f ) -- create the panel
+		f.equippanels[Quantum.EquipSlots.Head].SetItem( equipped[ Quantum.EquipSlots.Head ] ) -- give its current item
+
 		---- Inventory panel ----
 
 		local inv = vgui.Create( "DPanel", f ) -- section for all of the item panels
@@ -122,7 +212,6 @@ function menu.open( dt )
 			surface.DrawRect( 0, 0, w, h )
 		end
 
-		local itemWidth, itemHeight = 65 * resScale, 65 * resScale
 		local maxW, maxH = Quantum.Inventory.Width, Quantum.Inventory.Height
 
 		local itempanels = {}
@@ -214,17 +303,7 @@ function menu.open( dt )
 				itempanels[ii].icon:SetFOV( 45 )
 
 				-- get the dimensions of the models entity
-				local mn, mx = itempanels[ii].icon.Entity:GetRenderBounds()
-				local size = 0
-
-				-- calculate the vector axises so that the view doesn't go outside of the models renderbounds --
-				size = math.max( size, math.abs( mn.x ) + math.abs( mx.x ) )
-				size = math.max( size, math.abs( mn.y ) + math.abs( mx.y ) )
-				size = math.max( size, math.abs( mn.z ) + math.abs( mx.z ) )
-
-				-- Apply the new "data" --
-				itempanels[ii].icon:SetCamPos( Vector( size/2, size, size ) )
-				itempanels[ii].icon:SetLookAt( ( mn + mx )/2 )
+				configureCamLookPos( itempanels[ii].icon )
 
 				---- Amount Text ----
 				if( itempanels[ii].item.amount > 1 ) then
