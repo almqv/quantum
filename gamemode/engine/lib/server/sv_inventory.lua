@@ -49,7 +49,7 @@ function Quantum.Server.Inventory.EquipItem( pl, itemindex )
 				if( itemTbl.equipeffect != nil ) then
 					Quantum.Effect.Give( pl, itemTbl.equipeffect ) -- give the player the effect
 				end
-
+				Quantum.Debug( tostring(pl) .. " equipped item (" .. tostring(slotitem[1]) .. ")" )
 				-- NETWORKING --
 				Quantum.Net.Inventory.Update( pl ) -- update the client
 
@@ -81,8 +81,8 @@ function Quantum.Server.Inventory.SetSlotItem( pl, char, pos, itemid, amount )
 	else
 		local item = Quantum.Item.Get( itemid )
 		if( isEquippable( item ) || !isStackable( item ) ) then 
-			amount = nil
-			setItemTbl = { itemid }
+			amount = 1
+			setItemTbl = { itemid, amount }
 		else
 			amount = amount || 1
 			setItemTbl = { itemid, amount } 
@@ -91,6 +91,7 @@ function Quantum.Server.Inventory.SetSlotItem( pl, char, pos, itemid, amount )
 	
 	char.inventory[pos] = setItemTbl -- remove the item
 	-- Sent the new data to the client
+	amount = amount || 1
 	Quantum.Net.Inventory.SetItem( pl, pos, itemid, amount )
 end
 
@@ -99,8 +100,11 @@ function Quantum.Server.Inventory.GetSlotItem( char, pos ) return char.inventory
 function Quantum.Server.Inventory.FindStackable( char, item )
 	if( item.stack ) then
 		local inv = Quantum.Server.Char.GetInventory( char ) 
+		local itemInSlotAmount 
 		for i, item2 in pairs( inv ) do
-			if( item2[1] == item.id && item2[2] < item.stack ) then -- if the item is stackable and it is the same item
+			itemInSlotAmount = item2[2] || 1
+			print( itemInSlotAmount, item.stack )
+			if( item2[1] == item.id && itemInSlotAmount < item.stack ) then -- if the item is stackable and it is the same item
 				return i -- return its index
 			end
 		end

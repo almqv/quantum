@@ -126,6 +126,7 @@ function Quantum.Net.Inventory.SetItem( pl, index, itemid, amount ) -- sends a i
 		Quantum.WriteIntcode( Quantum.IntCode.SET_ITEM ) -- write the opcode first
 		net.WriteInt( index, Quantum.calculateNeededBits( Quantum.Inventory.Size ) )
 		net.WriteString( itemid )
+		print( amount, Quantum.calculateNeededBits( Quantum.Inventory.MaxStackSize ) )
 		net.WriteInt( amount, Quantum.calculateNeededBits( Quantum.Inventory.MaxStackSize ) )
 
 	net.Send( pl )

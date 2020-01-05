@@ -44,6 +44,7 @@ Quantum.Item.Create( "potatoe", {
 	stack = 1, 
 	soulbound = false, 
 	rarity = Quantum.Rarity.Legendary,
+	equipslot = Quantum.EquipSlots.Head,
 	consumefunction = function( user )
 		Quantum.Notify.Info( user, "You consumed a legendary potatoe! You now have 1000 health for 10 seconds!" )
 		user:SetHealth( 1000 )

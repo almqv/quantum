@@ -13,8 +13,8 @@ GM.Website = "N/A"
 Quantum = {}
 Quantum.Version = "v0.3-alpha"
 
-include( "engine/vars/sh_vars.lua" ) -- include the shared constant vars
-
 include( "engine/sh_debug.lua" ) -- add the debug functions and stuff
 
 include( "settings/sh_settings.lua" )
+
+include( "engine/vars/sh_vars.lua" ) -- include the shared constant vars
