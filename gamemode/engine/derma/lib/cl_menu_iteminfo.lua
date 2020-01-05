@@ -163,7 +163,7 @@ function iteminfo.giveoptions( p, page )
 
 	ypos = ypos + op.title.h + yspacing -- do the spacing thing
 
-	if( item.equipable ) then -- Equip
+	if( item.equipslot != nil ) then -- Equip
 
 		op.equip = vgui.Create( "DButton", options )
 		op.equip:SetText( "Equip" )

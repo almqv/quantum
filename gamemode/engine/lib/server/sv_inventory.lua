@@ -11,16 +11,40 @@ Quantum.Inventory.Size = Quantum.Inventory.Width * Quantum.Inventory.Height
 
 function Quantum.Server.Inventory.Create( char )
 	char.inventory = {}
+	char.equiped = {
+		[Quantum.EquipSlots.Head] = -1, -- -1 means that it is empty
+		[Quantum.EquipSlots.Chest] = -1,
+		[Quantum.EquipSlots.Legs] = -1,
+		[Quantum.EquipSlots.Boots] = -1,
+		[Quantum.EquipSlots.Weapon] = -1
+	}
+	char.effects = {}
 
 	return char.inventory
 end
 
 local function isEquippable( item )
-	return item.equipable || false
+	return item.equipslot != nil 
 end
 
 local function isStackable( item )
 	return item.stack || false
+end
+
+function Quantum.Server.Inventory.SetEquipSlotItem( pl, slot, itemindex )
+	local char = Quantum.Server.Char.GetCurrentCharacter( pl )
+	local slotitem = Quantum.Server.Inventory.GetSlotItem( char, index ) 
+	local itemTbl = Quantum.Item.Get( slotitem[1] )
+
+	local equipslot = itemTbl.equipslot
+
+	if( equipslot == nil ) then 
+		Quantum.Error( tostring(pl) .. " tried to equip an non-equipable item (" .. tostring(itemTbl[1]) .. ")" )
+		return 
+	else
+		Quantum.Debug( "Commin' soon." )
+		-- add effects here and equip it to the slot but check before
+	end
 end
 
 function Quantum.Server.Inventory.SetSlotItem( pl, char, pos, itemid, amount ) 

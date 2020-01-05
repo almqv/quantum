@@ -19,10 +19,11 @@ Quantum.Inventory = {
 }
 
 Quantum.EquipSlots = {
-	Head = "",
-	Chest = "",
-	Legs = "",
-	Boots = ""
+	Head = 0,
+	Chest = 1,
+	Legs = 2,
+	Boots = 3,
+	Weapon = 4
 }
 
 Quantum.InventoryOpenDelay = 0.35
