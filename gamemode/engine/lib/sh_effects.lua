@@ -79,7 +79,7 @@ if SERVER then -- server only functions
 		end
 	end
 
-	function Quantum.Effects.RemoveAll( pl )
+	function Quantum.Effect.RemoveAll( pl )
 		local char = Quantum.Server.Char.GetCurrentCharacter( pl )
 		if( char.effects != nil ) then
 			Quantum.Debug( "Removing all " .. tostring(pl) .. " effects." )
@@ -113,7 +113,7 @@ if SERVER then -- server only functions
 	end
 
 	hook.Add( "PlayerDeath", "Quantum_Effects_LooseOnDeath", function( ply ) 
-		Quantum.Effects.RemoveAll( ply ) -- remove all effects 
+		Quantum.Effect.RemoveAll( ply ) -- remove all effects 
 	end)
 
 end

@@ -11,7 +11,7 @@ Quantum.Inventory.Size = Quantum.Inventory.Width * Quantum.Inventory.Height
 
 function Quantum.Server.Inventory.Create( char )
 	char.inventory = {}
-	char.equiped = {
+	char.equipped = {
 		[Quantum.EquipSlots.Head] = -1, -- -1 means that it is empty
 		[Quantum.EquipSlots.Chest] = -1,
 		[Quantum.EquipSlots.Legs] = -1,
@@ -40,19 +40,37 @@ function Quantum.Server.Inventory.EquipItem( pl, itemindex )
 		local equipslot = itemTbl.equipslot
 
 		if( equipslot == nil ) then 
-			Quantum.Error( tostring(pl) .. " tried to equip an non-equipable item: (" .. tostring(itemTbl[1]) .. ")" )
+			Quantum.Error( tostring(pl) .. " tried to equip an non-equippable item: (" .. tostring(itemTbl[1]) .. ")" )
 			return 
 		else
 			if( Quantum.EquipSlots[equipslot] != nil ) then
-				char.equiped[equipslot] = slotitem[1] -- set it in the table
+
+				char.equipped[equipslot] = slotitem[1] -- set it in the table
 				if( itemTbl.equipeffect != nil ) then
 					Quantum.Effect.Give( pl, itemTbl.equipeffect ) -- give the player the effect
 				end
+
+				-- NETWORKING --
+				Quantum.Net.Inventory.Update( pl ) -- update the client
+
 			else
 				Quantum.Error( tostring(pl) .. " tried to equip an item in a non-existent equip slot: (" .. tostring(equipslot) .. ")" )
 				return
 			end
 		end
+	end
+end
+
+function Quantum.Server.Inventory.UnEquipItem( pl, equipslot )
+	local char = Quantum.Server.Char.GetCurrentCharacter( pl )
+	if( char.equipped[equipslot] != nil && char.equipped[equipslot] != -1 ) then
+		local itemTbl = Quantum.Item.Get( char.equipped[equipslot] )
+
+		if( itemTbl.equipeffect != nil ) then -- remove the items effect
+			Quantum.Effect.Remove( pl, itemTbl.equipeffect )
+		end
+
+		char.equipped[equipslot] = nil
 	end
 end
 
