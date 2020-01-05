@@ -40,10 +40,16 @@ function Quantum.Server.Inventory.EquipItem( pl, itemindex )
 		local equipslot = itemTbl.equipslot
 
 		if( equipslot == nil ) then 
-			Quantum.Error( tostring(pl) .. " tried to equip an non-equipable item (" .. tostring(itemTbl[1]) .. ")" )
+			Quantum.Error( tostring(pl) .. " tried to equip an non-equipable item: (" .. tostring(itemTbl[1]) .. ")" )
 			return 
 		else
-			
+			if( Quantum.EquipSlots[equipslot] != nil ) then
+				char.equiped[equipslot] = slotitem[1] -- set it in the table
+				
+			else
+				Quantum.Error( tostring(pl) .. " tried to equip an item in a non-existent equip slot: (" .. tostring(equipslot) .. ")" )
+				return
+			end
 		end
 	end
 end
