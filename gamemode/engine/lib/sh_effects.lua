@@ -63,14 +63,29 @@ if SERVER then -- server only functions
 		end
 	end
 
-	function Quantum.Effect.Remove( pl, effectid )
+	hook.Add( "PlayerDisconnected", "Quantum_Effects_RemoveHooksOnDisconnect", function( ply ) 
+		Quantum.Effect.RemoveAllRuntimeFunctions( ply )
+	end)
+
+
+	function Quantum.Effect.Remove( pl, effectid, character )
 		local effectTbl = Quantum.Effect.Get( effectid )
-		local char = Quantum.Server.Char.GetCurrentCharacter( pl )
+		local char = character || Quantum.Server.Char.GetCurrentCharacter( pl )
 
 		if( effectTbl != nil ) then
 			Quantum.Effect.RemoveRuntimeFunction( pl, effectid )
-			pl.effects[effectid] = nil
+			char.effects[effectid] = nil
 			effectTbl.func.stop( pl ) -- run the end function
+		end
+	end
+
+	function Quantum.Effects.RemoveAll( pl )
+		local char = Quantum.Server.Char.GetCurrentCharacter( pl )
+		if( char.effects != nil ) then
+			Quantum.Debug( "Removing all " .. tostring(pl) .. " effects." )
+			for i, effect in pairs( char.effects ) do
+				Quantum.Effect.Remove( pl, effect, char ) -- remove the effect
+			end
 		end
 	end
 
@@ -92,7 +107,13 @@ if SERVER then -- server only functions
 					Quantum.Effect.Remove( pl, effectid ) -- remove the effect from the player after its duration is over
 				end)
 			end
+
+			char.effects[ #char.effects + 1 ] = effectid -- add it to the effect table so that we can remove it later
 		end
 	end
-	
+
+	hook.Add( "PlayerDeath", "Quantum_Effects_LooseOnDeath", function( ply ) 
+		Quantum.Effects.RemoveAll( ply ) -- remove all effects 
+	end)
+
 end
