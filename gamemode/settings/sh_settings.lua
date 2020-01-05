@@ -18,14 +18,6 @@ Quantum.Inventory = {
 	MaxStackSize = 20 -- NOTE: MAX MaxStackSize=99
 }
 
-Quantum.EquipSlots = {
-	Head = 0,
-	Chest = 1,
-	Legs = 2,
-	Boots = 3,
-	Weapon = 4
-}
-
 Quantum.InventoryOpenDelay = 0.35
 Quantum.ItemPickupTime = 0.5 -- seconds
 

@@ -24,6 +24,7 @@ Quantum.ItemInfoDisplayMaxDistance = 200
 
 Quantum.CharInfoDisplayDistance = 400
 
+---- Item Variables ----
 
 Quantum.Rarity = {
 	None = { txt = "gnomerd the mvp", color = Color( 0, 0, 0, 120 ) },
@@ -32,6 +33,14 @@ Quantum.Rarity = {
 	Rare = { txt = "Rare", color = Color( 48, 163, 230, 40 ) },
 	Epic = { txt = "Epic", color = Color( 220, 90, 90, 40 ) },
 	Legendary = { txt = "Legendary", color = Color( 235, 125, 52, 40 ) }
+}
+
+Quantum.EquipSlots = {
+	Head = 0,
+	Chest = 1,
+	Legs = 2,
+	Boots = 3,
+	Weapon = 4
 }
 
 ---- Placeholders ----
