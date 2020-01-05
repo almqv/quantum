@@ -14,7 +14,7 @@ function Quantum.Effect.Create( effectid, tbl )
 		id = effectid,
 		icon = tbl.icon,
 		rarity = tbl.rarity || Quantum.Rarity.Common,
-		duration = tbl.duration || -1
+		duration = tbl.duration || -1,
 		func = {
 			start = tbl.startfunc || Quantum.EmptyFunction,
 			runtime = tbl.runtimefunc || Quantum.EmptyFunction,
@@ -79,7 +79,7 @@ if SERVER then -- server only functions
 		local char = Quantum.Server.Char.GetCurrentCharacter( pl )
 
 		if( effectTbl != nil ) then
-			if( effectTbl.func.start != nil && effectTbl.func.start != Quantum.EmptyFunction ) 
+			if( effectTbl.func.start != nil && effectTbl.func.start != Quantum.EmptyFunction ) then
 				effectTbl.func.start( pl )
 			end
 

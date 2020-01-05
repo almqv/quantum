@@ -31,7 +31,7 @@ local function isStackable( item )
 	return item.stack || false
 end
 
-function Quantum.Server.Inventory.SetEquipSlotItem( pl, slot, itemindex )
+function Quantum.Server.Inventory.SetEquipSlotItem( pl, itemindex )
 	local char = Quantum.Server.Char.GetCurrentCharacter( pl )
 	local slotitem = Quantum.Server.Inventory.GetSlotItem( char, index ) 
 	local itemTbl = Quantum.Item.Get( slotitem[1] )
@@ -42,8 +42,7 @@ function Quantum.Server.Inventory.SetEquipSlotItem( pl, slot, itemindex )
 		Quantum.Error( tostring(pl) .. " tried to equip an non-equipable item (" .. tostring(itemTbl[1]) .. ")" )
 		return 
 	else
-		Quantum.Debug( "Commin' soon." )
-		-- add effects here and equip it to the slot but check before
+		
 	end
 end
 
