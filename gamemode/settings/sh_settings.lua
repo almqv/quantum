@@ -6,7 +6,7 @@
 --   \_\ /_/    \_\_|_| |_| |_|_|\___|\___|_| |_| /_/  
 
 Quantum.CharacterLimit = 5
-Quantum.CharacterNameLimit = 12
+Quantum.CharacterNameLimit = 18
 Quantum.CharacterNameMin = 3
 Quantum.ServerTitle = "Electron Networks: CityRP"
 Quantum.DiscordInvite = "https://discord.gg/heUJB4B"
@@ -28,22 +28,10 @@ Quantum.EquipSlots = {
 
 Quantum.InventoryOpenDelay = 0.35
 Quantum.ItemPickupTime = 0.5 -- seconds
-Quantum.ItemInfoDisplayMaxDistance = 200
-
-Quantum.CharInfoDisplayDistance = 400
 
 Quantum.Money = {
 	Prefix = "$",
 	Surfix = ""
-}
-
-Quantum.Rarity = {
-	None = { txt = "gnomerd the mvp", color = Color( 0, 0, 0, 120 ) },
-	Trash = { txt = "Trash", color = Color( 100, 100, 100, 40 ) },
-	Common = { txt = "Common", color = Color( 250, 250, 250, 40 ) },
-	Rare = { txt = "Rare", color = Color( 48, 163, 230, 40 ) },
-	Epic = { txt = "Epic", color = Color( 220, 90, 90, 40 ) },
-	Legendary = { txt = "Legendary", color = Color( 235, 125, 52, 40 ) }
 }
 
 Quantum.Bind = {

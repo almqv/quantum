@@ -31,18 +31,20 @@ local function isStackable( item )
 	return item.stack || false
 end
 
-function Quantum.Server.Inventory.SetEquipSlotItem( pl, itemindex )
+function Quantum.Server.Inventory.EquipItem( pl, itemindex )
 	local char = Quantum.Server.Char.GetCurrentCharacter( pl )
 	local slotitem = Quantum.Server.Inventory.GetSlotItem( char, index ) 
 	local itemTbl = Quantum.Item.Get( slotitem[1] )
 
-	local equipslot = itemTbl.equipslot
+	if( itemTbl != nil ) then
+		local equipslot = itemTbl.equipslot
 
-	if( equipslot == nil ) then 
-		Quantum.Error( tostring(pl) .. " tried to equip an non-equipable item (" .. tostring(itemTbl[1]) .. ")" )
-		return 
-	else
-		
+		if( equipslot == nil ) then 
+			Quantum.Error( tostring(pl) .. " tried to equip an non-equipable item (" .. tostring(itemTbl[1]) .. ")" )
+			return 
+		else
+			
+		end
 	end
 end
 
