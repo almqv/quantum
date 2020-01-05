@@ -27,19 +27,20 @@ end
 
 function Quantum.Server.Inventory.EquipItem( pl, itemindex )
 	local char = Quantum.Server.Char.GetCurrentCharacter( pl )
-	local slotitem = Quantum.Server.Inventory.GetSlotItem( char, index ) 
+	local slotitem = Quantum.Server.Inventory.GetSlotItem( char, itemindex ) 
 	local itemTbl = Quantum.Item.Get( slotitem[1] )
 
 	if( itemTbl != nil ) then
 		local equipslot = itemTbl.equipslot
+		PrintTable( itemTbl )
 
 		if( equipslot == nil ) then 
 			Quantum.Error( tostring(pl) .. " tried to equip an non-equippable item: (" .. tostring(itemTbl[1]) .. ")" )
 			return 
 		else
-			if( Quantum.EquipSlots[equipslot] != nil ) then
+			if( table.KeyFromValue( Quantum.EquipSlots, equipslot ) != nil ) then
 
-				char.equipped[equipslot] = slotitem[1] -- set it in the table
+				char.equipped[equipslot] = { slotitem[1], itemindex } -- set it in the table
 				if( itemTbl.equipeffect != nil ) then
 					Quantum.Effect.Give( pl, itemTbl.equipeffect ) -- give the player the effect
 				end

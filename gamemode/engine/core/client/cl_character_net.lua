@@ -84,3 +84,19 @@ function Quantum.Client.InventoryNet.EatItem( index )
 		end
 	end
 end
+
+function Quantum.Client.InventoryNet.EquipItem( index )
+	local item = Quantum.Client.Inventory[index]
+	local itemTbl = Quantum.Item.Get( item[1] )
+	if( itemTbl != nil && item[2] > 0 ) then
+		if( itemTbl.equipslot != nil ) then
+
+			net.Start( "quantum_item_action" )
+				print("####", Quantum.IntCode.EQUIP_ITEM)
+				Quantum.WriteIntcode( Quantum.IntCode.EQUIP_ITEM )
+				net.WriteInt( index, Quantum.calculateNeededBits( Quantum.Inventory.Size ) )
+			net.SendToServer()
+
+		end
+	end
+end

@@ -42,9 +42,12 @@ Quantum.IntCode = {
 	EQUIP_ITEM = 4,
 	DESTROY_ITEM = 5, -- to be added
 	UPDATE = 6,
-	BIT_SIZE = 3
+	BIT_SIZE = 4
 }
 
 function Quantum.calculateNeededBits( n ) return math.ceil( math.log( n, 2 ) ) end
 
-function Quantum.WriteIntcode( intcode ) net.WriteInt( intcode, Quantum.IntCode.BIT_SIZE ) end
+function Quantum.WriteIntcode( intcode ) 
+	print( intcode )
+	net.WriteInt( intcode, Quantum.IntCode.BIT_SIZE ) 
+end

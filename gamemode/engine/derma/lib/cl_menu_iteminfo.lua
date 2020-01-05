@@ -181,7 +181,8 @@ function iteminfo.giveoptions( p, page )
 
 			page.equippanels[item.equipslot].SetItem( item.id ) -- set its item
 
-			---- EQUIP NET HERE ----
+			---- EQUIP NET ----
+			Quantum.Client.InventoryNet.EquipItem( index )
 		end
 		ypos = ypos + op.equip.h + yspacing
 	
