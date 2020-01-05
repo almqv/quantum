@@ -103,7 +103,6 @@ function Quantum.Server.Inventory.FindStackable( char, item )
 		local itemInSlotAmount 
 		for i, item2 in pairs( inv ) do
 			itemInSlotAmount = item2[2] || 1
-			print( itemInSlotAmount, item.stack )
 			if( item2[1] == item.id && itemInSlotAmount < item.stack ) then -- if the item is stackable and it is the same item
 				return i -- return its index
 			end
