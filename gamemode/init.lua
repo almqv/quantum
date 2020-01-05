@@ -7,8 +7,13 @@
 
 if SERVER then
 	AddCSLuaFile( "engine/sh_debug.lua" )
+
+	AddCSLuaFile( "engine/vars/sh_vars.lua" )
+	AddCSLuaFile( "engine/vars/cl_vars.lua" )
+
 	AddCSLuaFile( "settings/sh_settings.lua" )
 	AddCSLuaFile( "settings/sh_items.lua" )
+
 	AddCSLuaFile( "cl_init.lua" )
 	AddCSLuaFile( "shared.lua" )
 
@@ -23,6 +28,7 @@ if SERVER then
 
 	Quantum.Server = {}
 	include( "settings/sv_settings.lua" ) -- include the settings
+	include( "engine/vars/sv_vars.lua" ) -- include vars
 
 
 	local function loadCoreFiles()

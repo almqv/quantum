@@ -5,21 +5,6 @@
 --  \ \   / ____ \| | | | | | | |  __/ (__| | | |  / / 
 --   \_\ /_/    \_\_|_| |_| |_|_|\___|\___|_| |_| /_/  
 
-if SERVER then -- SERVER VARS UNDER THIS LINE
-
-
-end --
-
-if CLIENT then -- SERVER VARS UNDER THIS LINE
-
-	Quantum.Client.Cache = Quantum.Client.Cache || {}
-	Quantum.Client.ResolutionScale = ScrH() / 1080
-	Quantum.Client.ServerBannerPath = "gamemodes/" .. GM.FolderName .. "/gamemode/content/materials/quantum/server_banner.png" 
-
-end --
-
--- SHARED VARS UNDER THIS LINE
-
 Quantum.ItemInfoDisplayMaxDistance = 200
 
 Quantum.CharInfoDisplayDistance = 400
@@ -55,7 +40,7 @@ Quantum.IntCode = {
 	USE_ITEM = 2,
 	EAT_ITEM = 3,
 	EQUIP_ITEM = 4,
-	DESTROY_ITEM = 5,
+	DESTROY_ITEM = 5, -- to be added
 	UPDATE = 6,
 	BIT_SIZE = 3
 }
