@@ -204,7 +204,15 @@ function iteminfo.giveoptions( p, page )
 			surface.PlaySound( "UI/buttonclick.wav" )
 			options.Close()
 
-			page.equippanels[item.equipslot].SetItem( item.id ) -- set its item
+			if( page.equippanels[item.equipslot] != nil ) then
+				page.equippanels[item.equipslot].SetItem( item.id ) -- set its item
+			end
+			
+			if( page.markedItemPanel[item.equipslot] != nil ) then 
+				page.markedItemPanel[item.equipslot]:SetVisible( false ) -- unmark the old panel
+			end
+			p.mark:SetVisible( true ) -- mark the new one
+			page.markedItemPanel[item.equipslot] = p.mark -- and save it to the table for future use
 
 			---- EQUIP NET ----
 			Quantum.Client.InventoryNet.EquipItem( index )

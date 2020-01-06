@@ -121,6 +121,12 @@ surface.CreateFont( "q_item_amount", {
 	antialias = true
 })
 
+surface.CreateFont( "q_item_mark", {
+	font = "Cambria Bold",
+	size = 26 * Quantum.Client.ResolutionScale,
+	antialias = true
+})
+
 surface.CreateFont( "q_item_option_button", {
 	font = "Cambria",
 	size = 24 * Quantum.Client.ResolutionScale,

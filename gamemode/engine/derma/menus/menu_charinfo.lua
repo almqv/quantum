@@ -30,6 +30,18 @@ local function createItemAmountLabel( icon, item )
 	return icon.amountpanel
 end
 
+local function createItemEquipMark( icon )
+	icon.mark = vgui.Create( "DLabel", icon )
+	icon.mark:SetText( "E" )
+	icon.mark:SetTextColor( Color( 205, 205, 205, 255 ) )
+	icon.mark:SetFont( "q_item_mark" )
+	icon.mark:SetVisible( false )
+	icon.mark:SizeToContents()
+	icon.mark.w, icon.mark.h = icon.mark:GetSize()
+	icon.mark:SetPos( padding_s, padding_s )
+	return icon.mark
+end
+
 local function configureCamLookPos( icon )
 	local mn, mx = icon.Entity:GetRenderBounds()
 	local size = 0
@@ -113,6 +125,27 @@ local function getItemInSlot( pos )
 	else
 		return
 	end
+end
+
+local function getEquippedItems()
+	local returnTbl = {}
+
+	for equipType, equipSlot in pairs( Quantum.Client.Equipped ) do
+		returnTbl[ #returnTbl + 1 ] = { type = equipType, slot = equipSlot }
+	end
+
+	return returnTbl
+end
+
+local function checkIfItemIsEquipped( index )
+	local equipItems = getEquippedItems()
+
+	for ie, ii in pairs( equipItems ) do
+		if( ii.slot == index ) then
+			return true
+		end
+	end
+	return false
 end
 
 function menu.open( dt )
@@ -200,7 +233,7 @@ function menu.open( dt )
 		function char:LayoutEntity( Entity ) return end
 
 		---- EQUIP INFO----
-
+		f.markedItemPanel = {}
 		f.equippanels = {} -- so we can access it later
 		
 		local slotScale = 1.2
@@ -283,6 +316,7 @@ function menu.open( dt )
 				if( itempanels[ii].icon != nil ) then
 					if( IsValid( itempanels[ii].icon.amountpanel ) ) then
 						itempanels[ii].icon.amountpanel:Remove()
+						itempanels[ii].icon.mark:Remove()
 					end
 					if( itempanels[ii].item.amount > 1 ) then
 						itempanels[ii].icon.amountpanel = createItemAmountLabel( itempanels[ii].icon, itempanels[ii].item )
@@ -313,8 +347,15 @@ function menu.open( dt )
 				configureCamLookPos( itempanels[ii].icon )
 
 				---- Amount Text ----
-				if( itempanels[ii].item.amount > 1 ) then
+				if( itempanels[ii].GetItemAmount() > 1 ) then
 					itempanels[ii].icon.amountpanel = createItemAmountLabel( itempanels[ii].icon, itempanels[ii].item )
+				end
+
+				---- Equip Mark ----
+				itempanels[ii].icon.mark = createItemEquipMark( itempanels[ii].icon )
+				if( checkIfItemIsEquipped( itempanels[ii].index ) ) then
+					itempanels[ii].icon.mark:SetVisible( true )
+					f.markedItemPanel[itempanels[ii].item.equipslot] = itempanels[ii].icon.mark
 				end
 
 				---- Tooltip ----

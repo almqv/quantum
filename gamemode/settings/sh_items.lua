@@ -11,6 +11,7 @@ Quantum.Item.Create( "test", {
 	model = "models/props_phx/gears/bevel12.mdl",
 	soulbound = true, 
 	rarity = Quantum.Rarity.Rare, 
+	equipslot = Quantum.EquipSlots.Chest
 } )
 
 Quantum.Item.Create( "test2", {
