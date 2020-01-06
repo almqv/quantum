@@ -51,9 +51,14 @@ if SERVER then -- server only functions
 
 	function Quantum.Effect.RemoveRuntimeFunction( pl, effectid, hookID )
 		hookID = hookID || "Quantum_Effects_RunTime_" .. tostring(pl:SteamID64()) .. "_" .. tostring(effectid)
-		Quantum.Debug( "Removing runtime effect hook: " .. hookID )
+		--Quantum.Debug( "Removing runtime effect hook: " .. hookID )
 
-		pl.effecthooks[hookID] = nil
+		if( pl.effecthooks != nil ) then
+			PrintTable( pl.effecthooks )
+			if( pl.effecthooks[hookID] != nil ) then
+				pl.effecthooks[hookID] = nil
+			end
+		end
 		hook.Remove( "Think", hookID )
 	end
 
@@ -63,6 +68,9 @@ if SERVER then -- server only functions
 			for n, hookid in pairs( pl.effecthooks ) do
 				Quantum.Effect.RemoveRuntimeFunction( pl, nil, hookid )
 			end
+			pl.effecthooks = {}
+		else
+			return
 		end
 	end
 
