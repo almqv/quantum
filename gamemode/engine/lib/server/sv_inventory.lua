@@ -55,16 +55,17 @@ function Quantum.Server.Inventory.EquipItem( pl, itemindex )
 	end
 end
 
-function Quantum.Server.Inventory.UnEquipItem( pl, equipslot )
-	local char = Quantum.Server.Char.GetCurrentCharacter( pl )
+function Quantum.Server.Inventory.UnEquipItem( pl, equipslot, char )
+	char = char || Quantum.Server.Char.GetCurrentCharacter( pl )
+	
 	if( char.equipped[equipslot] != nil ) then
 		local slotItem = Quantum.Server.Inventory.GetSlotItem( char, char.equipped[equipslot] )
-		local itemTbl = Quantum.Item.Get( slotItem )
+		local itemTbl = Quantum.Item.Get( slotItem[1] )
 
 		if( itemTbl.equipeffect != nil ) then -- remove the items effect
 			Quantum.Effect.Remove( pl, itemTbl.equipeffect )
 		end
-
+		
 		Quantum.Debug( tostring(pl) .. " unequipped item (" .. tostring( itemTbl.id ) .. ") - (" .. tostring( char.equipped[equipslot]  ) .. ")" )
 		char.equipped[equipslot] = nil
 
@@ -72,9 +73,27 @@ function Quantum.Server.Inventory.UnEquipItem( pl, equipslot )
 	end
 end
 
+function Quantum.Server.Inventory.GetEquippedItems( pl, char )
+	char = char || Quantum.Server.Char.GetCurrentCharacter( pl )
+	local returnTbl = {}
+
+	for equipType, equipSlot in pairs( char.equipped ) do
+		returnTbl[ #returnTbl + 1 ] = { type = equipType, slot = equipSlot }
+	end
+
+	return returnTbl
+end
+
 function Quantum.Server.Inventory.SetSlotItem( pl, char, pos, itemid, amount ) 
 	local setItemTbl = {}
 	if( amount < 1 ) then 
+		local equippedItems = Quantum.Server.Inventory.GetEquippedItems( pl, char )
+		for ei, slotTbl in pairs( equippedItems ) do
+			if( slotTbl.slot == pos ) then
+				Quantum.Server.Inventory.UnEquipItem( pl, slotTbl.type ) -- unequipp the item if it was removed
+			end
+		end
+
 		setItemTbl = nil 
 	else
 		local item = Quantum.Item.Get( itemid )
@@ -91,6 +110,27 @@ function Quantum.Server.Inventory.SetSlotItem( pl, char, pos, itemid, amount )
 	-- Sent the new data to the client
 	amount = amount || 1
 	Quantum.Net.Inventory.SetItem( pl, pos, itemid, amount )
+end
+
+function Quantum.Server.Inventory.RemoveSlotItem( pl, char, pos, amount )
+	local slotItem = Quantum.Server.Inventory.GetSlotItem( char, pos )
+	local itemid = slotItem[1]
+
+	if( slotItem == nil ) then return end
+
+	if( amount <= 0 ) then
+		Quantum.Server.Inventory.SetSlotItem( pl, char, pos, itemid, 0 ) 
+		return 0
+	else
+		local am_diff = slotItem[2] - amount
+		if( am_diff <= 0 ) then 
+			Quantum.Server.Inventory.SetSlotItem( pl, char, pos, itemid, 0 ) 
+			return 0
+		else
+			Quantum.Server.Inventory.SetSlotItem( pl, char, pos, itemid, am_diff ) 
+			return am_diff
+		end
+	end
 end
 
 function Quantum.Server.Inventory.GetSlotItem( char, pos ) return char.inventory[pos] end
@@ -268,7 +308,8 @@ function Quantum.Server.Inventory.DropItem( pl, index, amount ) -- Quantum.Serve
 
 		if( am_diff >= 0 ) then -- drop the item from the players inv
 			-- remove the items am_diff from its stack
-			Quantum.Server.Inventory.SetSlotItem( pl, char, index, itemid, am_diff )
+			--Quantum.Server.Inventory.SetSlotItem( pl, char, index, itemid, am_diff )
+			Quantum.Server.Inventory.RemoveSlotItem( pl, char, index, amount )
 
 			-- spawn the item infront of the player
 			Quantum.Server.Item.SpawnItemAtPlayer( pl, itemid, amount ) 
@@ -287,7 +328,7 @@ function Quantum.Server.Inventory.UseItem( pl, index )
 	if( item != nil || #item > 0 ) then
 		local itemTbl = Quantum.Item.Get( item[1] )
 		if( itemTbl.useeffect != nil ) then
-			Quantum.Server.Inventory.SetSlotItem( pl, char, index, item[1], item[2] - 1 )
+			Quantum.Server.Inventory.RemoveSlotItem( pl, char, index, 1 )
 			Quantum.Effect.Give( pl, itemTbl.useeffect ) -- call the function
 		end
 	end
@@ -302,7 +343,7 @@ function Quantum.Server.Inventory.EatItem( pl, index )
 	if( item != nil || #item > 0 ) then
 		local itemTbl = Quantum.Item.Get( item[1] )
 		if( itemTbl.consumeeffect != nil ) then
-			Quantum.Server.Inventory.SetSlotItem( pl, char, index, item[1], item[2] - 1 )
+			Quantum.Server.Inventory.RemoveSlotItem( pl, char, index, 1 )
 			Quantum.Effect.Give( pl, itemTbl.consumeeffect )
 		end
 	end

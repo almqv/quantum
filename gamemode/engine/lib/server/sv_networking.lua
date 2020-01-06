@@ -147,7 +147,7 @@ end
 local intcodeFunctions = {
 	[Quantum.IntCode.SET_ITEM] = function( pl, index, itemid, amount ) -- if the client is trying to set an item then kick the player
 		Quantum.Warn( "Player [" .. pl:Nick() .. " | " .. pl:SteamID() .. "] tried to use a blacklisted Intcode function called from the client!" )
-		--pl:Kick( "[Quantum Security] Tried to use a invalid Intcode function. Nice try." ) 
+		pl:Kick( "[Quantum Security] Tried to use a invalid Intcode function. Nice try." ) 
 	end,
 	[Quantum.IntCode.DROP_ITEM] = function( pl, index, itemid, amount )
 		Quantum.Server.Inventory.DropItem( pl, index, amount )
@@ -169,7 +169,6 @@ net.Receive( "quantum_item_action", function( len, pl )
 	local itemid = net.ReadString() 
 	local amount = net.ReadInt( Quantum.calculateNeededBits( Quantum.Inventory.MaxStackSize ) ) 
 
-	print( "####", intcode, index, itemid, amount )
 	intcodeFunctions[intcode]( pl, index, itemid, amount )
 end)
 

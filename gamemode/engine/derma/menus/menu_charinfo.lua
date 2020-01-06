@@ -74,7 +74,6 @@ local function createEquipSlotPanel( equiptype, x, y, scale, parent )
 			p.icon:SetModel( itemTbl.model )
 			configureCamLookPos( p.icon )
 		else
-			print( "REMOVE" )
 			p.icon:SetVisible( false ) -- hide it if there is no item
 			if( IsValid( p.icon.tooltip ) ) then
 				p.icon.tooltip:Remove()
@@ -109,7 +108,11 @@ end
 
 local function getItemInSlot( pos )
 	local inv = Quantum.Client.Inventory  || {}
-	return inv[pos][1]
+	if( inv[pos] != nil ) then
+		return inv[pos][1]
+	else
+		return
+	end
 end
 
 function menu.open( dt )
@@ -205,7 +208,6 @@ function menu.open( dt )
 
 		f.equippanels[Quantum.EquipSlots.Head] = createEquipSlotPanel( Quantum.EquipSlots.Head, slotXpos, char.y + char.h/5, slotScale, f ) -- create the panel
 		f.equippanels[Quantum.EquipSlots.Head].SetItem( getItemInSlot(equipped[ Quantum.EquipSlots.Head ]) ) -- give its current item
-		print( "EQUIPED: ", getItemInSlot(equipped[ Quantum.EquipSlots.Head ]) )
 		---- Inventory panel ----
 
 		local inv = vgui.Create( "DPanel", f ) -- section for all of the item panels

@@ -156,7 +156,6 @@ function main.open(dt)
 			play.w, play.h = play:GetSize()
 
 			play.y = play.y + play.h + padding*2
-			print( play.y )
 		end
 
 		play:SetTextColor( buttonTextColor )

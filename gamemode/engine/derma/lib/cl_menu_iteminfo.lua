@@ -21,6 +21,31 @@ local function resizePanel( p )
 	return p.w, p.h
 end
 
+local function getEquippedItems()
+	local returnTbl = {}
+
+	for equipType, equipSlot in pairs( Quantum.Client.Equipped ) do
+		returnTbl[ #returnTbl + 1 ] = { type = equipType, slot = equipSlot }
+	end
+
+	return returnTbl
+end
+
+local function checkIfItemIsEquippedAndRemove( page, index )
+	local equipItems = getEquippedItems()
+
+	for ie, ii in pairs( equipItems ) do
+		print( ie, ii )
+		if( ii.slot == index ) then
+			if( page.equippanels[ii.type] != nil ) then
+				page.equippanels[ii.type].SetItem( nil ) -- remove it
+			else
+				Quantum.Error( "Func 'checkIfItemIsEquippedAndRemove': type is not valid! type=" .. tostring(ii.type) )
+			end
+		end
+	end
+end
+
 function iteminfo.dropamount( p, page, itemPanel )
 	local index = p.index
 	local item = p.item
@@ -206,6 +231,10 @@ function iteminfo.giveoptions( p, page )
 			p:GetParent().SetItemAmount( amount - 1 )
 
 			options.Close()
+
+			if( amount - 1 <= 0 ) then
+				checkIfItemIsEquippedAndRemove( page, index )
+			end
 			
 			---- USE NET ----
 			Quantum.Client.InventoryNet.UseItem( index )
@@ -231,6 +260,10 @@ function iteminfo.giveoptions( p, page )
 			p:GetParent().SetItemAmount( amount - 1 )
 
 			options.Close()
+
+			if( amount - 1 <= 0 ) then
+				checkIfItemIsEquippedAndRemove( page, index )
+			end
 			
 			---- EAT NET ----
 			Quantum.Client.InventoryNet.EatItem( index )
@@ -257,6 +290,7 @@ function iteminfo.giveoptions( p, page )
 				iteminfo.dropamount( options, page, itemPanel )
 			else
 				p:GetParent().RemoveItem()
+				checkIfItemIsEquippedAndRemove( page, index )
 				---- DROP NET HERE ----
 				Quantum.Client.InventoryNet.DropItem( item.id, index, amount )
 

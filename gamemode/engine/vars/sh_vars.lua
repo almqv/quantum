@@ -48,6 +48,5 @@ Quantum.IntCode = {
 function Quantum.calculateNeededBits( n ) return math.ceil( math.log( n, 2 ) ) end
 
 function Quantum.WriteIntcode( intcode ) 
-	print( intcode )
 	net.WriteInt( intcode, Quantum.IntCode.BIT_SIZE ) 
 end
