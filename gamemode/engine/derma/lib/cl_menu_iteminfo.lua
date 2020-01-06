@@ -35,7 +35,6 @@ local function checkIfItemIsEquippedAndRemove( page, index )
 	local equipItems = getEquippedItems()
 
 	for ie, ii in pairs( equipItems ) do
-		print( ie, ii )
 		if( ii.slot == index ) then
 			if( page.equippanels[ii.type] != nil ) then
 				page.equippanels[ii.type].SetItem( nil ) -- remove it
@@ -207,7 +206,7 @@ function iteminfo.giveoptions( p, page )
 			if( page.equippanels[item.equipslot] != nil ) then
 				page.equippanels[item.equipslot].SetItem( item.id ) -- set its item
 			end
-			
+
 			if( page.markedItemPanel[item.equipslot] != nil ) then 
 				page.markedItemPanel[item.equipslot]:SetVisible( false ) -- unmark the old panel
 			end
