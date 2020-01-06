@@ -107,6 +107,11 @@ local function createEquipSlotPanel( equiptype, x, y, scale, parent )
 	return p
 end
 
+local function getItemInSlot( pos )
+	local inv = Quantum.Client.Inventory  || {}
+	return inv[pos][1]
+end
+
 function menu.open( dt )
 	local items = Quantum.Client.Inventory 
 	local equipped = Quantum.Client.Equipped
@@ -199,8 +204,8 @@ function menu.open( dt )
 		local slotXpos = char.x + char.w*0.75 + padding*4
 
 		f.equippanels[Quantum.EquipSlots.Head] = createEquipSlotPanel( Quantum.EquipSlots.Head, slotXpos, char.y + char.h/5, slotScale, f ) -- create the panel
-		f.equippanels[Quantum.EquipSlots.Head].SetItem( equipped[ Quantum.EquipSlots.Head ] ) -- give its current item
-
+		f.equippanels[Quantum.EquipSlots.Head].SetItem( getItemInSlot(equipped[ Quantum.EquipSlots.Head ]) ) -- give its current item
+		print( "EQUIPED: ", getItemInSlot(equipped[ Quantum.EquipSlots.Head ]) )
 		---- Inventory panel ----
 
 		local inv = vgui.Create( "DPanel", f ) -- section for all of the item panels
