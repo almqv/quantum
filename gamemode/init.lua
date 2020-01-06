@@ -13,6 +13,7 @@ if SERVER then
 
 	AddCSLuaFile( "settings/sh_settings.lua" )
 	AddCSLuaFile( "settings/sh_items.lua" )
+	AddCSLuaFile( "settings/sh_effects.lua" )
 
 	AddCSLuaFile( "cl_init.lua" )
 	AddCSLuaFile( "shared.lua" )
@@ -110,8 +111,9 @@ if SERVER then
 
 	end
 
-	local function loadAllItems()
+	local function loadAllItemsAndEffects()
 		include( "settings/sh_items.lua" )
+		include( "settings/sh_effects.lua" )
 	end
 	
 	function Quantum.Server.Load()
@@ -121,7 +123,7 @@ if SERVER then
 		addAllDermaMenus()
 
 		-- Creation of stuff
-		loadAllItems() -- load the items
+		loadAllItemsAndEffects() 
 	end
 	
 	Quantum.Server.Load() 

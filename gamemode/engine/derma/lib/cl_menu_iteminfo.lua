@@ -188,7 +188,7 @@ function iteminfo.giveoptions( p, page )
 	
 	end
 
-	if( item.usefunction != nil ) then -- USE
+	if( item.useeffect != nil ) then -- USE
 
 		op.use = vgui.Create( "DButton", options )
 		op.use:SetText( "Use Item" )
@@ -213,7 +213,7 @@ function iteminfo.giveoptions( p, page )
 		ypos = ypos + op.use.h + yspacing
 	end
 
-	if( item.consumefunction ) then -- EAT
+	if( item.consumeeffect != nil ) then -- EAT
 
 		op.eat = vgui.Create( "DButton", options )
 		op.eat:SetText( "Consume" )
@@ -335,14 +335,17 @@ function iteminfo.givetooltip( p, page )
 		rare:SetPos( title.x, title.y + title.h + padding_s )
 		rare.x, rare.y = rare:GetPos()
 
-		local equip = vgui.Create( "DLabel", self )
-		equip:SetText( Quantum.EquipSlotsNames[self.item.equipslot] || "ERROR EQUIPTYPE" )
-		equip:SetFont( "q_tooltip_equiptype" )
-		equip:SetTextColor( Color( 255, 255, 255, 255 ) )
-		equip:SizeToContents()
-		equip.w, equip.h = equip:GetSize()
-		equip:SetPos( title.x, rare.y + rare.h + padding_s )
-		equip.x, equip.y = equip:GetPos()
+		local equip
+		if( Quantum.EquipSlotsNames[self.item.equipslot] != nil ) then
+			equip = vgui.Create( "DLabel", self )
+			equip:SetText( Quantum.EquipSlotsNames[self.item.equipslot] || "ERROR EQUIPTYPE" )
+			equip:SetFont( "q_tooltip_equiptype" )
+			equip:SetTextColor( Color( 255, 255, 255, 255 ) )
+			equip:SizeToContents()
+			equip.w, equip.h = equip:GetSize()
+			equip:SetPos( title.x, rare.y + rare.h + padding_s )
+			equip.x, equip.y = equip:GetPos()
+		end
 
 		local desc = vgui.Create( "DLabel", self )
 		desc:SetText( self.item.desc || "ERROR DESC" )
@@ -350,8 +353,51 @@ function iteminfo.givetooltip( p, page )
 		desc:SetTextColor( Color( 205, 205, 205, 255 ) )
 		desc:SizeToContents()
 		desc.w, desc.h = desc:GetSize()
-		desc:SetPos( title.x, equip.y + equip.h + padding_s )
+
+		if( IsValid(equip) ) then
+			desc:SetPos( title.x, equip.y + equip.h + padding_s )
+		else
+			desc:SetPos( title.x, rare.y + rare.h + padding_s )
+		end
+
 		desc.x, desc.y = desc:GetPos()
+
+		local yposBase = desc.y + desc.h + padding_s
+
+		if( self.item.useeffect != nil ) then
+			local effectTbl = Quantum.Effect.Get( self.item.useeffect )
+
+			if( effectTbl.desc != nil ) then
+				local use = vgui.Create( "DLabel", self )
+				use:SetText( "Use: " .. effectTbl.desc || "ERROR DESC USE" )
+				use:SetFont( "q_tooltip_desc" )
+				use:SetTextColor( Color( 18, 224, 66, 255 ) )
+				use:SizeToContents()
+				use.w, use.h = use:GetSize()
+				use:SetPos( title.x, yposBase )
+				use.x, use.y = use:GetPos()
+
+				yposBase = yposBase + use.y + padding_s
+			end
+		end
+
+		if( self.item.consumeeffect != nil ) then
+
+			local effectTbl = Quantum.Effect.Get( self.item.consumeeffect )
+
+			if( effectTbl.desc != nil ) then
+				local eat = vgui.Create( "DLabel", self )
+				eat:SetText( "Consume: " .. effectTbl.desc || "ERROR DESC EAT" )
+				eat:SetFont( "q_tooltip_desc" )
+				eat:SetTextColor( Color( 18, 224, 66, 255 ) )
+				eat:SizeToContents()
+				eat.w, eat.h = eat:GetSize()
+				eat:SetPos( title.x, yposBase )
+				eat.x, eat.y = eat:GetPos()
+
+				yposBase = yposBase + eat.y + padding_s
+			end
+		end
 
 		if( self.item.soulbound == true ) then
 			local sb = vgui.Create( "DLabel", self )
@@ -360,7 +406,7 @@ function iteminfo.givetooltip( p, page )
 			sb:SetTextColor( Color( 235, 64, 52, 255 ) )
 			sb:SizeToContents()
 			sb.w, sb.h = sb:GetSize()
-			sb:SetPos( title.x, desc.y + desc.h + padding_s )
+			sb:SetPos( title.x, yposBase )
 		end
 		
 		-- Correct the tooltips size so its content fits inside of it

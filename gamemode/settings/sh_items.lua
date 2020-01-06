@@ -11,8 +11,6 @@ Quantum.Item.Create( "test", {
 	model = "models/props_phx/gears/bevel12.mdl",
 	soulbound = true, 
 	rarity = Quantum.Rarity.Rare, 
-	usefunction = function() print( "Test!" ) end,  
-	consumefunction = function() print( "Test 2!" ) end
 } )
 
 Quantum.Item.Create( "test2", {
@@ -22,10 +20,7 @@ Quantum.Item.Create( "test2", {
 	stack = 10, 
 	soulbound = false, 
 	rarity = Quantum.Rarity.Trash, 
-	consumefunction = function( user )  
-		Quantum.Notify.Info( user, "You consumed trash and therefore died!" )
-		user:Kill()
-	end 
+	consumeeffect = "eat_trash"
 } )
 
 Quantum.Item.Create( "bomb", {
@@ -45,9 +40,5 @@ Quantum.Item.Create( "potatoe", {
 	soulbound = false, 
 	rarity = Quantum.Rarity.Legendary,
 	equipslot = Quantum.EquipSlots.Head,
-	consumefunction = function( user )
-		Quantum.Notify.Info( user, "You consumed a legendary potatoe! You now have 1000 health for 10 seconds!" )
-		user:SetHealth( 1000 )
-		timer.Simple( 10, function() user:SetHealth( user:GetMaxHealth() ) end)
-	end
+	consumeeffect = "eat_potatoe"
 } )

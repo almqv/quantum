@@ -19,8 +19,8 @@ function Quantum.Item.Create( itemid, args )
 		equipslot = args.equipslot, -- slot for the equipable
 		equipeffect = args.equipeffect, -- equip buff like in other MMO RPG games
 		rarity = args.rarity || Quantum.Rarity.Trash, -- rarity of the item
-		usefunction = args.usefunction, -- use function 
-		consumefunction = args.consumefunction --consume function
+		useeffect = args.useeffect, -- use effect
+		consumeeffect = args.consumeeffect --consume effect
 	}
 	item.stack = math.Clamp( item.stack, 1, Quantum.Inventory.MaxStackSize ) -- clamp it so it does not go over the max size
 	if( item.equipslot != nil ) then item.stack = 1 end -- make the stack size to 1 if equipable

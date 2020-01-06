@@ -46,8 +46,9 @@ if CLIENT then
 		include( fol .. "cl_menu.lua" )
 	end
 
-	local function loadAllItems()
+	local function loadAllItemsAndEffects()
 		include( "settings/sh_items.lua" )
+		include( "settings/sh_effects.lua" )
 	end
 
 	function Quantum.Client.Load()
@@ -60,8 +61,8 @@ if CLIENT then
 		Quantum.Debug( "Loaded all files." )
 
 		-- add all of the items
-		loadAllItems()
-		Quantum.Debug( "Loaded all items." )
+		loadAllItemsAndEffects()
+		Quantum.Debug( "Loaded all items & effects." )
 	end
 
 	Quantum.Client.Load() 

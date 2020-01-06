@@ -283,9 +283,9 @@ function Quantum.Server.Inventory.UseItem( pl, index )
 
 	if( item != nil || #item > 0 ) then
 		local itemTbl = Quantum.Item.Get( item[1] )
-		if( itemTbl.usefunction != nil ) then
+		if( itemTbl.useeffect != nil ) then
 			Quantum.Server.Inventory.SetSlotItem( pl, char, index, item[1], item[2] - 1 )
-			itemTbl.usefunction(pl) -- call the function
+			Quantum.Effect.Give( pl, itemTbl.useeffect ) -- call the function
 		end
 	end
 end
@@ -298,9 +298,9 @@ function Quantum.Server.Inventory.EatItem( pl, index )
 
 	if( item != nil || #item > 0 ) then
 		local itemTbl = Quantum.Item.Get( item[1] )
-		if( itemTbl.consumefunction != nil ) then
+		if( itemTbl.consumeeffect != nil ) then
 			Quantum.Server.Inventory.SetSlotItem( pl, char, index, item[1], item[2] - 1 )
-			itemTbl.consumefunction( pl ) 
+			Quantum.Effect.Give( pl, itemTbl.consumeeffect )
 		end
 	end
 end

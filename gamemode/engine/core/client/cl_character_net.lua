@@ -55,7 +55,7 @@ function Quantum.Client.InventoryNet.UseItem( index )
 	local item = Quantum.Client.Inventory[index]
 	local itemTbl = Quantum.Item.Get( item[1] )
 	if( itemTbl != nil && item[2] > 0 ) then
-		if( itemTbl.usefunction != nil ) then
+		if( itemTbl.useeffect != nil ) then
 
 			Quantum.Client.InventoryNet.SetItem( index, item[1], item[2] - 1 ) -- remove one from the inventory on the client 
 
@@ -72,7 +72,7 @@ function Quantum.Client.InventoryNet.EatItem( index )
 	local item = Quantum.Client.Inventory[index]
 	local itemTbl = Quantum.Item.Get( item[1] )
 	if( itemTbl != nil && item[2] > 0 ) then
-		if( itemTbl.consumefunction != nil ) then
+		if( itemTbl.consumeeffect != nil ) then
 
 			Quantum.Client.InventoryNet.SetItem( index, item[1], item[2] - 1 ) -- remove one from the inventory on the client 
 
