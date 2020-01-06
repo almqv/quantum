@@ -244,30 +244,37 @@ function menu.open( dt )
 		local equipSlotSpacing = padding*10
 		local equipSlot_PanelWidth, equipSlot_PanelHeight = itemWidth * slotScale, itemHeight * slotScale
 
+		print("ITEMS IN SLOT#########################")
 		-- HEAD
 		f.equippanels[Quantum.EquipSlots.Head] = createEquipSlotPanel( Quantum.EquipSlots.Head, slotXpos, equipSlotYpos, slotScale, f ) -- create the panel
+		print( "Helmet:", getItemInSlot(equipped[ Quantum.EquipSlots.Head ]) )
 		f.equippanels[Quantum.EquipSlots.Head].SetItem( getItemInSlot(equipped[ Quantum.EquipSlots.Head ]) ) -- give its current item
 		equipSlotYpos = equipSlotYpos + equipSlot_PanelHeight + equipSlotSpacing
 
 		-- CHEST
-		f.equippanels[Quantum.EquipSlots.Chest] = createEquipSlotPanel( Quantum.EquipSlots.Chest, slotXpos, equipSlotYpos, slotScale, f ) -- create the panel
-		f.equippanels[Quantum.EquipSlots.Chest].SetItem( getItemInSlot(equipped[ Quantum.EquipSlots.Chest ]) ) -- give its current item
+		f.equippanels[Quantum.EquipSlots.Chest] = createEquipSlotPanel( Quantum.EquipSlots.Chest, slotXpos, equipSlotYpos, slotScale, f ) 
+		print( "Chest:", getItemInSlot(equipped[ Quantum.EquipSlots.Chest ]) )
+		f.equippanels[Quantum.EquipSlots.Chest].SetItem( getItemInSlot(equipped[ Quantum.EquipSlots.Chest ]) ) 
 		equipSlotYpos = equipSlotYpos + equipSlot_PanelHeight + equipSlotSpacing
 
 		-- LEGS
-		f.equippanels[Quantum.EquipSlots.Legs] = createEquipSlotPanel( Quantum.EquipSlots.Legs, slotXpos, equipSlotYpos, slotScale, f ) -- create the panel
-		f.equippanels[Quantum.EquipSlots.Legs].SetItem( getItemInSlot(equipped[ Quantum.EquipSlots.Legs ]) ) -- give its current item
+		f.equippanels[Quantum.EquipSlots.Legs] = createEquipSlotPanel( Quantum.EquipSlots.Legs, slotXpos, equipSlotYpos, slotScale, f )
+		print( "Legs:", getItemInSlot(equipped[ Quantum.EquipSlots.Legs ]) )
+		f.equippanels[Quantum.EquipSlots.Legs].SetItem( getItemInSlot(equipped[ Quantum.EquipSlots.Legs ]) )
 		equipSlotYpos = equipSlotYpos + equipSlot_PanelHeight + equipSlotSpacing
 
 		-- BOOTS
-		f.equippanels[Quantum.EquipSlots.Boots] = createEquipSlotPanel( Quantum.EquipSlots.Boots, slotXpos, equipSlotYpos, slotScale, f ) -- create the panel
-		f.equippanels[Quantum.EquipSlots.Boots].SetItem( getItemInSlot(equipped[ Quantum.EquipSlots.Boots ]) ) -- give its current item
+		f.equippanels[Quantum.EquipSlots.Boots] = createEquipSlotPanel( Quantum.EquipSlots.Boots, slotXpos, equipSlotYpos, slotScale, f ) 
+		print( "Boots:", getItemInSlot(equipped[ Quantum.EquipSlots.Boots ]) )
+		f.equippanels[Quantum.EquipSlots.Boots].SetItem( getItemInSlot(equipped[ Quantum.EquipSlots.Boots ]) ) 
 		equipSlotYpos = equipSlotYpos + equipSlot_PanelHeight + equipSlotSpacing
 
 		-- WEAPON
 		f.equippanels[Quantum.EquipSlots.Weapon] = createEquipSlotPanel( Quantum.EquipSlots.Weapon, slotXpos + equipSlot_PanelWidth + equipSlotSpacing/2, (equipSlotYpos + equipSlot_PanelHeight) / 2, slotScale, f ) -- create the panel
+		print( "Weapon:", getItemInSlot(equipped[ Quantum.EquipSlots.Weapon ]) )
 		f.equippanels[Quantum.EquipSlots.Weapon].SetItem( getItemInSlot(equipped[ Quantum.EquipSlots.Weapon ]) ) -- give its current item
 
+		print("END ################333")
 		---- Inventory panel ----
 
 		local inv = vgui.Create( "DPanel", f ) -- section for all of the item panels

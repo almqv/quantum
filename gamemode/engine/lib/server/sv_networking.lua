@@ -131,6 +131,17 @@ function Quantum.Net.Inventory.SetItem( pl, index, itemid, amount ) -- sends a i
 	net.Send( pl )
 end
 
+function Quantum.Net.Inventory.SetEquipItem( pl, index, equipslot )
+	net.Start( "quantum_item_action" )
+	
+		Quantum.WriteIntcode( Quantum.IntCode.EQUIP_ITEM ) -- write the opcode first
+		net.WriteInt( index, Quantum.calculateNeededBits( Quantum.Inventory.Size ) )
+		net.WriteString( "" )
+		net.WriteInt( equipslot, Quantum.calculateNeededBits( Quantum.Inventory.MaxStackSize ) )
+
+	net.Send( pl )
+end
+
 function Quantum.Net.Inventory.Update( pl )
 	Quantum.Debug( "Updating " .. tostring(pl) .. " character." )
 
@@ -165,11 +176,11 @@ local intcodeFunctions = {
 
 net.Receive( "quantum_item_action", function( len, pl )
 	local intcode = net.ReadInt( Quantum.IntCode.BIT_SIZE )
-	local index = net.ReadInt( Quantum.calculateNeededBits( Quantum.Inventory.Size ) ) 
-	local itemid = net.ReadString() 
-	local amount = net.ReadInt( Quantum.calculateNeededBits( Quantum.Inventory.MaxStackSize ) ) 
+	local par1 = net.ReadInt( Quantum.calculateNeededBits( Quantum.Inventory.Size ) ) 
+	local par2 = net.ReadString() 
+	local par3 = net.ReadInt( Quantum.calculateNeededBits( Quantum.Inventory.MaxStackSize ) ) 
 
-	intcodeFunctions[intcode]( pl, index, itemid, amount )
+	intcodeFunctions[intcode]( pl, par1, par2, par3 )
 end)
 
 

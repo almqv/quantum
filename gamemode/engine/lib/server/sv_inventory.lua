@@ -37,7 +37,8 @@ function Quantum.Server.Inventory.EquipItem( pl, itemindex )
 			Quantum.Error( tostring(pl) .. " tried to equip an non-equippable item: (" .. tostring(itemTbl[1]) .. ")" )
 			return 
 		else
-			if( table.KeyFromValue( Quantum.EquipSlots, equipslot ) != nil ) then
+			local equipslotKey = table.KeyFromValue( Quantum.EquipSlots, equipslot )
+			if( equipslotKey != nil ) then
 
 				char.equipped[equipslot] = itemindex -- set it in the table
 				if( itemTbl.equipeffect != nil ) then
@@ -45,7 +46,7 @@ function Quantum.Server.Inventory.EquipItem( pl, itemindex )
 				end
 				Quantum.Debug( tostring(pl) .. " equipped item (" .. tostring(slotitem[1]) .. ") - (" .. tostring(itemindex) .. ")" )
 				-- NETWORKING --
-				Quantum.Net.Inventory.Update( pl ) -- update the client
+				Quantum.Net.Inventory.SetEquipItem( pl, itemindex, equipslot )
 
 			else
 				Quantum.Error( tostring(pl) .. " tried to equip an item in a non-existent equip slot: (" .. tostring(equipslot) .. ")" )
@@ -69,7 +70,7 @@ function Quantum.Server.Inventory.UnEquipItem( pl, equipslot, char )
 		Quantum.Debug( tostring(pl) .. " unequipped item (" .. tostring( itemTbl.id ) .. ") - (" .. tostring( char.equipped[equipslot]  ) .. ")" )
 		char.equipped[equipslot] = nil
 
-		Quantum.Net.Inventory.Update( pl ) -- update the client
+		Quantum.Net.Inventory.SetEquipItem( pl, -1, equipslot )
 	end
 end
 

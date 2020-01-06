@@ -10,6 +10,7 @@ Quantum.Client.InventoryNet = {}
 Quantum.Inventory.Size = Quantum.Inventory.Width * Quantum.Inventory.Height
 
 function Quantum.Client.InventoryNet.SetItem( index, itemid, amount )
+	Quantum.Debug( "Running SetItem" )
 	if( Quantum.Client.Inventory == nil ) then Quantum.Client.Inventory = {} end
 
 	if( amount >= 1 ) then
@@ -19,19 +20,32 @@ function Quantum.Client.InventoryNet.SetItem( index, itemid, amount )
 	end
 end
 
+function Quantum.Client.InventoryNet.SetEquipItem( itemindex, itemid, equipslot )
+	Quantum.Debug( "Running SetEquipItem" )
+	print( "Slot: ".. equipslot, "Itemindex: " .. itemindex )
+	if( Quantum.Client.Equipped == nil ) then Quantum.Client.Equipped = {} end
+
+	if( itemindex > 0 ) then
+		Quantum.Client.Equipped[equipslot] = itemindex
+	else
+		Quantum.Client.Equipped[equipslot] = nil -- remove it if unequipp
+	end
+end
+
 local intcodeFunctions = {
-	[Quantum.IntCode.SET_ITEM] = Quantum.Client.InventoryNet.SetItem
+	[Quantum.IntCode.SET_ITEM] = Quantum.Client.InventoryNet.SetItem,
+	[Quantum.IntCode.EQUIP_ITEM] = Quantum.Client.InventoryNet.SetEquipItem
 }
 
 net.Receive( "quantum_item_action", function( len, pl ) -- used for updating the players inventory on the client
 	local intcode = net.ReadInt( Quantum.IntCode.BIT_SIZE )
 
 	-- Parameters
-	local index = net.ReadInt( Quantum.calculateNeededBits( Quantum.Inventory.Size ) ) 
-	local itemid = net.ReadString()
-	local amount = net.ReadInt( Quantum.calculateNeededBits( Quantum.Inventory.MaxStackSize ) ) 
+	local par1 = net.ReadInt( Quantum.calculateNeededBits( Quantum.Inventory.Size ) ) 
+	local par2 = net.ReadString()
+	local par3 = net.ReadInt( Quantum.calculateNeededBits( Quantum.Inventory.MaxStackSize ) ) 
 
-	intcodeFunctions[intcode]( index, itemid, amount )
+	intcodeFunctions[intcode]( par1, par2, par3 )
 end)
 
 net.Receive( "quantum_char_update", function( len, pl ) 
@@ -92,7 +106,6 @@ function Quantum.Client.InventoryNet.EquipItem( index )
 		if( itemTbl.equipslot != nil ) then
 
 			net.Start( "quantum_item_action" )
-				print("####", Quantum.IntCode.EQUIP_ITEM)
 				Quantum.WriteIntcode( Quantum.IntCode.EQUIP_ITEM )
 				net.WriteInt( index, Quantum.calculateNeededBits( Quantum.Inventory.Size ) )
 			net.SendToServer()
