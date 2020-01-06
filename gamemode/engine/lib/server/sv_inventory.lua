@@ -44,6 +44,10 @@ function Quantum.Server.Inventory.EquipItem( pl, itemindex )
 				if( itemTbl.equipeffect != nil ) then
 					Quantum.Effect.Give( pl, itemTbl.equipeffect ) -- give the player the effect
 				end
+				if( itemTbl.equipgive != nil ) then
+					pl:Give( itemTbl.equipgive )
+					pl:SelectWeapon( itemTbl.equipgive ) 
+				end
 				Quantum.Debug( tostring(pl) .. " equipped item (" .. tostring(slotitem[1]) .. ") - (" .. tostring(itemindex) .. ")" )
 				-- NETWORKING --
 				Quantum.Net.Inventory.SetEquipItem( pl, itemindex, equipslot )
@@ -66,7 +70,11 @@ function Quantum.Server.Inventory.UnEquipItem( pl, equipslot, char )
 		if( itemTbl.equipeffect != nil ) then -- remove the items effect
 			Quantum.Effect.Remove( pl, itemTbl.equipeffect )
 		end
-		
+
+		if( itemTbl.equipgive != nil ) then
+			pl:StripWeapon( itemTbl.equipgive ) 
+			pl:SelectWeapon( "quantum_hands" ) 
+		end
 		Quantum.Debug( tostring(pl) .. " unequipped item (" .. tostring( itemTbl.id ) .. ") - (" .. tostring( char.equipped[equipslot]  ) .. ")" )
 		char.equipped[equipslot] = nil
 

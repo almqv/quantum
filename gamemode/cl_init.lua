@@ -51,6 +51,17 @@ if CLIENT then
 		include( "settings/sh_effects.lua" )
 	end
 
+	local function loadPlugins()
+		local fol = GM.FolderName .. "/plugins/"
+		local pluginFiles = file.Find( fol .. "plugin_*.lua", "LUA" )
+
+		if( #pluginFiles > 0 ) then
+			for _, file in pairs( pluginFiles ) do
+				include( fol .. file )
+			end
+		end
+	end
+
 	function Quantum.Client.Load()
 		local fol = GM.FolderName .. "/gamemode/engine/core/"
 		
@@ -60,9 +71,13 @@ if CLIENT then
 
 		Quantum.Debug( "Loaded all files." )
 
-		-- add all of the items
+		-- add all of the items & effects
 		loadAllItemsAndEffects()
 		Quantum.Debug( "Loaded all items & effects." )
+
+		-- load all of the plugins
+		loadPlugins()
+		Quantum.Debug( "Loaded all plugins." )
 	end
 
 	Quantum.Client.Load() 

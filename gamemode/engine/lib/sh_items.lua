@@ -17,6 +17,7 @@ function Quantum.Item.Create( itemid, args )
 		stack = args.stack || 1, -- items max stack size
 		soulbound = args.soulbound, -- if item could be dropped/traded to other players
 		equipslot = args.equipslot, -- slot for the equipable
+		equipgive = args.equipgive,
 		equipeffect = args.equipeffect, -- equip buff like in other MMO RPG games
 		rarity = args.rarity || Quantum.Rarity.Trash, -- rarity of the item
 		useeffect = args.useeffect, -- use effect

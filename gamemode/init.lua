@@ -115,6 +115,26 @@ if SERVER then
 		include( "settings/sh_items.lua" )
 		include( "settings/sh_effects.lua" )
 	end
+
+	local function loadPlugins()
+		
+
+		local fol = GM.FolderName .. "/plugins/"
+		local pluginFiles = file.Find( fol .. "plugin_*.lua", "LUA" )
+
+		if( #pluginFiles > 0 ) then
+			MsgC( "\n" )
+			Quantum.Debug( "Loading plugins...")
+			for _, file in pairs( pluginFiles ) do
+				AddCSLuaFile( fol .. file )
+				include( fol .. file )
+				Quantum.Debug( "Added plugin: " .. fol .. file )
+			end
+		else
+			MsgC( "\n" )
+			Quantum.Debug( "No plugins found." )
+		end
+	end
 	
 	function Quantum.Server.Load()
 		-- Add all of the base files
@@ -124,6 +144,9 @@ if SERVER then
 
 		-- Creation of stuff
 		loadAllItemsAndEffects() 
+
+		-- Plugins
+		loadPlugins()
 	end
 	
 	Quantum.Server.Load() 
