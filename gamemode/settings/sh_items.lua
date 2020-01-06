@@ -30,7 +30,8 @@ Quantum.Item.Create( "bomb", {
 	model = "models/props_phx/ww2bomb.mdl",
 	stack = 2, 
 	soulbound = false, 
-	rarity = Quantum.Rarity.Epic
+	rarity = Quantum.Rarity.Epic,
+	equipslot = Quantum.EquipSlots.Chest
 } )
 
 Quantum.Item.Create( "potatoe", {
