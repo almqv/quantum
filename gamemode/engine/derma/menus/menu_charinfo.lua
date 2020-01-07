@@ -160,6 +160,7 @@ function menu.open( dt )
 
 	if( !f ) then
 		Quantum.Client.IsInMenu = true
+		Quantum.Client.IsInInventory = true
 
 		local f = vgui.Create( "DFrame" )
 		f:SetSize( sw, sh )
@@ -175,6 +176,7 @@ function menu.open( dt )
 		end
 		function f:OnClose()
 			Quantum.Client.IsInMenu = false -- show the hud when closed
+			Quantum.Client.IsInInventory = false
 			Quantum.Client.Cam.Stop()
 		end
 

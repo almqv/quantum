@@ -37,6 +37,9 @@ local function setUpPlayer( ply )
 	ply:SetCrouchedWalkSpeed( Quantum.Server.Settings.PlayerSpeeds.duck)
 	ply:SetMaxSpeed( Quantum.Server.Settings.PlayerSpeeds.run )
 
+	ply:Give( "quantum_hands" )
+	ply:SetActiveWeapon( "quantum_hands" )
+
 	Quantum.Debug( tostring( ply ) .. charnametxt  )
 end
 

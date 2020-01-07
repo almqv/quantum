@@ -7,12 +7,31 @@
 
 local plugin = {}
 
-plugin.AllowedTypes = {
-	["fas2"] = true,
-	["weapon"] = true,
-	["quantum"] = true,
-	["cw"] = true
+plugin.types = {
+	pwb = "weapon_pwb",
+	quantum = "quantum",
+	cw = "cw",
+	m9k = "m9k",
+	weapon = "weapon"
 }
+
+plugin.AllowedTypes = {
+	[plugin.types.pwb] = true,
+	[plugin.types.weapon] = true,
+	[plugin.types.quantum] = true,
+	[plugin.types.cw] = true,
+	[plugin.types.m9k] = true
+}
+
+local function createItemName( entclass )
+	local str = string.Replace( entclass, "_", " " )
+
+	for i, ns in pairs( plugin.types ) do
+		str = string.Replace( str, ns, "" )
+	end
+
+	return string.upper( str )
+end
 
 function plugin.getAllWeaponID()
 	local returnTbl = {}
@@ -38,11 +57,12 @@ function plugin.CreateItems( weps )
 	for _, wepID in pairs( weps ) do
 		local swepTbl = weapons.Get( wepID ) 
 		Quantum.Debug( "Added " .. wepID .. " as an item!" )
+		local wepName = createItemName( wepID )
 		Quantum.Item.Create( wepID, {
-			name = swepTbl.PrintName, 
-			desc = swepTbl.Purpose,
+			name = wepName, 
+			desc = "A firearm." || swepTbl.Purpose,
 			model = swepTbl.WorldModel,
-			rarity = Quantum.Rarity.Common, 
+			rarity = Quantum.Rarity.Weapon, 
 			equipslot = Quantum.EquipSlots.Weapon,
 			equipgive = wepID
 		} )

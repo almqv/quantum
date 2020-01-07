@@ -7,7 +7,8 @@
 
 local enabledHUDs = {
 	["CHudChat"] = true,
-	["CHudGMod"] = true
+	["CHudGMod"] = true,
+	["CHudWeaponSelection"] = true
 }
 
 hook.Add( "HUDShouldDraw", "Quantum_RemoveDefualtHUD", function( hudid ) 
@@ -46,10 +47,10 @@ local function renderStatHUD()
 	surface.DrawText( hptxt )
 
 	-- Crosshair
-	if( Quantum.Client.ShowCrosshair ) then
-		surface.SetDrawColor( 255, 255, 255, 200 )
-		surface.DrawRect( sw/2 - radius, sh/2 - radius, radius*2, radius*2 )
-	end
+	-- if( Quantum.Client.ShowCrosshair ) then
+	-- 	surface.SetDrawColor( 255, 255, 255, 200 )
+	-- 	surface.DrawRect( sw/2 - radius, sh/2 - radius, radius*2, radius*2 )
+	-- end
 end
 
 local function renderItemInfoHUD()
@@ -78,7 +79,7 @@ local function renderItemInfoHUD()
 	
 	
 				draw.SimpleText( itemAmountTxt .. item.name, "q_item_hud_title", screenPos.x, screenPos.y, SetAlpha( item.rarity.color, 255 * alphaFrac ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-				draw.SimpleText( "Rarity: " .. item.rarity.txt, "q_item_hud_rarity", screenPos.x, screenPos.y + txtPadding, SetAlpha( item.rarity.color, 255 *alphaFrac ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+				draw.SimpleText( item.rarity.txt, "q_item_hud_rarity", screenPos.x, screenPos.y + txtPadding, SetAlpha( item.rarity.color, 255 *alphaFrac ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 				if( item.soulbound ) then
 					draw.SimpleText( "Soulbound", "q_item_hud_soulbound", screenPos.x, screenPos.y + txtPadding*2, Color( 235, 64, 52, 255 * alphaFrac ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 				end
@@ -96,7 +97,7 @@ local function renderCharNamesHUD3D2D()
 			local distance = LocalPlayer():GetPos():Distance( ent:GetPos() )
 			local distFrac = Lerp( distance/Quantum.CharInfoDisplayDistance, 1, 0 )
 			
-			if( distance <= Quantum.CharInfoDisplayDistance ) then
+			if( distance <= Quantum.CharInfoDisplayDistance && ent:Alive() ) then
 				local name = ent:GetNWString( "q_char_name" )
 				local pos = ent:GetPos()
 				pos.z = pos.z + 75
@@ -234,7 +235,7 @@ function GM:Think()
 end
 
 hook.Add( "RenderScreenspaceEffects", "Quantum_HUD_RenderLowHealth", function() 
-	if( !Quantum.Client.IsInMenu ) then
+	if( !Quantum.Client.IsInMenu || Quantum.Client.IsInInventory ) then
 		if( LocalPlayer():Health() / LocalPlayer():GetMaxHealth() <= 0.25 ) then 
 			DrawMotionBlur( 0.4, 0.8, 0.1 ) 
 			DrawColorModify( {

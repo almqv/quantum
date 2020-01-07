@@ -25,40 +25,35 @@ local function isStackable( item )
 	return item.stack || false
 end
 
-function Quantum.Server.Inventory.EquipItem( pl, itemindex )
-	local char = Quantum.Server.Char.GetCurrentCharacter( pl )
-	local slotitem = Quantum.Server.Inventory.GetSlotItem( char, itemindex ) 
-	local itemTbl = Quantum.Item.Get( slotitem[1] )
+local function setupWeaponItem( pl, itemTbl, dontSelect )
+	if( itemTbl.equipgive != nil ) then
+		pl:Give( itemTbl.equipgive, false )
+		if( !dontSelect ) then pl:SelectWeapon( itemTbl.equipgive ) end
+	end
+end
 
-	if( itemTbl != nil ) then
-		local equipslot = itemTbl.equipslot
+local function setupEquipedItem( pl, itemTbl )
+	if( itemTbl.equipeffect != nil ) then
+		Quantum.Effect.Give( pl, itemTbl.equipeffect ) -- give the player the effect
+	end
+	setupWeaponItem( pl, itemTbl )
+end
 
-		if( equipslot == nil ) then 
-			Quantum.Error( tostring(pl) .. " tried to equip an non-equippable item: (" .. tostring(itemTbl[1]) .. ")" )
-			return 
-		else
-			local equipslotKey = table.KeyFromValue( Quantum.EquipSlots, equipslot )
-			if( equipslotKey != nil ) then
-
-				char.equipped[equipslot] = itemindex -- set it in the table
-				if( itemTbl.equipeffect != nil ) then
-					Quantum.Effect.Give( pl, itemTbl.equipeffect ) -- give the player the effect
-				end
-				if( itemTbl.equipgive != nil ) then
-					pl:Give( itemTbl.equipgive )
-					pl:SelectWeapon( itemTbl.equipgive ) 
-				end
-				Quantum.Debug( tostring(pl) .. " equipped item (" .. tostring(slotitem[1]) .. ") - (" .. tostring(itemindex) .. ")" )
-				-- NETWORKING --
-				Quantum.Net.Inventory.SetEquipItem( pl, itemindex, equipslot )
-
-			else
-				Quantum.Error( tostring(pl) .. " tried to equip an item in a non-existent equip slot: (" .. tostring(equipslot) .. ")" )
-				return
-			end
+local function setupWeaponOnRespawn( pl, char )
+	char = char || Quantum.Server.Char.GetCurrentCharacter( pl )
+	local slotItem = Quantum.Server.Inventory.GetSlotItem( char, char.equipped[Quantum.EquipSlots.Weapon] )
+	if( slotItem != nil ) then
+		local itemTbl = Quantum.Item.Get( slotItem[1] )
+		if( itemTbl != nil ) then
+			setupEquipedItem( pl, itemTbl, true )
 		end
 	end
 end
+
+hook.Add( "PlayerSpawn", "Quantum_Inventory_Equip_GiveWeapon", function( ply ) 
+	setupWeaponOnRespawn( ply )
+	ply:SelectWeapon( "quantum_hands" )
+end)
 
 function Quantum.Server.Inventory.UnEquipItem( pl, equipslot, char )
 	char = char || Quantum.Server.Char.GetCurrentCharacter( pl )
@@ -79,6 +74,37 @@ function Quantum.Server.Inventory.UnEquipItem( pl, equipslot, char )
 		char.equipped[equipslot] = nil
 
 		Quantum.Net.Inventory.SetEquipItem( pl, -1, equipslot )
+	end
+end
+
+function Quantum.Server.Inventory.EquipItem( pl, itemindex )
+	local char = Quantum.Server.Char.GetCurrentCharacter( pl )
+	local slotitem = Quantum.Server.Inventory.GetSlotItem( char, itemindex ) 
+	local itemTbl = Quantum.Item.Get( slotitem[1] )
+
+	if( itemTbl != nil ) then
+		local equipslot = itemTbl.equipslot
+
+		if( equipslot == nil ) then 
+			Quantum.Error( tostring(pl) .. " tried to equip an non-equippable item: (" .. tostring(itemTbl[1]) .. ")" )
+			return 
+		else
+			local equipslotKey = table.KeyFromValue( Quantum.EquipSlots, equipslot )
+			if( equipslotKey != nil ) then
+
+				Quantum.Server.Inventory.UnEquipItem( pl, equipslot, char ) -- unequip the slot first
+				char.equipped[equipslot] = itemindex -- set it in the table
+				setupEquipedItem( pl, itemTbl ) -- setup the player
+
+				Quantum.Debug( tostring(pl) .. " equipped item (" .. tostring(slotitem[1]) .. ") - (" .. tostring(itemindex) .. ")" )
+				-- NETWORKING --
+				Quantum.Net.Inventory.SetEquipItem( pl, itemindex, equipslot )
+
+			else
+				Quantum.Error( tostring(pl) .. " tried to equip an item in a non-existent equip slot: (" .. tostring(equipslot) .. ")" )
+				return
+			end
+		end
 	end
 end
 
