@@ -41,9 +41,10 @@ Quantum.IntCode = {
 	USE_ITEM = 2,
 	EAT_ITEM = 3,
 	EQUIP_ITEM = 4,
-	DESTROY_ITEM = 5, -- to be added
-	UPDATE = 6,
-	BIT_SIZE = 4
+	UNEQUIP_ITEM = 5,
+	DESTROY_ITEM = 6, -- to be added
+	UPDATE = 7,
+	BIT_SIZE = 5
 }
 
 function Quantum.calculateNeededBits( n ) return math.ceil( math.log( n, 2 ) ) end

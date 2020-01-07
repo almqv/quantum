@@ -174,6 +174,9 @@ local intcodeFunctions = {
 	end,
 	[Quantum.IntCode.EQUIP_ITEM] = function( pl, index, itemid, amount )
 		Quantum.Server.Inventory.EquipItem( pl, index )
+	end,
+	[Quantum.IntCode.UNEQUIP_ITEM] = function( pl, equipslot, itemid, amount )
+		Quantum.Server.Inventory.UnEquipItem( pl, equipslot )
 	end
 }
 

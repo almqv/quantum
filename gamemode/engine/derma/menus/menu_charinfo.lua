@@ -64,12 +64,16 @@ local function createEquipSlotPanel( equiptype, x, y, scale, parent )
 		theme.itempanel( self, self.itemcolor, true )
 	end
 
-	function p.SetItem( itemid )
-		--local itemid = itempanel.item.id
-		local itemTbl = Quantum.Item.Get( itemid )
-		if( itemTbl != nil ) then
-			--itempanel:Remove()
+	function p.SetItem( itemindex, itemid )
+		local item = Quantum.Client.Inventory[itemindex]
+		
+		
+		if( item != nil ) then
+			itemid = itemid || item[1]
+			local itemTbl = Quantum.Item.Get( itemid )
+
 			p.itemid = itemid -- give it its equipped item
+			p.itemindex = itemindex
 			p.itemcolor = itemTbl.rarity.color -- give it its color
 
 			p.item = itemTbl
@@ -121,7 +125,7 @@ end
 local function getItemInSlot( pos )
 	local inv = Quantum.Client.Inventory  || {}
 	if( inv[pos] != nil ) then
-		return inv[pos][1]
+		return pos, inv[pos][1]
 	else
 		return
 	end

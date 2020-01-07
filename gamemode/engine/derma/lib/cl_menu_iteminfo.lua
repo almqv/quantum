@@ -189,32 +189,65 @@ function iteminfo.giveoptions( p, page )
 
 	if( item.equipslot != nil ) then -- Equip
 
-		op.equip = vgui.Create( "DButton", options )
-		op.equip:SetText( "Equip (" .. Quantum.EquipSlotsNames[item.equipslot] .. ")" )
-		op.equip:SetFont( "q_item_option_button" )
-		op.equip:SizeToContents()
-		op.equip.w, op.equip.h = op.equip:GetSize()
-		op.equip:SetPos( xbasepos, ypos )
-		op.equip.x, op.equip.y = op.equip:GetPos()
-		op.equip.Paint = function( self )
-			theme.iteminfobutton( self )
-		end
-		op.equip.DoClick = function( self )
-			surface.PlaySound( "UI/buttonclick.wav" )
-			options.Close()
+		if( page.equippanels[item.equipslot].itemindex != index ) then
 
-			if( page.equippanels[item.equipslot] != nil ) then
-				page.equippanels[item.equipslot].SetItem( item.id ) -- set its item
+			op.equip = vgui.Create( "DButton", options )
+			op.equip:SetText( "Equip (" .. Quantum.EquipSlotsNames[item.equipslot] .. ")" )
+			op.equip:SetFont( "q_item_option_button" )
+			op.equip:SizeToContents()
+			op.equip.w, op.equip.h = op.equip:GetSize()
+			op.equip:SetPos( xbasepos, ypos )
+			op.equip.x, op.equip.y = op.equip:GetPos()
+			op.equip.Paint = function( self )
+				theme.iteminfobutton( self )
+			end
+			op.equip.DoClick = function( self )
+				surface.PlaySound( "UI/buttonclick.wav" )
+				options.Close()
+
+				if( page.equippanels[item.equipslot] != nil ) then
+					page.equippanels[item.equipslot].SetItem( index ) -- set its item
+				end
+
+				if( page.markedItemPanel[item.equipslot] != nil ) then 
+					page.markedItemPanel[item.equipslot]:SetVisible( false ) -- unmark the old panel
+				end
+				p.mark:SetVisible( true ) -- mark the new one
+				page.markedItemPanel[item.equipslot] = p.mark -- and save it to the table for future use
+
+				---- EQUIP NET ----
+				Quantum.Client.InventoryNet.EquipItem( index )
 			end
 
-			if( page.markedItemPanel[item.equipslot] != nil ) then 
-				page.markedItemPanel[item.equipslot]:SetVisible( false ) -- unmark the old panel
-			end
-			p.mark:SetVisible( true ) -- mark the new one
-			page.markedItemPanel[item.equipslot] = p.mark -- and save it to the table for future use
+		else
 
-			---- EQUIP NET ----
-			Quantum.Client.InventoryNet.EquipItem( index )
+			op.equip = vgui.Create( "DButton", options )
+			op.equip:SetText( "Unequip (" .. Quantum.EquipSlotsNames[item.equipslot] .. ")" )
+			op.equip:SetFont( "q_item_option_button" )
+			op.equip:SizeToContents()
+			op.equip.w, op.equip.h = op.equip:GetSize()
+			op.equip:SetPos( xbasepos, ypos )
+			op.equip.x, op.equip.y = op.equip:GetPos()
+			op.equip.Paint = function( self )
+				theme.iteminfobutton( self )
+			end
+			op.equip.DoClick = function( self )
+				surface.PlaySound( "UI/buttonclick.wav" )
+				options.Close()
+				
+				if( page.equippanels[item.equipslot] != nil ) then
+					page.equippanels[item.equipslot].SetItem( nil ) -- remove the item from the display
+				end
+	
+				if( page.markedItemPanel[item.equipslot] != nil ) then 
+					page.markedItemPanel[item.equipslot]:SetVisible( false ) -- unmark the panel
+				end
+				page.markedItemPanel[item.equipslot] = nil -- remove it from the table so its spot is free
+	
+				---- EQUIP NET ----
+				Quantum.Client.InventoryNet.UnequipItem( item.equipslot )
+			end
+
 		end
 		ypos = ypos + op.equip.h + yspacing
 	
