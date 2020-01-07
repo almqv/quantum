@@ -73,6 +73,18 @@ Quantum.Server.Settings.PainSounds.Male = {
 	"vo/npc/male01/pain09.wav"
 }
 
+Quantum.Server.Settings.PainSounds.Female = {
+	"vo/npc/female01/pain01.wav",
+	"vo/npc/female01/pain02.wav",
+	"vo/npc/female01/pain03.wav",
+	"vo/npc/female01/pain04.wav",
+	"vo/npc/female01/pain05.wav",
+	"vo/npc/female01/pain06.wav",
+	"vo/npc/female01/pain07.wav",
+	"vo/npc/female01/pain08.wav",
+	"vo/npc/female01/pain09.wav"
+}
+
 Quantum.Server.Settings.DamageHurtSoundRepeatChance = 90 -- %
 
 Quantum.Server.Settings.IdlePainSounds = {}
@@ -82,6 +94,14 @@ Quantum.Server.Settings.IdlePainSounds.Male = {
 	"vo/npc/male01/moan03.wav",
 	"vo/npc/male01/moan04.wav",
 	"vo/npc/male01/moan05.wav"
+}
+
+Quantum.Server.Settings.IdlePainSounds.Female = {
+	"vo/npc/female01/moan01.wav",
+	"vo/npc/female01/moan02.wav",
+	"vo/npc/female01/moan03.wav",
+	"vo/npc/female01/moan04.wav",
+	"vo/npc/female01/moan05.wav"
 }
 
 --- Features to be added ---

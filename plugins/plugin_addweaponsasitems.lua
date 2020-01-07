@@ -27,7 +27,7 @@ local function createItemName( entclass )
 	local str = string.Replace( entclass, "_", " " )
 
 	for i, ns in pairs( plugin.types ) do
-		str = string.Replace( str, ns, "" )
+		str = string.gsub( str, ns, "" )
 	end
 
 	return string.upper( str )
@@ -56,8 +56,10 @@ end
 function plugin.CreateItems( weps )
 	for _, wepID in pairs( weps ) do
 		local swepTbl = weapons.Get( wepID ) 
-		Quantum.Debug( "Added " .. wepID .. " as an item!" )
-		local wepName = createItemName( wepID )
+		local wepName = swepTbl.PrintName
+		if( wepName == "Scripted Weapon" || wepName == wepID ) then 
+			wepName = createItemName( wepID )
+		end
 		Quantum.Item.Create( wepID, {
 			name = wepName, 
 			desc = "A firearm." || swepTbl.Purpose,

@@ -146,13 +146,16 @@ function Quantum.Net.Inventory.Update( pl )
 	Quantum.Debug( "Updating " .. tostring(pl) .. " character." )
 
 	local charTbl = Quantum.Server.Char.GetCurrentCharacter( pl )
-	local char = { money = charTbl.money, model = charTbl.model, name = charTbl.name }
 
-	net.Start( "quantum_char_update" )
-		net.WriteTable( Quantum.Server.Char.GetInventory( charTbl ) )
-		net.WriteTable( char )
-		net.WriteTable( charTbl.equipped )
-	net.Send( pl )
+	if( charTbl != nil ) then
+		local char = { money = charTbl.money, model = charTbl.model, name = charTbl.name }
+
+		net.Start( "quantum_char_update" )
+			net.WriteTable( Quantum.Server.Char.GetInventory( charTbl ) )
+			net.WriteTable( char )
+			net.WriteTable( charTbl.equipped )
+		net.Send( pl )
+	end
 end
 
 local intcodeFunctions = {

@@ -24,6 +24,7 @@ local function CreateCharTable( args )
 		maxhealth = Quantum.Server.Settings.MaxHealth,
 		health = args.health || Quantum.Server.Settings.MaxHealth,
 		model = setMdl || "models/player.mdl", 
+		gender = args.gender || "Male",
 		money = args.money || Quantum.Server.Settings.StarterMoney,
 		inventory = args.inventory || {}, -- create new inventory later
 		jobs = args.jobs || {

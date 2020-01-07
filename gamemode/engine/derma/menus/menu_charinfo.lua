@@ -234,6 +234,32 @@ function menu.open( dt )
 		ent:SetEyeTarget( eyepos + Vector( 40, -5, 2 ) )
 		function char:LayoutEntity( Entity ) return end
 
+		---- Inventory panel ----
+
+		local inv = vgui.Create( "DPanel", f ) -- section for all of the item panels
+		inv:SetSize( f.w - char.w, f.h - bar.h )
+		inv.w, inv.h = inv:GetSize()
+		inv:SetPos( char.w, bar.h )
+		inv.Paint = function( self, w, h ) 
+			surface.SetDrawColor( 0, 0, 0, 0 )
+			surface.DrawRect( 0, 0, w, h )
+		end
+
+		local maxW, maxH = Quantum.Inventory.Width, Quantum.Inventory.Height
+
+		local itempanels = {}
+				
+		local count = 0
+		local xbasepos, ybasepos = 0, 0
+		local xintervall, yintervall = itemWidth + padding/2, itemHeight + padding/2
+		local xpos, ypos = 0, 0
+		local rows = 0
+
+		local itemframe = vgui.Create( "DPanel", inv ) -- container for all of the item panels
+		itemframe:SetSize( inv:GetSize() )
+		itemframe:SetPos( 0, 0 )
+		itemframe.Paint = function( self, w, h ) end
+
 		---- EQUIP INFO----
 		f.markedItemPanel = {}
 		f.equippanels = {} -- so we can access it later
@@ -269,32 +295,6 @@ function menu.open( dt )
 		-- WEAPON
 		f.equippanels[Quantum.EquipSlots.Weapon] = createEquipSlotPanel( Quantum.EquipSlots.Weapon, slotXpos + equipSlot_PanelWidth + equipSlotSpacing/2, (equipSlotYpos + equipSlot_PanelHeight) / 2, slotScale, f ) -- create the panel
 		f.equippanels[Quantum.EquipSlots.Weapon].SetItem( getItemInSlot(equipped[ Quantum.EquipSlots.Weapon ]) ) -- give its current item
-
-		---- Inventory panel ----
-
-		local inv = vgui.Create( "DPanel", f ) -- section for all of the item panels
-		inv:SetSize( f.w - char.w, f.h - bar.h )
-		inv.w, inv.h = inv:GetSize()
-		inv:SetPos( char.w, bar.h )
-		inv.Paint = function( self, w, h ) 
-			surface.SetDrawColor( 0, 0, 0, 0 )
-			surface.DrawRect( 0, 0, w, h )
-		end
-
-		local maxW, maxH = Quantum.Inventory.Width, Quantum.Inventory.Height
-
-		local itempanels = {}
-				
-		local count = 0
-		local xbasepos, ybasepos = 0, 0
-		local xintervall, yintervall = itemWidth + padding/2, itemHeight + padding/2
-		local xpos, ypos = 0, 0
-		local rows = 0
-
-		local itemframe = vgui.Create( "DPanel", inv ) -- container for all of the item panels
-		itemframe:SetSize( inv:GetSize() )
-		itemframe:SetPos( 0, 0 )
-		itemframe.Paint = function( self, w, h ) end
 
 		for ii=1, maxW * maxH, 1 do -- create all of the item panels
 			if( ii != 1 ) then count = count + 1 end

@@ -18,7 +18,7 @@ Quantum.Rarity = {
 	Rare = { txt = "Rare", color = Color( 48, 163, 230, 40 ) },
 	Epic = { txt = "Epic", color = Color( 220, 90, 90, 40 ) },
 	Legendary = { txt = "Legendary", color = Color( 235, 125, 52, 40 ) },
-	Weapon = { txt = "Illegal", color = Color( 220, 90, 90, 40 ) }
+	Weapon = { txt = "Weapon", color = Color( 220, 90, 90, 40 ) }
 }
 
 Quantum.EquipSlots = {

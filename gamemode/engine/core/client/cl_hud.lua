@@ -8,7 +8,7 @@
 local enabledHUDs = {
 	["CHudChat"] = true,
 	["CHudGMod"] = true,
-	["CHudWeaponSelection"] = true
+	["CHudWeaponSelection"] = false
 }
 
 hook.Add( "HUDShouldDraw", "Quantum_RemoveDefualtHUD", function( hudid ) 

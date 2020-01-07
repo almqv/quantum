@@ -9,7 +9,7 @@ Quantum.Server.Player = {}
 
 local ply = FindMetaTable( "Player" )
 
-function GM:PlayerSelectSpawn( pl )
+function GM:PlayerSelectSpawn( ply )
 	return -- return nothing because we dont wont the player to spawn anywhere
 end
 
@@ -20,6 +20,12 @@ function GM:PlayerInitialSpawn( ply )
 end
 
 local function setUpPlayer( ply )
+	local plchar = Quantum.Server.Char.GetCurrentCharacter( ply )
+
+	if( plchar != nil ) then
+		ply:SetModel( plchar.model )
+	end
+	
 	if( ply:GetModel() ~= nil ) then
 		ply:SetupHands()
 	else
@@ -39,6 +45,8 @@ local function setUpPlayer( ply )
 
 	ply:Give( "quantum_hands" )
 	ply:SetActiveWeapon( "quantum_hands" )
+
+	ply:SetFOV( 80 )
 
 	Quantum.Debug( tostring( ply ) .. charnametxt  )
 end

@@ -13,5 +13,5 @@ Quantum.EquipSlotsNames = {
 	[Quantum.EquipSlots.Chest] = "Chest",
 	[Quantum.EquipSlots.Legs] = "Legs",
 	[Quantum.EquipSlots.Boots] = "Boots",
-	[Quantum.EquipSlots.Weapon] = "Weapon",
+	[Quantum.EquipSlots.Weapon] = "Main hand",
 }

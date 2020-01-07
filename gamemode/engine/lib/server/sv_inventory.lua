@@ -27,6 +27,7 @@ end
 
 local function setupWeaponItem( pl, itemTbl, dontSelect )
 	if( itemTbl.equipgive != nil ) then
+		pl:StripAmmo()
 		pl:Give( itemTbl.equipgive, false )
 		if( !dontSelect ) then pl:SelectWeapon( itemTbl.equipgive ) end
 	end
@@ -51,8 +52,10 @@ local function setupWeaponOnRespawn( pl, char )
 end
 
 hook.Add( "PlayerSpawn", "Quantum_Inventory_Equip_GiveWeapon", function( ply ) 
-	setupWeaponOnRespawn( ply )
-	ply:SelectWeapon( "quantum_hands" )
+	if( ply.isloaded ) then
+		setupWeaponOnRespawn( ply )
+		ply:SelectWeapon( "quantum_hands" )
+	end
 end)
 
 function Quantum.Server.Inventory.UnEquipItem( pl, equipslot, char )
