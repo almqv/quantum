@@ -7,12 +7,28 @@
 
 local plugin = {}
 
+plugin.AllowedTypes = {
+	["fas2"] = true,
+	["weapon"] = true,
+	["quantum"] = true,
+	["cw"] = true
+}
+
 function plugin.getAllWeaponID()
 	local returnTbl = {}
-	for _, wep in pairs( weapons.GetList() ) do
-		if( wep.ClassName != "weapon_base" && wep.ClassName != "quantum_hands" && wep.ClassName != "quantum_keys" ) then -- do not want them
-			returnTbl[ #returnTbl + 1 ] = wep.ClassName
+	for _, ent in pairs( weapons.GetList()  ) do
+
+		local classname = ent.ClassName
+		local splitTbl = string.Split( classname, "_" )
+		local entType = splitTbl[1]
+
+		if( plugin.AllowedTypes[entType] ) then
+			local wep = weapons.Get( classname )
+			if( classname != "weapon_base" && classname != "quantum_hands" && classname != "quantum_keys" ) then -- do not want them
+				returnTbl[ #returnTbl + 1 ] = classname
+			end
 		end
+
 	end
 
 	return returnTbl
@@ -21,8 +37,9 @@ end
 function plugin.CreateItems( weps )
 	for _, wepID in pairs( weps ) do
 		local swepTbl = weapons.Get( wepID ) 
+		Quantum.Debug( "Added " .. wepID .. " as an item!" )
 		Quantum.Item.Create( wepID, {
-			name = swepTbl.PrintName , 
+			name = swepTbl.PrintName, 
 			desc = swepTbl.Purpose,
 			model = swepTbl.WorldModel,
 			rarity = Quantum.Rarity.Common, 

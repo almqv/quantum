@@ -126,9 +126,9 @@ if SERVER then
 			MsgC( "\n" )
 			Quantum.Debug( "Loading plugins...")
 			for _, file in pairs( pluginFiles ) do
+				Quantum.Debug( "Added plugin: " .. fol .. file )
 				AddCSLuaFile( fol .. file )
 				include( fol .. file )
-				Quantum.Debug( "Added plugin: " .. fol .. file )
 			end
 		else
 			MsgC( "\n" )
