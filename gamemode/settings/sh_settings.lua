@@ -21,6 +21,8 @@ Quantum.Inventory = {
 Quantum.InventoryOpenDelay = 0.35
 Quantum.ItemPickupTime = 0.5 -- seconds
 
+Quantum.HolsterTime = 1 -- seconds
+
 Quantum.Money = {
 	Prefix = "$",
 	Surfix = ""
@@ -28,7 +30,7 @@ Quantum.Money = {
 
 Quantum.Bind = {
 	OpenInventory = KEY_TAB,
-	HolsterWeapon = ""
+	HolsterMain = KEY_F
 }
 
 Quantum.Models = {
