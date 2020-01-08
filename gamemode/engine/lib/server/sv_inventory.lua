@@ -400,3 +400,8 @@ function Quantum.Server.Inventory.EatItem( pl, index )
 		end
 	end
 end
+
+
+function Quantum.Server.Inventory.FindItemSlots( pl, itemid )
+	return
+end
