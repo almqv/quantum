@@ -67,7 +67,6 @@ local function createEquipSlotPanel( equiptype, x, y, scale, parent )
 	function p.SetItem( itemindex, itemid )
 		local item = Quantum.Client.Inventory[itemindex]
 		
-		
 		if( item != nil ) then
 			itemid = itemid || item[1]
 			local itemTbl = Quantum.Item.Get( itemid )
@@ -97,6 +96,10 @@ local function createEquipSlotPanel( equiptype, x, y, scale, parent )
 			p.itemid = nil -- remove its item id
 			p.itemcolor = nil -- remove the background color
 		end
+	end
+
+	function p.GetCurrentEquipedIndex()
+		return p.itemindex
 	end
 
 	p.icon = vgui.Create( "DModelPanel", p )
@@ -397,10 +400,12 @@ function menu.open( dt )
 				----
 
 				---- Click Options ---- 
-				itempanels[ii].icon.options = iteminfo.giveoptions( itempanels[ii].icon, f, itempanels[ii].item.amount )
-
 				itempanels[ii].icon.DoClick = function( self )
 					surface.PlaySound( "UI/buttonclick.wav" )
+
+					if( self.options ) then self.options:Remove() end -- remove old options panel if it exists
+
+					self.options = iteminfo.giveoptions( self, f, itempanels[ii].item.amount ) -- create a options panel
 					self.options.Open()	
 				end
 

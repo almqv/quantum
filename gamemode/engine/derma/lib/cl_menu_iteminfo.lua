@@ -161,19 +161,21 @@ function iteminfo.giveoptions( p, page )
 		if( page.shownOption == options ) then
 			page.shownOption = nil
 			page.showtooltips = true
-			options:SetVisible( false )
-			options:SetPos( 0, 0 )
+			options:Remove()
 		elseif( page.shownOption != nil ) then
 			page.shownOption.Close()
 		end
 	end
+
+	options.panels = {}
+
 	---- all of the option panels ----
 	local xbasepos, ybasepos = padding_s, padding_s -- everything needs to be a bit to the side on both axises
 
 	local ypos = ybasepos
 	local yspacing = padding/4
 
-	local op = {}
+	local op = options.panels
 
 	---- Allways create the title for the item ----
 	op.title = vgui.Create( "DLabel", options )
@@ -189,8 +191,8 @@ function iteminfo.giveoptions( p, page )
 
 	if( item.equipslot != nil ) then -- Equip
 
-		if( page.equippanels[item.equipslot].itemindex != index ) then
-
+		if( page.equippanels[item.equipslot].GetCurrentEquipedIndex() != index ) then
+			print( "TRUE", page.equippanels[item.equipslot].GetCurrentEquipedIndex(), index )
 			op.equip = vgui.Create( "DButton", options )
 			op.equip:SetText( "Equip (" .. Quantum.EquipSlotsNames[item.equipslot] .. ")" )
 			op.equip:SetFont( "q_item_option_button" )
@@ -220,7 +222,7 @@ function iteminfo.giveoptions( p, page )
 			end
 
 		else
-
+			print( "FALSE", page.equippanels[item.equipslot].GetCurrentEquipedIndex(), index )
 			op.equip = vgui.Create( "DButton", options )
 			op.equip:SetText( "Unequip (" .. Quantum.EquipSlotsNames[item.equipslot] .. ")" )
 			op.equip:SetFont( "q_item_option_button" )
@@ -237,6 +239,7 @@ function iteminfo.giveoptions( p, page )
 				
 				if( page.equippanels[item.equipslot] != nil ) then
 					page.equippanels[item.equipslot].SetItem( nil ) -- remove the item from the display
+					page.equippanels[item.equipslot].itemindex = nil
 				end
 	
 				if( page.markedItemPanel[item.equipslot] != nil ) then 

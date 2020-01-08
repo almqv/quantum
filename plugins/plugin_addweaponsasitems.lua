@@ -11,6 +11,7 @@ plugin.types = {
 	pwb = "weapon_pwb",
 	quantum = "quantum",
 	cw = "cw",
+	fas2 = "fas2",
 	m9k = "m9k",
 	weapon = "weapon"
 }
@@ -20,7 +21,8 @@ plugin.AllowedTypes = {
 	[plugin.types.weapon] = true,
 	[plugin.types.quantum] = true,
 	[plugin.types.cw] = true,
-	[plugin.types.m9k] = true
+	[plugin.types.m9k] = true,
+	[plugin.types.fas2] = true
 }
 
 local function createItemName( entclass )
