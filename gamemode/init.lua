@@ -14,6 +14,7 @@ if SERVER then
 	AddCSLuaFile( "settings/sh_settings.lua" )
 	AddCSLuaFile( "settings/sh_items.lua" )
 	AddCSLuaFile( "settings/sh_effects.lua" )
+	AddCSLuaFile( "settings/sh_recipes.lua" )
 
 	AddCSLuaFile( "cl_init.lua" )
 	AddCSLuaFile( "shared.lua" )
@@ -114,6 +115,7 @@ if SERVER then
 	local function loadAllItemsAndEffects()
 		include( "settings/sh_items.lua" )
 		include( "settings/sh_effects.lua" )
+		include( "settings/sh_recipes.lua" )
 	end
 
 	local function loadPlugins()

@@ -13,10 +13,11 @@ function Quantum.Recipe.Add( itemid, station, tbl )
 	if( Quantum.Item.Get( itemid ) == nil ) then return end
 
 	local returnTbl = {
-		name = tbl.name || "Secret Recipe" -- name of the recipe
-		station = station,
-		creates = itemid -- what the recipe creates
-		amount = tbl.amount -- how much you get from 1 craft
+		name = tbl.name || "Secret Recipe", -- name of the recipe
+		station = station, -- where you can craft it ( at what "crafting table" can you make it at )
+		creates = itemid, -- what the recipe creates
+		delay = tbl.delay || Quantum.MinCraftDelay,
+		amount = tbl.amount || 1, -- how much you get from 1 craft
 		recipe = tbl.recipe || {}
 	}
 
@@ -61,22 +62,5 @@ function Quantum.Recipe.CanMake( inv, itemid )
 
 		return #failedReq <= 0, failedReq
 
-	end
-end
-
-function Quantum.Recipe.MakeItem( pl, itemid )
-	local recipe = Quantum.Recipe.Get( itemid )
-	local char = Quantum.Server.Char.GetCurrentCharacter( pl )
-	local inv = Quantum.Server.Char.GetInventory( char )
-
-	if( recipe != nil ) then
-		local canMake, failedReq = Quantum.Recipe.CanMake( inv, itemid )
-
-		if( canMake ) then
-			-- create item
-		else
-			-- Dont make the item
-			return
-		end
 	end
 end
