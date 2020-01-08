@@ -188,6 +188,20 @@ function Quantum.Server.Inventory.FindStackable( char, item )
 	end
 end
 
+function Quantum.Server.Inventory.GetItemAmount( char, itemid, inv )
+	inv = inv || Quantum.Server.Char.GetInventory( char )
+	local amount = 0
+
+	for pos, item in pairs( inv ) do
+		if( item[1] == itemid && item[2] != nil ) then
+			if( item[2] > 0 ) then
+				amount = amount + item[2]
+			end
+		end
+	end
+	return amount
+end
+
 function Quantum.Server.Inventory.FindItemSpot( char )
 	local inv = Quantum.Server.Char.GetInventory( char )
 	local pos = 0

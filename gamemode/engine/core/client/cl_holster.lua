@@ -32,9 +32,11 @@ function Quantum.Client.Holster.SwitchHolster()
 		local curWep= getCurEquippedWeapon()
 		if( curWep != nil && curWep != "quantum_hands" ) then
 			local wepEnt = client:GetWeapon( curWep )
-			client:SelectWeapon( client:GetWeapon( curWep ) )
+			print(wepEnt)
+			input.SelectWeapon( wepEnt )
 		else
-			client:SelectWeapon( client:GetWeapon( "quantum_hands" ) )
+			local wepEnt = client:GetWeapon( "quantum_hands" )
+			input.SelectWeapon( wepEnt )
 		end
 	end
 end
@@ -57,7 +59,7 @@ function Quantum.Client.Holster.CheckBind()
 end
 
 hook.Add( "Think", "Quantum_Client_Holster_Hook", function() 
-	-- if( !Quantum.Client.IsInMenu ) then
-	-- 	Quantum.Client.Holster.CheckBind()
-	-- end
+	if( !Quantum.Client.IsInMenu ) then
+		Quantum.Client.Holster.CheckBind()
+	end
 end)

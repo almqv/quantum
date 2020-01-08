@@ -30,7 +30,7 @@ Quantum.Money = {
 
 Quantum.Bind = {
 	OpenInventory = KEY_TAB,
-	HolsterMain = KEY_F
+	HolsterMain = KEY_Q
 }
 
 Quantum.Models = {
