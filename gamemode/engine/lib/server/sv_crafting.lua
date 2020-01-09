@@ -36,15 +36,20 @@ function Quantum.Server.Crafting.MakeItem( pl, itemid )
 
 			setPlayerIsCrafting( pl, true )
 
-			timer.Create( "Quantum_Crafting_" ..pl:SteamID64(), recipe.delay, 1, function() 
+			timer.Create( "Quantum_Crafting_" .. pl:SteamID64(), recipe.delay, 1, function() 
 				-- remove the ingridients from the players inv
+				Quantum.Server.Inventory.FindItemSlots( pl, itemid, inv )
+
+				for k, reqItem in pairs( recipe.recipe ) do
+					print( "##", k, reqItem.item )
+				end
 	
 				-- create item
 			end)
 
 		else
 			-- Dont make the item
-			Quantum.Server.Notify.Deny( pl, "You don't have sufficient resources to create that item!" )
+			Quantum.Notify.Deny( pl, "You don't have sufficient resources to create that item!" )
 		end
 	end
 

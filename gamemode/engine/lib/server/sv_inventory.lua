@@ -402,6 +402,19 @@ function Quantum.Server.Inventory.EatItem( pl, index )
 end
 
 
-function Quantum.Server.Inventory.FindItemSlots( pl, itemid )
-	return
+function Quantum.Server.Inventory.FindItemSlots( pl, itemid, inv )
+	local char = Quantum.Server.Char.GetCurrentCharacter( pl )
+	inv = inv || Quantum.Server.Char.GetInventory( char )
+
+	local indexes = {}
+
+	for i, item in pairs( inv ) do
+		if( item != nil ) then
+			if( item[1] == itemid ) then
+				indexes[ #indexes + 1 ] = i
+			end
+		end
+	end
+
+	return indexes
 end
