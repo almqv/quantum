@@ -9,6 +9,7 @@
 Quantum.Recipe.Add( "potatoe", nil, { --Quantum.Server.Crafting.MakeItem( Entity(1), "potatoe" )
 	name = "Legendary Potatoe Recipe",
 	amount = 1,
+	delay = 5,
 	recipe = {
 		{ item = "test2", amount = 5 },
 		{ item = "test", amount = 2  }
