@@ -57,10 +57,16 @@ function Quantum.Server.Crafting.MakeItem( pl, itemid )
 
 						-- get items
 						local slots = Quantum.Server.Inventory.FindItemSlots( pl, reqItem.item, inv )
-
+						local itemCount = 0
 						-- loop through all slots and remove them
 						for i, slot in pairs( slots ) do
-							Quantum.Server.Inventory.RemoveSlotItem( pl, char, slot, reqItem.amount )
+							if( itemCount < reqItem.amount ) then 
+								itemCount = itemCount + inv[slot][2]
+								print( inv[slot][2] )
+								Quantum.Server.Inventory.RemoveSlotItem( pl, char, slot, inv[slot][2] )
+							end
+
+							if( i >= #slots ) then local itemCount = 0 end
 						end
 					end
 		
