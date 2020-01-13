@@ -21,7 +21,8 @@ function Quantum.Recipe.Add( itemid, station, tbl )
 		recipe = tbl.recipe || {}
 	}
 
-	Quantum.Recipes[ itemid ] = returnTbl
+	Quantum.Recipes[ itemid ] = returnTbl 
+	Quantum.Recipes[ itemid ].delay = math.Clamp( Quantum.Recipes[ itemid ].delay, Quantum.MinCraftDelay, Quantum.MaxCraftDelay ) 
 
 	return returnTbl
 end

@@ -6,7 +6,7 @@
 --   \_\ /_/    \_\_|_| |_| |_|_|\___|\___|_| |_| /_/  
 
 
-Quantum.Recipe.Add( "potatoe", nil, {
+Quantum.Recipe.Add( "potatoe", nil, { --Quantum.Server.Crafting.MakeItem( Entity(1), "potatoe" )
 	name = "Legendary Potatoe Recipe",
 	amount = 1,
 	recipe = {

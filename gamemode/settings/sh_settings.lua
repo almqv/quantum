@@ -23,6 +23,9 @@ Quantum.ItemPickupTime = 0.5 -- seconds
 
 Quantum.HolsterTime = 1 -- seconds
 
+Quantum.MinCraftDelay = 2
+Quantum.MaxCraftDelay = 60
+
 Quantum.Money = {
 	Prefix = "$",
 	Surfix = ""

@@ -34,7 +34,7 @@ function Quantum.Server.Crafting.MakeItem( pl, itemid )
 		if( canMake ) then
 			
 			cancelCrafting( pl ) -- stop the crafting if the player is allready crafting something
-			
+
 			-- and then craft this item instead
 			setPlayerIsCrafting( pl, true )
 
@@ -44,9 +44,13 @@ function Quantum.Server.Crafting.MakeItem( pl, itemid )
 
 				for k, reqItem in pairs( recipe.recipe ) do
 					print( "##", k, reqItem.item )
+					Quantum.Server.Inventory.RemoveSlotItem( pl, char, k, reqItem.amount )
 				end
 	
 				-- create item
+
+				Quantum.Server.Inventory.GiveItem( pl, recipe.creates, recipe.amount )
+				
 			end)
 
 		else
