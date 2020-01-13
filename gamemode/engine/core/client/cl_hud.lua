@@ -88,9 +88,63 @@ local function renderItemInfoHUD()
 	end
 end
 
+
+local pStart
+local pFrac
+
+local pW, pH = 250 * scale, 15 * scale
+local pBasePosX, pBasePosY = sw/2 - pW/2, (sh / 2)*1.25
+
+local function createCraftPanel()
+
+	local craft = vgui.Create( "DLabel" )
+	craft:SetText( "Crafting..." )
+	craft:SetFont( "q_craft_hud_text" )
+	craft:SetTextColor( Color( 255, 255, 255, 200 ) )
+	craft:SizeToContents()
+	craft.w, craft.h = craft:GetSize()
+	craft:SetPos( sw/2 - craft.w/2, sh*0.65 - craft.h/2 )
+
+	craft.frac = 0
+	craft.fadein = true
+	craft.startTime = CurTime()
+	local intervall = 1.25
+	local midIntervall = 0.2
+
+	craft.Think = function( self )
+		if( craft.fadein ) then
+			if( self.startTime == nil ) then self.startTime = CurTime() end
+			self.frac = Lerp( (CurTime() - self.startTime ) / intervall, 0, 1 )
+			self:SetAlpha( math.Clamp( 255 * self.frac, 5, 255 ) )
+			if( self.frac >= 1 ) then 
+				self.fadein = false 
+				self.startTime = nil
+				self.frac = 1
+			end
+		else
+			if( self.startTime == nil ) then self.startTime = CurTime() end
+			self.frac = Lerp( (CurTime() - self.startTime ) / intervall, 1, 0 )
+			self:SetAlpha( math.Clamp( 255 * self.frac, 5, 255 ) )
+			if( self.frac <= 0 ) then 
+				self.fadein = true
+				self.startTime = nil
+				self.frac = 1
+			end
+		end
+	end
+
+	return craft
+end
+
+local craftPanel
+
 local function renderActionDelayHUD()
 	if( LocalPlayer():GetNWBool( "Quantum_Craft_IsCrafting" ) ) then
-
+		if( !IsValid( craftPanel ) ) then
+			craftPanel = createCraftPanel()
+		end
+	else
+		if( IsValid( craftPanel ) ) then craftPanel:Remove() end
 	end
 end
 
@@ -222,6 +276,7 @@ function GM:HUDPaint()
 				if( LocalPlayer():Alive() ) then
 					renderStatHUD()
 					renderItemInfoHUD()
+					renderActionDelayHUD()
 				end
 			end
 		end
