@@ -22,18 +22,20 @@ local function cancelCrafting( pl )
 end
 
 function Quantum.Server.Crafting.MakeItem( pl, itemid )
+
 	local recipe = Quantum.Recipe.Get( itemid )
 	local char = Quantum.Server.Char.GetCurrentCharacter( pl )
 	local inv = Quantum.Server.Char.GetInventory( char )
 
 	if( recipe != nil ) then
+
 		local canMake, failedReq = Quantum.Recipe.CanMake( inv, itemid )
 
 		if( canMake ) then
 			
 			cancelCrafting( pl ) -- stop the crafting if the player is allready crafting something
+			
 			-- and then craft this item instead
-
 			setPlayerIsCrafting( pl, true )
 
 			timer.Create( "Quantum_Crafting_" .. pl:SteamID64(), recipe.delay, 1, function() 
@@ -49,7 +51,7 @@ function Quantum.Server.Crafting.MakeItem( pl, itemid )
 
 		else
 			-- Dont make the item
-			Quantum.Notify.Deny( pl, "You don't have sufficient resources to create that item!" )
+			Quantum.Notify.Deny( pl, "You don not have sufficient resources to create that item!" )
 		end
 	end
 
