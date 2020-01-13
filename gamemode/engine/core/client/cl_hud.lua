@@ -88,6 +88,12 @@ local function renderItemInfoHUD()
 	end
 end
 
+local function renderActionDelayHUD()
+	if( LocalPlayer():GetNWBool( "Quantum_Craft_IsCrafting" ) ) then
+
+	end
+end
+
 local function renderCharNamesHUD3D2D()
 	local entsNear = ents.FindInSphere( LocalPlayer():GetPos(), Quantum.CharInfoDisplayDistance )
 	local txtPadding = 32 * scale

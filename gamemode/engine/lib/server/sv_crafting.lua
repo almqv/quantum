@@ -8,9 +8,15 @@
 Quantum.Server.Crafting = {}
 
 
-local function setPlayerIsCrafting( pl, iscrafting )
+local function setPlayerIsCrafting( pl, iscrafting, delay )
 	pl.iscrafting = iscrafting
 	pl:SetNWBool( "Quantum_Craft_IsCrafting", iscrafting )
+
+	if( delay ) then
+		pl:SetNWInt( "Quantum_Craft_IsCrafting_Delay", delay ) -- a bit expensive but it should do the trick
+	else
+		pl:SetNWInt( "Quantum_Craft_IsCrafting_Delay", 0 )
+	end
 end
 
 local function isPlayerCrafting( pl ) 
@@ -63,6 +69,8 @@ function Quantum.Server.Crafting.MakeItem( pl, itemid )
 					Quantum.Server.Inventory.GiveItem( pl, recipe.creates, recipe.amount )
 					Quantum.Notify.ItemCrafted( pl, Quantum.Item.Get( recipe.creates ), recipe.amount )
 					setPlayerIsCrafting( pl, false ) -- when everything is done then set this to false
+
+					pl:EmitSound( Quantum.Server.Settings.ItemPickupSound ) -- make a sound on craft
 				end)
 
 			end
