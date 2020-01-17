@@ -189,7 +189,6 @@ function menu.open( dt )
 
 		local keycodesClose = {
 			[KEY_ESCAPE] = true,
-			[KEY_F2] = true,
 			[KEY_TAB] = true
 		}
 
