@@ -217,9 +217,15 @@ function menu.open( dt )
 			theme.blurpanel( self, Color( 255, 255, 255, 1 ) )
 		end
 
+		local items = {
+			"test",
+			"test2",
+			"potatoe",
+			"bomb"
+		}
 		for i=1, 10 do  ---- ADD CRAFT SELECT PANELS HERE
 			local p = createItemPanel( 200, 200*(i-1), 1.25, scroll, f )
-			p.SetItem( "potatoe" )
+			p.SetItem( table.Random( items ) )
 		end
 
 
