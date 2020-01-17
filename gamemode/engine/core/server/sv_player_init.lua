@@ -48,7 +48,7 @@ local function setUpPlayer( ply )
 	ply:Give( "quantum_hands" )
 	ply:SelectWeapon( "quantum_hands" )
 
-	Quantum.Debug( tostring( ply ) .. charnametxt  )
+	Quantum.Debug( Quantum.PrintPlayer( pl ) .. charnametxt  )
 end
 
 function GM:PlayerSpawn( ply )

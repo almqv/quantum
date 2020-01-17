@@ -367,7 +367,7 @@ function Quantum.Server.Inventory.DropItem( pl, index, amount ) -- Quantum.Serve
 			Quantum.Server.Item.SpawnItemAtPlayer( pl, itemid, amount ) 
 		end
 	else
-		Quantum.Error( "Player " .. tostring( pl ) .. " tried to drop a something from index=" .. tostring(index) .. " where there exists no item." )
+		Quantum.Error( "Player " .. Quantum.PrintPlayer( pl ) .. " tried to drop a something from index=" .. tostring(index) .. " where there exists no item." )
 	end
 end
 

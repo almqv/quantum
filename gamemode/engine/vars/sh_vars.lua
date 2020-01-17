@@ -52,3 +52,7 @@ function Quantum.calculateNeededBits( n ) return math.ceil( math.log( n, 2 ) ) e
 function Quantum.WriteIntcode( intcode ) 
 	net.WriteInt( intcode, Quantum.IntCode.BIT_SIZE ) 
 end
+
+function Quantum.PrintPlayer( pl )
+	return pl:Nick() .. " | " .. pl:SteamID()
+end

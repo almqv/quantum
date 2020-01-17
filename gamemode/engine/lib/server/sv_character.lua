@@ -64,7 +64,7 @@ function Quantum.Server.Char.Remove( pl, index )
 end
 
 function Quantum.Server.Char.GetCurrentCharacter( pl )
-	if( pl.character == nil ) then Quantum.Error( tostring( pl ) .. " doesn't have a character! Unable to get current character table." ) end
+	if( pl.character == nil ) then Quantum.Error( Quantum.PrintPlayer( pl ) .. " doesn't have a character! Unable to get current character table." ) end
 	return pl.character
 end
 

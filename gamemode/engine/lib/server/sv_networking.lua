@@ -18,26 +18,27 @@ local function checkCacheTable( ply, cache_id, dt )
 		Quantum.Error( tostring(ply) .. " does not have a cache table, creating..." )
 		ply.cache = {} 
 		if( ply.cache ~= nil ) then Quantum.Debug( "Success! Created cache table for " .. tostring(ply) ) end
-	else
-		if( ply.cache[cache_id] == nil ) then
-			Quantum.Debug( tostring(ply) .. " does not have a cache for '" .. tostring(cache_id) .. "'. Creating..." )
-			ply.cache[cache_id] = {
-				id = cache_id,
-				cache = datatable
-			}
-			if( ply.cache[cache_id] ~= nil && table.Count( ply.cache[cache_id] ) >= 1 ) then
-				Quantum.Debug( "Success! Created cache '" .. tostring(cache_id) .. "' for " .. tostring(ply) .. "." )
-				if( ply.cache[cache_id].count == nil ) then 
-					ply.cache[cache_id].count = 1 
-				else 
-					ply.cache[cache_id].count = ply.cache[cache_id].count + 1 -- keep count
-				end 
-			else
-				Quantum.Error( "Failed. Creation of cache '" .. tostring(cache_id) .. "' for " .. tostring(ply) .. " failed to validate or did not get created." )
-				ply.cache[cache_id] = nil -- remove the cache since it is "broken"
-			end
+	end
+
+	if( ply.cache[cache_id] == nil ) then
+		Quantum.Debug( tostring(ply) .. " does not have a cache for '" .. tostring(cache_id) .. "'. Creating..." )
+		ply.cache[cache_id] = {
+			id = cache_id,
+			cache = datatable
+		}
+		if( ply.cache[cache_id] ~= nil ) then
+			Quantum.Debug( "Success! Created cache '" .. tostring(cache_id) .. "' for " .. tostring(ply) .. "." )
+			if( ply.cache[cache_id].count == nil ) then 
+				ply.cache[cache_id].count = 1 
+			else 
+				ply.cache[cache_id].count = ply.cache[cache_id].count + 1 -- keep count
+			end 
+		else
+			Quantum.Error( "Failed. Creation of cache '" .. tostring(cache_id) .. "' for " .. tostring(ply) .. " failed to validate or did not get created." )
+			ply.cache[cache_id] = nil -- remove the cache since it is "broken"
 		end
 	end
+
 	return ply.cache[cache_id]
 end
 
@@ -45,7 +46,6 @@ local function CacheDatatableMethod( id, datatable, ply )
 	ply.cache[id] = checkCacheTable( ply, id, datatable ) -- check caching tables etc
 	Quantum.Debug( "(" .. tostring(ply) .. " | " .. tostring(id) .. ") Removing known data in cache from datatable..." )
 	if( ply.cache[id] ~= nil ) then
-		PrintTable(ply.cache[id])
 		if( ply.cache[id].count > 1 ) then -- dont want to filter out data if this is the first time.
 			for k, v in pairs( datatable ) do -- loop through the datatable
 				for k2, v2 in pairs( table.GetKeys( ply.cache[id].cache ) ) do -- check each key with each key from the record cache
@@ -79,7 +79,7 @@ local function SendDatatableToClient( client, dt, type )
 			net.WriteTable( datatable ) -- send the data to the player
 		end
 	net.Send( client )
-	Quantum.Debug("Net message sent.")
+	Quantum.Debug("Net message sent.\n")
 end
 
 function Quantum.Net.OpenMenu( pl, type, dt )
@@ -95,10 +95,10 @@ local netfuncs = {
 	createChar = function( pl, args )
 		pl.charcount = Quantum.Server.Char.GetCharCount( pl ) 
 		if( #args.name > 16 ) then 
-			Quantum.Debug( "Player " .. tostring( pl ) .. " character name too long. Unable to create." )
+			Quantum.Debug( "Player " .. Quantum.PrintPlayer( pl ) .. " character name too long. Unable to create." )
 			return
 		elseif( pl.charcount + 1 > Quantum.CharacterLimit ) then -- character limit
-			Quantum.Debug( "Player " .. tostring( pl ) .. " tried to exceed their character limit." )
+			Quantum.Debug( "Player " .. Quantum.PrintPlayer( pl ) .. " tried to exceed their character limit." )
 			return 
 		end
 		Quantum.Server.Char.Load( pl, pl.charcount + 1, args )

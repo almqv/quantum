@@ -24,14 +24,6 @@ function ENT:Initialize()
 
 end
 
-function ENT:Use( activator, caller )
-	-- if( activator:IsPlayer() ) then
-	-- 	if( activator.isloaded ) then
-	-- 		Quantum.Net.OpenMenu( activator, "crafting" )
-	-- 	end
-	-- end
-end
-
 function ENT:InitializeStation( stationid, pos, ang )
 	if( pos == nil || ang == nil ) then return end
 
