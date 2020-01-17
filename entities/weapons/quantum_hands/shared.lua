@@ -12,6 +12,23 @@ if CLIENT then
 	SWEP.SlotPos = 0
 	SWEP.DrawAmmo = false
 	SWEP.DrawCrosshair = false
+
+	function SWEP:DrawHUD()
+		--if( self:GetOwner():IsSuperAdmin() ) then
+			
+			local hitpos = self:GetOwner():GetEyeTrace().HitPos
+			print("dRQAW")
+			local x, y, v = hitpos:ToScreen()
+			local w, h = 51 * Quantum.Client.ResolutionScale, 51 * Quantum.Client.ResolutionScale
+			surface.SetDrawColor( Color( 90, 90, 255, 255 ) )
+			--surface.DrawRect( x, y, w, h )
+			--surface.DrawRect( 10, 10, w, h )
+			surface.SetTextPos( 10, 10 )
+			surface.SetTextColor( Color( 200, 200, 200, 200 ) )
+			surface.SetFont( "Default" )
+			surface.DrawText( "Developer Mode" )
+		--end
+	end
 end
 
 SWEP.WorldModel = ""
