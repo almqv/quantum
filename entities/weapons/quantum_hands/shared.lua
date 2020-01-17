@@ -32,16 +32,17 @@ if CLIENT then
 
 	hook.Add( "PostDrawOpaqueRenderables", "Quantum_Client_DeveloperHands_HitPos", function() 
 		if( LocalPlayer():IsSuperAdmin() ) then
-			local trace = LocalPlayer():GetEyeTrace()
-			local angle = trace.HitNormal:Angle()
+			if( LocalPlayer():GetActiveWeapon():GetClass() == "quantum_hands" ) then
+				local trace = LocalPlayer():GetEyeTrace()
+				local angle = trace.HitNormal:Angle()
 
-			render.SetMaterial( cubeMat )
-			render.DrawBox( trace.HitPos, Angle( 0, 0, 0), Vector( 0, 0, 0 ), Vector( 2, 2, 2 ), Color( 255, 255, 255 ) )
-			
-			render.DrawLine( trace.HitPos, trace.HitPos + 12 * angle:Forward(), Color( 255, 0, 0 ), true )
-			render.DrawLine( trace.HitPos, trace.HitPos + 12 * -angle:Right(), Color( 0, 255, 0 ), true )
-			render.DrawLine( trace.HitPos, trace.HitPos + 12 * angle:Up(), Color( 0, 0, 255 ), true )
-
+				render.SetMaterial( cubeMat )
+				render.DrawBox( trace.HitPos, Angle( 0, 0, 0), Vector( 0, 0, 0 ), Vector( 2, 2, 2 ), Color( 255, 255, 255 ) )
+				
+				render.DrawLine( trace.HitPos, trace.HitPos + 12 * angle:Forward(), Color( 255, 0, 0 ), true )
+				render.DrawLine( trace.HitPos, trace.HitPos + 12 * -angle:Right(), Color( 0, 255, 0 ), true )
+				render.DrawLine( trace.HitPos, trace.HitPos + 12 * angle:Up(), Color( 0, 0, 255 ), true )
+			end
 		end
 	end)
 end
@@ -92,6 +93,7 @@ function SWEP:PrimaryAttack()
 		end
 	else
 		if( LocalPlayer():IsSuperAdmin() ) then
+			LocalPlayer():ChatPrint( "Check console for output.\n" )
 			Quantum.Debug( "--Hitpos Data--" )
 			print( translateVector( "Vector", LocalPlayer():GetEyeTrace().HitPos ) )
 			print( translateVector( "Angle", LocalPlayer():GetAngles() ) )
@@ -103,6 +105,7 @@ end
 function SWEP:SecondaryAttack() 
 	if CLIENT then
 		if( LocalPlayer():IsSuperAdmin() ) then
+			LocalPlayer():ChatPrint( "Check console for output.\n" )
 			Quantum.Debug( "--Camera Data--" )
 			print( translateVector( "Vector", LocalPlayer():GetPos() ) )
 			print( translateVector( "Angle", LocalPlayer():GetAngles() ) )
