@@ -29,7 +29,7 @@ local function setUpPlayer( ply )
 	if( ply:GetModel() ~= nil ) then
 		ply:SetupHands()
 	else
-		Quantum.Error( tostring(ply) .. " doesn't have a valid model. Unable to set up hands!" )
+		Quantum.Error( Quantum.PrintPlayer( ply ) .. " doesn't have a valid model. Unable to set up hands!" )
 	end
 	local char = Quantum.Server.Char.GetCurrentCharacter( ply )
 	local charnametxt = " spawned."
@@ -48,7 +48,7 @@ local function setUpPlayer( ply )
 	ply:Give( "quantum_hands" )
 	ply:SelectWeapon( "quantum_hands" )
 
-	Quantum.Debug( Quantum.PrintPlayer( pl ) .. charnametxt  )
+	Quantum.Debug( Quantum.PrintPlayer( ply ) .. charnametxt  )
 end
 
 function GM:PlayerSpawn( ply )

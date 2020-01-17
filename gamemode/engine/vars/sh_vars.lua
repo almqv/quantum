@@ -54,5 +54,5 @@ function Quantum.WriteIntcode( intcode )
 end
 
 function Quantum.PrintPlayer( pl )
-	return pl:Nick() .. " | " .. pl:SteamID()
+	return "[" .. pl:Nick() .. "|" .. pl:SteamID() .. "]"
 end

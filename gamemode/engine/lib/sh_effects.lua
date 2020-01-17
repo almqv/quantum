@@ -51,10 +51,8 @@ if SERVER then -- server only functions
 
 	function Quantum.Effect.RemoveRuntimeFunction( pl, effectid, hookID )
 		hookID = hookID || "Quantum_Effects_RunTime_" .. tostring(pl:SteamID64()) .. "_" .. tostring(effectid)
-		--Quantum.Debug( "Removing runtime effect hook: " .. hookID )
 
 		if( pl.effecthooks != nil ) then
-			PrintTable( pl.effecthooks )
 			if( pl.effecthooks[hookID] != nil ) then
 				pl.effecthooks[hookID] = nil
 			end
@@ -64,7 +62,7 @@ if SERVER then -- server only functions
 
 	function Quantum.Effect.RemoveAllRuntimeFunctions( pl )
 		if( pl.effecthooks != nil ) then
-			Quantum.Debug( "Removing all runtime hooks for " .. tostring(pl) .. "." )
+			Quantum.Debug( "Removing all runtime hooks for " .. Quantum.PrintPlayer( pl ) .. "." )
 			for n, hookid in pairs( pl.effecthooks ) do
 				Quantum.Effect.RemoveRuntimeFunction( pl, nil, hookid )
 			end
@@ -93,7 +91,7 @@ if SERVER then -- server only functions
 	function Quantum.Effect.RemoveAll( pl )
 		local char = Quantum.Server.Char.GetCurrentCharacter( pl )
 		if( char.effects != nil ) then
-			Quantum.Debug( "Removing all " .. tostring(pl) .. " effects." )
+			Quantum.Debug( "Removing all " .. Quantum.PrintPlayer( pl ) .. " effects." )
 			for i, effect in pairs( char.effects ) do
 				Quantum.Effect.Remove( pl, effect, char ) -- remove the effect
 			end
@@ -107,7 +105,7 @@ if SERVER then -- server only functions
 
 		if( effectTbl != nil ) then
 
-			Quantum.Debug( "Giving " .. tostring(pl) .. " the '" .. tostring(effectid) .. "' effect." )
+			Quantum.Debug( "Giving " .. Quantum.PrintPlayer( pl ) .. " the '" .. tostring(effectid) .. "' effect." )
 
 			if( effectTbl.func.start != nil && effectTbl.func.start != Quantum.EmptyFunction ) then
 				effectTbl.func.start( pl )

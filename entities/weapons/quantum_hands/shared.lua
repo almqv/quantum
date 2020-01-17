@@ -32,16 +32,18 @@ if CLIENT then
 
 	hook.Add( "PostDrawOpaqueRenderables", "Quantum_Client_DeveloperHands_HitPos", function() 
 		if( LocalPlayer():IsSuperAdmin() && !Quantum.Client.IsInMenu ) then
-			if( LocalPlayer():GetActiveWeapon():GetClass() == "quantum_hands" ) then
-				local trace = LocalPlayer():GetEyeTrace()
-				local angle = trace.HitNormal:Angle()
+			if( IsValid( LocalPlayer():GetActiveWeapon() ) ) then
+				if( LocalPlayer():GetActiveWeapon():GetClass() == "quantum_hands" ) then
+					local trace = LocalPlayer():GetEyeTrace()
+					local angle = trace.HitNormal:Angle()
 
-				render.SetMaterial( cubeMat )
-				render.DrawBox( trace.HitPos, Angle( 0, 0, 0), Vector( 0, 0, 0 ), Vector( 2, 2, 2 ), Color( 255, 25, 25, 100 ) )
-				
-				render.DrawLine( trace.HitPos, trace.HitPos + 12 * angle:Forward(), Color( 255, 0, 0 ), true )
-				render.DrawLine( trace.HitPos, trace.HitPos + 12 * -angle:Right(), Color( 0, 255, 0 ), true )
-				render.DrawLine( trace.HitPos, trace.HitPos + 12 * angle:Up(), Color( 0, 0, 255 ), true )
+					render.SetMaterial( cubeMat )
+					render.DrawBox( trace.HitPos, Angle( 0, 0, 0), Vector( 0, 0, 0 ), Vector( 2, 2, 2 ), Color( 255, 25, 25, 100 ) )
+					
+					render.DrawLine( trace.HitPos, trace.HitPos + 12 * angle:Forward(), Color( 255, 0, 0 ), true )
+					render.DrawLine( trace.HitPos, trace.HitPos + 12 * -angle:Right(), Color( 0, 255, 0 ), true )
+					render.DrawLine( trace.HitPos, trace.HitPos + 12 * angle:Up(), Color( 0, 0, 255 ), true )
+				end
 			end
 		end
 	end)
