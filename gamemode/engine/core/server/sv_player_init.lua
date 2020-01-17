@@ -43,9 +43,6 @@ local function setUpPlayer( ply )
 	ply:SetCrouchedWalkSpeed( Quantum.Server.Settings.PlayerSpeeds.duck)
 	ply:SetMaxSpeed( Quantum.Server.Settings.PlayerSpeeds.run )
 
-	ply:Give( "quantum_hands" )
-	ply:SetActiveWeapon( "quantum_hands" )
-
 	ply:SetFOV( 80 )
 
 	Quantum.Debug( tostring( ply ) .. charnametxt  )
@@ -57,6 +54,9 @@ function GM:PlayerSpawn( ply )
 		if( ply.isloaded == true ) then 
 			ply:UnSpectate() 
 			setUpPlayer( ply )
+
+			ply:Give( "quantum_hands" )
+			ply:SelectWeapon( "quantum_hands" )
 		else
 			ply:SetPos( Vector( -8936.411133, 8244.439453, 7744.031250 ) )
 			Quantum.Net.OpenMenu( ply, "main", { chars = Quantum.Server.Char.GetPlayerChars_cl( ply ) } ) -- make the player open the main menu
