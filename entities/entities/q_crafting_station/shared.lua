@@ -5,16 +5,11 @@
 --  \ \   / ____ \| | | | | | | |  __/ (__| | | |  / / 
 --   \_\ /_/    \_\_|_| |_| |_|_|\___|\___|_| |_| /_/  
 
-GM.Name = "Quantum Framework"
-GM.Author = "AlmTech"
-GM.Email = "elias@almtech.se"
-GM.Website = "N/A"
-
-Quantum = {}
-Quantum.Version = "v0.4-alpha"
-
-include( "engine/sh_debug.lua" ) -- add the debug functions and stuff
-
-include( "settings/sh_settings.lua" )
-
-include( "engine/vars/sh_vars.lua" ) -- include the shared constant vars
+ENT.Type = "anim"
+ENT.Base = "base_entity"
+ 
+ENT.PrintName = "Quantum Item"
+ENT.Author = "AlmTech"
+ENT.Contact = "elias@almtech.se"
+ENT.Spawnable = false
+ENT.AdminSpawnable = false

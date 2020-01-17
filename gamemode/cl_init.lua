@@ -49,6 +49,8 @@ if CLIENT then
 	local function loadAllItemsAndEffects()
 		include( "settings/sh_items.lua" )
 		include( "settings/sh_effects.lua" )
+		include( "settings/sh_crafting_stations.lua" )
+		include( "settings/sh_recipes.lua" )
 	end
 
 	local function loadPlugins()

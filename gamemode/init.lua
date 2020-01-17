@@ -15,6 +15,7 @@ if SERVER then
 	AddCSLuaFile( "settings/sh_items.lua" )
 	AddCSLuaFile( "settings/sh_effects.lua" )
 	AddCSLuaFile( "settings/sh_recipes.lua" )
+	AddCSLuaFile( "settings/sh_crafting_stations.lua" )
 
 	AddCSLuaFile( "cl_init.lua" )
 	AddCSLuaFile( "shared.lua" )
@@ -115,8 +116,17 @@ if SERVER then
 	local function loadAllItemsAndEffects()
 		include( "settings/sh_items.lua" )
 		include( "settings/sh_effects.lua" )
+		include( "settings/sh_crafting_stations.lua" )
 		include( "settings/sh_recipes.lua" )
 	end
+
+	local function loadStations()
+		include( "settings/sv_crafting_stations_locations.lua" )
+	end
+	hook.Add( "PostGamemodeLoaded", "Quantum_Init_Stations_Load", function()  
+		Quantum.Debug( "Spawning crafting stations..." )
+		loadStations()
+	end)
 
 	local function loadPlugins()
 		
@@ -152,5 +162,6 @@ if SERVER then
 	end
 	
 	Quantum.Server.Load() 
+	loadStations()
 	MsgC( "\n" )
 end
