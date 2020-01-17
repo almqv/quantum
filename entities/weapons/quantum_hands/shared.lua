@@ -38,9 +38,9 @@ if CLIENT then
 			render.SetMaterial( cubeMat )
 			render.DrawBox( trace.HitPos, Angle( 0, 0, 0), Vector( 0, 0, 0 ), Vector( 2, 2, 2 ), Color( 255, 255, 255 ) )
 			
-			render.DrawLine( trace.HitPos, trace.HitPos + 8 * angle:Forward(), Color( 255, 0, 0 ), true )
-			render.DrawLine( trace.HitPos, trace.HitPos + 8 * -angle:Right(), Color( 0, 255, 0 ), true )
-			render.DrawLine( trace.HitPos, trace.HitPos + 8 * angle:Up(), Color( 0, 0, 255 ), true )
+			render.DrawLine( trace.HitPos, trace.HitPos + 12 * angle:Forward(), Color( 255, 0, 0 ), true )
+			render.DrawLine( trace.HitPos, trace.HitPos + 12 * -angle:Right(), Color( 0, 255, 0 ), true )
+			render.DrawLine( trace.HitPos, trace.HitPos + 12 * angle:Up(), Color( 0, 0, 255 ), true )
 
 		end
 	end)
