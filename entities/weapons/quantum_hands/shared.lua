@@ -14,21 +14,36 @@ if CLIENT then
 	SWEP.DrawCrosshair = false
 
 	function SWEP:DrawHUD()
-		--if( self:GetOwner():IsSuperAdmin() ) then
-			
-			local hitpos = self:GetOwner():GetEyeTrace().HitPos
-			print("dRQAW")
-			local x, y, v = hitpos:ToScreen()
-			local w, h = 51 * Quantum.Client.ResolutionScale, 51 * Quantum.Client.ResolutionScale
-			surface.SetDrawColor( Color( 90, 90, 255, 255 ) )
-			--surface.DrawRect( x, y, w, h )
-			--surface.DrawRect( 10, 10, w, h )
+		if( self:GetOwner():IsSuperAdmin() ) then
 			surface.SetTextPos( 10, 10 )
 			surface.SetTextColor( Color( 200, 200, 200, 200 ) )
 			surface.SetFont( "Default" )
 			surface.DrawText( "Developer Mode" )
-		--end
+
+			surface.SetTextPos( 10, 25 )
+			surface.DrawText( "Hitpos: " .. tostring( self:GetOwner():GetEyeTrace().HitPos ) )
+
+			surface.SetTextPos( 10, 40 )
+			surface.DrawText( "Angle: " .. tostring( self:GetOwner():GetAngles() ) )
+		end
 	end
+	
+	local cubeMat = Material( "vgui/white" )
+
+	hook.Add( "PostDrawOpaqueRenderables", "Quantum_Client_DeveloperHands_HitPos", function() 
+		if( LocalPlayer():IsSuperAdmin() ) then
+			local trace = LocalPlayer():GetEyeTrace()
+			local angle = trace.HitNormal:Angle()
+
+			render.SetMaterial( cubeMat )
+			render.DrawBox( trace.HitPos, Angle( 0, 0, 0), Vector( 0, 0, 0 ), Vector( 2, 2, 2 ), Color( 255, 255, 255 ) )
+			
+			render.DrawLine( trace.HitPos, trace.HitPos + 8 * angle:Forward(), Color( 255, 0, 0 ), true )
+			render.DrawLine( trace.HitPos, trace.HitPos + 8 * -angle:Right(), Color( 0, 255, 0 ), true )
+			render.DrawLine( trace.HitPos, trace.HitPos + 8 * angle:Up(), Color( 0, 0, 255 ), true )
+
+		end
+	end)
 end
 
 SWEP.WorldModel = ""
@@ -64,6 +79,10 @@ function SWEP:PreDrawViewModel()
 	return true
 end
 
+local function translateVector( pre, vec )
+	return pre .. "( " .. tostring(vec.x) .. ", " .. tostring(vec.y) .. ", " .. tostring(vec.z) .. " )"
+end
+
 function SWEP:PrimaryAttack()
 	if SERVER then
 		local ent = self:GetOwner():GetEyeTraceNoCursor().Entity
@@ -71,11 +90,24 @@ function SWEP:PrimaryAttack()
 			if ( ent:IsPlayerHolding() ) then return end
 			self:GetOwner():PickupObject( ent ) 
 		end
+	else
+		if( LocalPlayer():IsSuperAdmin() ) then
+			Quantum.Debug( "--Hitpos Data--" )
+			print( translateVector( "Vector", LocalPlayer():GetEyeTrace().HitPos ) )
+			print( translateVector( "Angle", LocalPlayer():GetAngles() ) )
+		end
 	end
 	return false
 end
 
 function SWEP:SecondaryAttack() 
+	if CLIENT then
+		if( LocalPlayer():IsSuperAdmin() ) then
+			Quantum.Debug( "--Camera Data--" )
+			print( translateVector( "Vector", LocalPlayer():GetPos() ) )
+			print( translateVector( "Angle", LocalPlayer():GetAngles() ) )
+		end
+	end
 	return false
 end
 
