@@ -82,7 +82,7 @@ function theme.sharpbutton( b, inClr )
 	if( !b:IsHovered() ) then
 		surface.SetDrawColor( 205, 205, 205, 255 )
 	else
-		surface.SetDrawColor( 120, 120, 120, 255 )
+		surface.SetDrawColor( 116, 185, 255, 255 )
 	end
 
 	surface.DrawOutlinedRect( 0, 0, w, h )

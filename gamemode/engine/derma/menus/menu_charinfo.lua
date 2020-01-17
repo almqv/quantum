@@ -209,7 +209,7 @@ function menu.open( dt )
 		bar.Paint = function( self ) theme.blurpanel( self ) end
 		bar.DoClick = function( self ) f:Close() end
 
-		-- Inventory button --
+		-- Inventory title --
 		title = vgui.Create( "DLabel", bar )
 		title:SetText( "Inventory" )
 		title:SetFont( "q_header_s" )

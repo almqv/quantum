@@ -27,6 +27,10 @@ function Quantum.Station.Get( id )
 	return Quantum.Stations[id]
 end	
 
+function Quantum.Station.GetRecipes( id )
+	return Quantum.Stations[id].recipes
+end
+
 if SERVER then
 	Quantum.Server.Station = {}
 
