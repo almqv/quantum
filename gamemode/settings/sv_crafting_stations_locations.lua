@@ -9,3 +9,8 @@ Quantum.Server.Station.Create( "barrel", {
 	pos = Vector( 10, 0, 0 ),
 	ang = Angle( 0, 0, 0 )
 })
+
+Quantum.Server.Station.Create( "barrel", {
+	pos = Vector( 11972.8359375, 8478.060546875, 8.03125 ),
+	ang = Angle( 0, -166.42593383789, 0 )
+})

@@ -63,4 +63,16 @@ if SERVER then
 	end
 
 	Quantum.Server.Station.RemoveAll() -- remove all stations on lua refresh
+
+	hook.Add( "KeyRelease", "Quantum_Station_KeyRelease", function( pl, key ) 
+		if( pl.isloaded ) then
+			if( key == IN_USE ) then
+				local ent = pl:GetEyeTraceNoCursor().Entity
+				if( ent:GetClass() == "q_crafting_station" ) then
+					pl:SetLocalVelocity( Vector( 0, 0, 0 ) ) 
+					Quantum.Net.OpenMenu( pl, "crafting", { stationEnt = ent, station = ent.stationid } )
+				end
+			end
+		end
+	end)
 end

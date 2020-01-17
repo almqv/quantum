@@ -25,9 +25,13 @@ local function checkCacheTable( ply, cache_id, dt )
 				id = cache_id,
 				cache = datatable
 			}
-			if( ply.cache[cache_id] ~= nil && table.Count( ply.cache[cache_id] ) == 1 ) then
+			if( ply.cache[cache_id] ~= nil && table.Count( ply.cache[cache_id] ) >= 1 ) then
 				Quantum.Debug( "Success! Created cache '" .. tostring(cache_id) .. "' for " .. tostring(ply) .. "." )
-				if( ply.cache[id].count == nil ) then ply.cache[id].count = 1 else ply.cache[id].count = ply.cache[id].count + 1 end -- keep count
+				if( ply.cache[cache_id].count == nil ) then 
+					ply.cache[cache_id].count = 1 
+				else 
+					ply.cache[cache_id].count = ply.cache[cache_id].count + 1 -- keep count
+				end 
 			else
 				Quantum.Error( "Failed. Creation of cache '" .. tostring(cache_id) .. "' for " .. tostring(ply) .. " failed to validate or did not get created." )
 				ply.cache[cache_id] = nil -- remove the cache since it is "broken"
@@ -41,6 +45,7 @@ local function CacheDatatableMethod( id, datatable, ply )
 	ply.cache[id] = checkCacheTable( ply, id, datatable ) -- check caching tables etc
 	Quantum.Debug( "(" .. tostring(ply) .. " | " .. tostring(id) .. ") Removing known data in cache from datatable..." )
 	if( ply.cache[id] ~= nil ) then
+		PrintTable(ply.cache[id])
 		if( ply.cache[id].count > 1 ) then -- dont want to filter out data if this is the first time.
 			for k, v in pairs( datatable ) do -- loop through the datatable
 				for k2, v2 in pairs( table.GetKeys( ply.cache[id].cache ) ) do -- check each key with each key from the record cache

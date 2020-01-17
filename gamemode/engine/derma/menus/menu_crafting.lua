@@ -21,8 +21,12 @@ local itemWidth, itemHeight = 65 * resScale, 65 * resScale
 function menu.open( dt )
 
 	local station
+	local stationEnt
 	if( dt != nil ) then
-		station = dt.cont.station
+		if( dt.cont != nil ) then
+			station = dt.cont.station
+			stationEnt = dt.cont.stationEnt
+		end
 	end
 
 	local items = Quantum.Client.Inventory 
@@ -34,10 +38,11 @@ function menu.open( dt )
 		return 
 	end
 
-	if( !f ) then
+	if( !Quantum.Client.CurStationMenu ) then
 		Quantum.Client.IsInMenu = true
 
 		local f = vgui.Create( "DFrame" )
+		Quantum.Client.CurStationMenu = f
 		f:SetSize( sw, sh )
 		f.w, f.h = f:GetSize()
 		f:SetTitle( "" )
@@ -51,6 +56,7 @@ function menu.open( dt )
 		end
 		function f:OnClose()
 			Quantum.Client.IsInMenu = false
+			Quantum.Client.CurStationMenu = nil
 			Quantum.Client.Cam.Stop()
 		end
 
@@ -62,6 +68,14 @@ function menu.open( dt )
 		function f:OnKeyCodeReleased( keyCode )
 			if( keycodesClose[keyCode] ) then
 				self:Close()	
+			end
+		end
+
+		function f:Think()
+			if( IsValid( stationEnt ) ) then
+				if( LocalPlayer():GetPos():Distance( stationEnt:GetPos() ) >= 100 ) then -- clientside security sucks but works in this case :P
+					self:Close()
+				end
 			end
 		end
 
