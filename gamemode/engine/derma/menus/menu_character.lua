@@ -119,6 +119,14 @@ local pages = {
 					pos1 = Vector(11504.430664, 3809.523193, 72.031250),
 					ang1 = Angle(5, 112.406662, 0.000000)
 				}
+			},
+			["rp_dunwood_eu"] = {
+				[1] = {
+					fov = 75,
+					velocity = 10,
+					pos1 = Vector( -7419.0327148438, 13390.305664063, 256.03125 ),
+					ang1 = Angle( 3.4110288619995, 126.79418945313, 0 )
+				}
 			}
 		}
 		Quantum.Client.Cam.Start( p.scene[game.GetMap()], true )
@@ -334,7 +342,7 @@ local pages = {
 		mdl.Think = function( self )
 			if( self:GetModel() ~= getMaxModel( getClassModels(inputs.class)[inputs.gender], inputs.modelIndex ) ) then  
 				if( ( modelLocations[ game.GetMap() ] != nil ) ) then
-					qrender.model( getMaxModel( getClassModels(inputs.class)[inputs.gender], inputs.modelIndex ) )
+					qrender.vmodel( getMaxModel( getClassModels(inputs.class)[inputs.gender], inputs.modelIndex ), modelLocations[ game.GetMap() ]["charselect"].pos, modelLocations[ game.GetMap() ]["charselect"].ang )
 				else
 					self:SetModel( getMaxModel( getClassModels(inputs.class)[inputs.gender], inputs.modelIndex ) )
 				end

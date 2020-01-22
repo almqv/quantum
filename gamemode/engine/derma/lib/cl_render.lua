@@ -7,7 +7,7 @@
 
 local qrender = {}
 
-function qrender.model( mdl, vec, ang )
+function qrender.vmodel( mdl, vec, ang )
 
 	render.Model( {
 		model = mdl,
