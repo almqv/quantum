@@ -20,15 +20,22 @@ Quantum.Server.Settings.ItemDespawnTimer = 300
 Quantum.Server.Settings.ItemPickupSound = "physics/cardboard/cardboard_box_impact_hard2.wav"
 
 Quantum.Server.Settings.InitSpawnLocation = { 
-	pos = Vector( 5054.682617, 3152.809326, 168.031250 ),
-	ang = Angle( 3.009660, 89.639153, 0.000000 )
+	pos = Vector( 12418.626953125, 9959.9345703125, 320.03125 ),
+	ang = Angle( 0, -2.1179277896881, 0 )
 }
 
 Quantum.Server.Settings.SpawnLocations = {
 
 	["rp_truenorth_v1a_livin"] = {
 		["Hospital"] = { pos = Vector( 13526.426758, 13088.842773, 125.031250 ), ang = Angle( 1, -115, 0 ) },
+		
 		["Lake"] = { pos = Vector( 10812, -8319, 5382 ), ang = Angle( 5, -40, 0 ) }
+	},
+
+	["rp_dunwood_eu"] = {
+		["Hospital"] = { pos = Vector( -5102.2807617188, 10812.857421875, 256.03125 ), ang = Angle( 0, 40.045780181885, 0 ) }, 
+		
+		["Graveyard"] = { pos = Vector( 6220.7700195313, -12982.192382813, 248 ), ang = Angle( 0, -136.18241882324, 0 ) }
 	}
 
 }
@@ -106,7 +113,9 @@ Quantum.Server.Settings.IdlePainSounds.Female = {
 
 --- Features to be added ---
 Quantum.Server.Settings.MaxJobLevel = 250
-Quantum.Server.Settings.MaxJobSlots = 2
+Quantum.Server.Settings.MaxJobSlots = Vector( 12418.626953125, 9959.9345703125, 320.03125 )
+Angle( 65.102394104004, -2.1179277896881, 0 )
+
 Quantum.Server.Settings.MaxSkillLevel = 100
 
 

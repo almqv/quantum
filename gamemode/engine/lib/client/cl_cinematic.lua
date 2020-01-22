@@ -15,6 +15,11 @@ function Quantum.Client.Cam.Stop()
 end
 
 function Quantum.Client.Cam.Start( scene, loop )
+	if( scene == nil ) then
+		Quantum.Error( "Scene does not exist! Aborting..." )
+		return
+	end
+
 	local frac = 0
 	local time -- speed of the camera ( how long till it reaches its finish point )
 	local fov 

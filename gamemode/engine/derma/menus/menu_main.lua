@@ -44,6 +44,26 @@ local scenes = {
 				 ang1 = Angle( 7.180876, 118.805817, 0.000000 )
 			 }
 		}
+	},
+	--
+
+	["rp_dunwood_eu"] = {
+		[1] = {
+			[1] = {
+				fov = 60,
+				velocity = 1,
+				pos1 = Vector( -8481.490234375, 10434.901367188, 161.60014343262 ),
+				ang1 = Angle( 13.865054130554, 112.71305084229, 0 )
+			}
+		},
+		[2] = {
+			[1] = {
+				fov = 80,
+				velocity = 1,
+				pos1 = Vector( 3845.0456542969, 10594.700195313, 1220.03125 ),
+				ang1 = Angle( -43.528274536133, -141.58242797852, 0 )
+			}
+		}
 	}
 }
 
@@ -73,11 +93,12 @@ function main.open(dt)
 		f.Paint = function( self ) 
 			theme.renderblur( self, 2, 7 )
 		end
-		f.OnClose = function( self )
-			--Quantum.Client.Menu.Menus["character"].open( dt )
-		end
 
-		Quantum.Client.Cam.Start( scenes[ game.GetMap() ][math.random( 1, table.Count(scenes[ game.GetMap() ])) ], false )
+		if( scenes[ game.GetMap() ] != nil ) then
+			Quantum.Client.Cam.Start( scenes[ game.GetMap() ][math.random( 1, table.Count(scenes[ game.GetMap() ])) ], false )
+		else
+			Quantum.Error( "There are no scenes for this map! Aborting scene..." )
+		end
 
 		local version = vgui.Create( "DLabel", f )
 		version:SetText( "Quantum Version: " .. Quantum.Version )
@@ -95,6 +116,9 @@ function main.open(dt)
 		title.w, title.h = title:GetSize()
 		title:SetPos( sw/2 - title.w/2, sh/5 - title.h/2 )
 		title.x, title.y = title:GetPos()
+		title.Paint = function( self )
+			theme.blurpanel( self, Color( 0, 0, 0, 150 ) )
+		end
 
 		local sub = vgui.Create( "DLabel", f )
 		sub:SetText( "Run by Quantum, created by AlmTech" )
@@ -102,8 +126,11 @@ function main.open(dt)
 		sub:SetTextColor( Color( 255, 255, 255, 150 ) )
 		sub:SizeToContents()
 		sub.w, sub.h = sub:GetSize()
-		sub:SetPos( sw/2 - sub.w/2, title.y + sub.h + padding*2.25 )
+		sub:SetPos( sw/2 - sub.w/2, title.y + sub.h + padding*2.45 )
 		sub.x, sub.y = sub:GetPos()
+		sub.Paint = function( self )
+			theme.blurpanel( self, Color( 0, 0, 0, 90 ) )
+		end
 
 
 		---- BUTTONS ----

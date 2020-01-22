@@ -11,6 +11,7 @@ local snm = Quantum.Client.Menu.GetAPI( "net" )
 local page = Quantum.Client.Menu.GetAPI( "page" )
 local theme = Quantum.Client.Menu.GetAPI( "theme" )
 local fade = Quantum.Client.Menu.GetAPI( "fade" )
+local qrender = Quantum.Client.Menu.GetAPI( "qrender" )
 
 local resScale = Quantum.Client.ResolutionScale
 local sw, sh = ScrW(), ScrH()
@@ -76,6 +77,19 @@ local function runIntroCinematic( parent, char )
 		char.runIntro = nil -- remove the unwanted var since it is taking space for no reason
 	end
 end
+
+local modelLocations = {
+	["rp_dunwood_eu"] = {
+		["charselect"] = {
+			pos = Vector( -7553.9194335938, 13563.834960938, 256.03125 ),
+			ang = Angle( 46.707160949707, -47.234722137451, 0 )
+		},
+		["charcreate"] = {
+			pos = Vector( -7553.9194335938, 13563.834960938, 256.03125 ),
+			ang = Angle( 46.707160949707, -47.234722137451, 0 )
+		}
+	}
+}
 
 local pages = {
 	charCreate = function( parent )
@@ -307,18 +321,23 @@ local pages = {
 
 
 		--- Model viewer
-		mdl:SetModel( Quantum.Models.Player.Citizen.Male[math.random(1, #Quantum.Models.Player.Citizen.Male)] ) -- set the char model
-		local minv, maxv = mdl.Entity:GetRenderBounds()
-		local ent = mdl.Entity
-		local eyepos = ent:GetBonePosition( ent:LookupBone( "ValveBiped.Bip01_Head1" ) )
-		eyepos:Add( Vector( 40, 0, -15 ) )
-		mdl:SetCamPos( eyepos - Vector( -10, 0, -2 ) )
-		mdl:SetLookAt( eyepos )
+		if( modelLocations[ game.GetMap() ] == nil ) then
+			mdl:SetModel( Quantum.Models.Player.Citizen.Male[math.random(1, #Quantum.Models.Player.Citizen.Male)] ) -- set the char model
+			local minv, maxv = mdl.Entity:GetRenderBounds()
+			local ent = mdl.Entity
+			local eyepos = ent:GetBonePosition( ent:LookupBone( "ValveBiped.Bip01_Head1" ) )
+			eyepos:Add( Vector( 40, 0, -15 ) )
+			mdl:SetCamPos( eyepos - Vector( -10, 0, -2 ) )
+			mdl:SetLookAt( eyepos )
+		end
 
 		mdl.Think = function( self )
-			--getClassModels(inputs.class)
 			if( self:GetModel() ~= getMaxModel( getClassModels(inputs.class)[inputs.gender], inputs.modelIndex ) ) then  
-				self:SetModel( getMaxModel( getClassModels(inputs.class)[inputs.gender], inputs.modelIndex ) )
+				if( ( modelLocations[ game.GetMap() ] != nil ) ) then
+					qrender.model( getMaxModel( getClassModels(inputs.class)[inputs.gender], inputs.modelIndex ) )
+				else
+					self:SetModel( getMaxModel( getClassModels(inputs.class)[inputs.gender], inputs.modelIndex ) )
+				end
 			end
 		end
 
