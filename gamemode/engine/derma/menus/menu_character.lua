@@ -79,16 +79,16 @@ local function runIntroCinematic( parent, char )
 end
 
 local modelLocations = {
-	["rp_dunwood_eu"] = {
-		["charselect"] = {
-			pos = Vector( -7553.9194335938, 13563.834960938, 256.03125 ),
-			ang = Angle( 46.707160949707, -47.234722137451, 0 )
-		},
-		["charcreate"] = {
-			pos = Vector( -7553.9194335938, 13563.834960938, 256.03125 ),
-			ang = Angle( 46.707160949707, -47.234722137451, 0 )
-		}
-	}
+	-- ["rp_dunwood_eu"] = {
+	-- 	["charselect"] = {
+	-- 		pos = Vector( -7553.9194335938, 13563.834960938, 256.03125 ),
+	-- 		ang = Angle( 0, -47.234722137451, 0 )
+	-- 	},
+	-- 	["charcreate"] = {
+	-- 		pos = Vector( -7553.9194335938, 13563.834960938, 256.03125 ),
+	-- 		ang = Angle( 0, -47.234722137451, 0 )
+	-- 	}
+	-- }
 }
 
 local pages = {
@@ -122,9 +122,9 @@ local pages = {
 			},
 			["rp_dunwood_eu"] = {
 				[1] = {
-					fov = 75,
+					fov = 50,
 					velocity = 10,
-					pos1 = Vector( -7419.0327148438, 13390.305664063, 256.03125 ),
+					pos1 = Vector( -7419.0327148438, 13390.305664063, 326.03125 ),
 					ang1 = Angle( 3.4110288619995, 126.79418945313, 0 )
 				}
 			}
@@ -337,12 +337,17 @@ local pages = {
 			eyepos:Add( Vector( 40, 0, -15 ) )
 			mdl:SetCamPos( eyepos - Vector( -10, 0, -2 ) )
 			mdl:SetLookAt( eyepos )
+		else
+			mdl.csent = qrender.CreateMdl( getMaxModel( getClassModels(inputs.class)[inputs.gender], inputs.modelIndex ), modelLocations[ game.GetMap() ]["charselect"].pos, modelLocations[ game.GetMap() ]["charselect"].ang )
+		end
+		mdl.OnRemove = function()
+			qrender.delCSent( mdl.csent )
 		end
 
 		mdl.Think = function( self )
 			if( self:GetModel() ~= getMaxModel( getClassModels(inputs.class)[inputs.gender], inputs.modelIndex ) ) then  
-				if( ( modelLocations[ game.GetMap() ] != nil ) ) then
-					qrender.vmodel( getMaxModel( getClassModels(inputs.class)[inputs.gender], inputs.modelIndex ), modelLocations[ game.GetMap() ]["charselect"].pos, modelLocations[ game.GetMap() ]["charselect"].ang )
+				if( ( modelLocations[ game.GetMap() ] != nil && self.csent != nil ) ) then
+					qrender.SetModel( self.csent, getMaxModel( getClassModels(inputs.class)[inputs.gender], inputs.modelIndex ) )
 				else
 					self:SetModel( getMaxModel( getClassModels(inputs.class)[inputs.gender], inputs.modelIndex ) )
 				end

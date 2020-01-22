@@ -7,14 +7,31 @@
 
 local qrender = {}
 
-function qrender.vmodel( mdl, vec, ang )
+function qrender.CreateMdl( mdl, vec, ang )
 
-	render.Model( {
-		model = mdl,
-		pos = vec,
-		angle = ang
-	} )
+	Quantum.Debug( "CSEnt created." )
 
+	local ent = ClientsideModel( mdl )
+	ent:SetPos( vec )
+	ent:SetAngles( ang )
+
+	return ent
+
+end
+
+function qrender.SetModel( ent, model )
+	if( ent:GetModel() != model ) then
+		ent:SetModel( model )
+	else
+		return
+	end
+end
+
+function qrender.delCSent( ent )
+	if( IsValid(ent) ) then
+		Quantum.Debug( "CSEnt removed." )
+		ent:Remove()
+	end
 end
 
 return qrender
