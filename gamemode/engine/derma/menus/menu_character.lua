@@ -78,19 +78,6 @@ local function runIntroCinematic( parent, char )
 	end
 end
 
-local modelLocations = {
-	-- ["rp_dunwood_eu"] = {
-	-- 	["charselect"] = {
-	-- 		pos = Vector( -7553.9194335938, 13563.834960938, 256.03125 ),
-	-- 		ang = Angle( 0, -47.234722137451, 0 )
-	-- 	},
-	-- 	["charcreate"] = {
-	-- 		pos = Vector( -7553.9194335938, 13563.834960938, 256.03125 ),
-	-- 		ang = Angle( 0, -47.234722137451, 0 )
-	-- 	}
-	-- }
-}
-
 local pages = {
 	charCreate = function( parent )
 		local pW, pH = parent:GetSize()
@@ -329,28 +316,17 @@ local pages = {
 
 
 		--- Model viewer
-		if( modelLocations[ game.GetMap() ] == nil ) then
-			mdl:SetModel( Quantum.Models.Player.Citizen.Male[math.random(1, #Quantum.Models.Player.Citizen.Male)] ) -- set the char model
-			local minv, maxv = mdl.Entity:GetRenderBounds()
-			local ent = mdl.Entity
-			local eyepos = ent:GetBonePosition( ent:LookupBone( "ValveBiped.Bip01_Head1" ) )
-			eyepos:Add( Vector( 40, 0, -15 ) )
-			mdl:SetCamPos( eyepos - Vector( -10, 0, -2 ) )
-			mdl:SetLookAt( eyepos )
-		else
-			mdl.csent = qrender.CreateMdl( getMaxModel( getClassModels(inputs.class)[inputs.gender], inputs.modelIndex ), modelLocations[ game.GetMap() ]["charselect"].pos, modelLocations[ game.GetMap() ]["charselect"].ang )
-		end
-		mdl.OnRemove = function()
-			qrender.delCSent( mdl.csent )
-		end
+		mdl:SetModel( Quantum.Models.Player.Citizen.Male[math.random(1, #Quantum.Models.Player.Citizen.Male)] ) -- set the char model
+		local minv, maxv = mdl.Entity:GetRenderBounds()
+		local ent = mdl.Entity
+		local eyepos = ent:GetBonePosition( ent:LookupBone( "ValveBiped.Bip01_Head1" ) )
+		eyepos:Add( Vector( 40, 0, -15 ) )
+		mdl:SetCamPos( eyepos - Vector( -10, 0, -2 ) )
+		mdl:SetLookAt( eyepos )
 
 		mdl.Think = function( self )
-			if( self:GetModel() ~= getMaxModel( getClassModels(inputs.class)[inputs.gender], inputs.modelIndex ) ) then  
-				if( ( modelLocations[ game.GetMap() ] != nil && self.csent != nil ) ) then
-					qrender.SetModel( self.csent, getMaxModel( getClassModels(inputs.class)[inputs.gender], inputs.modelIndex ) )
-				else
-					self:SetModel( getMaxModel( getClassModels(inputs.class)[inputs.gender], inputs.modelIndex ) )
-				end
+			if( self:GetModel() != getMaxModel( getClassModels(inputs.class)[inputs.gender], inputs.modelIndex ) ) then  
+				self:SetModel( getMaxModel( getClassModels(inputs.class)[inputs.gender], inputs.modelIndex ) )
 			end
 		end
 
