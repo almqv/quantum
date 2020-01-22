@@ -11,7 +11,6 @@ local snm = Quantum.Client.Menu.GetAPI( "net" )
 local page = Quantum.Client.Menu.GetAPI( "page" )
 local theme = Quantum.Client.Menu.GetAPI( "theme" )
 local fade = Quantum.Client.Menu.GetAPI( "fade" )
-local qrender = Quantum.Client.Menu.GetAPI( "qrender" )
 
 local resScale = Quantum.Client.ResolutionScale
 local sw, sh = ScrW(), ScrH()
@@ -109,10 +108,10 @@ local pages = {
 			},
 			["rp_dunwood_eu"] = {
 				[1] = {
-					fov = 50,
+					fov = 60,
 					velocity = 10,
-					pos1 = Vector( -7419.0327148438, 13390.305664063, 326.03125 ),
-					ang1 = Angle( 3.4110288619995, 126.79418945313, 0 )
+					pos1 = Vector( -7225.9956054688, -967.29949951172, 320 ),
+					ang1 = Angle( 2.7715656757355, 41.735473632813, 0 )
 				}
 			}
 		}
@@ -489,9 +488,17 @@ function menu.open( dt )
 			["rp_truenorth_v1a_livin"] = { 
 				[1] = {
 					fov = 70,
-					velocity = 10,
+					velocity = 1,
 					pos1 = Vector(9807.226563, -9093.957031, 5560.153809),
 					ang1 = Angle(5.702401, -42.888149, 0.000000)
+				}
+			},
+			["rp_dunwood_eu"] = {
+				[1] = {
+					fov = 70,
+					velocity = 1,
+					pos1 = Vector( -11620.374023438, 7470.0942382813, 409 ),
+					ang1 = Angle( 5.9394421577454, -49.899868011475, 0 )
 				}
 			}
 		}
@@ -586,7 +593,7 @@ function menu.open( dt )
 		Quantum.Client.selectedChar = Quantum.Client.charPanels[1]
 		-----------------------------------------------------
 
-		if( Quantum.Client.selectedChar && p.mdl ~= nil ) then
+		if( Quantum.Client.selectedChar && p.mdl != nil ) then
 			p.mdl:SetModel( Quantum.Client.selectedChar.char.model ) -- set the char model
 			local minv, maxv = p.mdl.Entity:GetRenderBounds()
 			local eyepos = p.mdl.Entity:GetBonePosition( p.mdl.Entity:LookupBone( "ValveBiped.Bip01_Head1" ) )
@@ -606,7 +613,7 @@ function menu.open( dt )
 			theme.sharpblurrbutton( self )
 		end
 		cr.Think = function( self )
-			if( table.Count(Quantum.Client.Chars) >= Quantum.CharacterLimit ) then
+			if( #Quantum.Client.Chars >= Quantum.CharacterLimit ) then
 				self:SetVisible( false )
 			else
 				self:SetVisible( true )
