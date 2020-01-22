@@ -665,7 +665,7 @@ function menu.open( dt )
 			local dt = { index = Quantum.Client.selectedChar.index }
 			snm.RunNetworkedFunc( "enterWorldChar", dt ) 
 			if( !isFirstTime( Quantum.Client.selectedChar.char ) ) then 
-				fade.transition( f, {}, 1, 2, 1, Color( 0, 0, 0, 255 ), true, Quantum.EmptyFunction, Quantum.EmptyFunction ) -- close the frame
+				fade.transition( f, {}, 1, 2, 1, Color( 0, 0, 0, 255 ), true, Quantum.EmptyFunction, Quantum.EmptyFunction, true ) -- close the frame
 			end 
 
 			-- Open the intro cinematic

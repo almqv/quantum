@@ -19,7 +19,7 @@ local function changeAlpha( clr, alpha )
 	return Color( clr.r, clr.g, clr.b, alpha )
 end
 
-function fade.transition( parent, dt, start_delay, mid_delay, end_delay, inColor, isBlur, startFunc, endFunc )
+function fade.transition( parent, dt, start_delay, mid_delay, end_delay, inColor, isBlur, startFunc, endFunc, showHUDonEnd )
 	local color = inColor || Color( 0, 0, 0, 255 )
 
 	local p = vgui.Create( "DPanel" )
@@ -36,6 +36,11 @@ function fade.transition( parent, dt, start_delay, mid_delay, end_delay, inColor
 		surface.SetDrawColor( changeAlpha( color, 255 * self.frac ) )
 
 		surface.DrawRect( 0, 0, w, h )
+	end
+	p.OnRemove = function()
+		if( showHUDonEnd ) then
+			Quantum.Client.IsInMenu = false
+		end
 	end
 
 	p.Think = function( self )
