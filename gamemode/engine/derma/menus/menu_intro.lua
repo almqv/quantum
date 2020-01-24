@@ -161,7 +161,10 @@ function intro.open()
 		f.w, f.h = f:GetSize()
 
 		f.Think = function( self )
-			if( Quantum.Client.Cam.Temp.Finished == true ) then self:Close() end -- if the scene is finished then close the menu and exit the cinematic
+			if( Quantum.Client.Cam.Temp.Finished == true ) then -- if the scene is finished then close the menu and exit the cinematic
+				--self:Close() 
+				fade.transition( f, {}, 1, 1, 1, Color( 0, 0, 0, 255 ), true, Quantum.EmptyFunction, function() Quantum.Client.IsInMenu = false end )
+			end 
 		end
 
 		--- MUSIC ---
