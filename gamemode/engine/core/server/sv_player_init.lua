@@ -43,7 +43,7 @@ local function setUpPlayer( ply )
 	ply:SetCrouchedWalkSpeed( Quantum.Server.Settings.PlayerSpeeds.duck)
 	ply:SetMaxSpeed( Quantum.Server.Settings.PlayerSpeeds.run )
 
-	ply:SetFOV( 80 )
+	ply:SetFOV( 72 )
 
 	ply:Give( "quantum_hands" )
 	ply:SelectWeapon( "quantum_hands" )

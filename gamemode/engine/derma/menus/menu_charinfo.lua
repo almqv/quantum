@@ -177,7 +177,7 @@ function menu.open( dt )
 		f:ShowCloseButton( false )
 		f:MakePopup()
 		f.Paint = function( self, w, h ) 
-			surface.SetDrawColor( 0, 0, 0, 40 )
+			surface.SetDrawColor( 0, 0, 0, 120 )
 			surface.DrawRect( 0, 0, w, h )
 			theme.renderblur( self, 10, 10 )
 		end
@@ -444,7 +444,7 @@ function menu.open( dt )
 		name:SetPos( itemframe.x, money.y - name.h - padding )
 		name.Paint = function( self, w, h ) 
 			draw.RoundedBox( 5, 0, 0, w, h, Color( 0, 0, 0, 90 ) )
-			theme.pagetext( self ) 
+			theme.pagetext( self, Color( 255, 255, 255 ) ) 
 		end
 
 	end

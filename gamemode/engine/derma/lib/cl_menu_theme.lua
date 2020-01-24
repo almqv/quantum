@@ -126,10 +126,11 @@ function theme.skipbutton( b, inClr )
 	surface.DrawRect( padding_s/2, padding_s/2, w - padding_s, h - padding_s )
 end
 
-function theme.pagetext( p )
+function theme.pagetext( p, clr )
 	local w, h = p:GetSize()
+	clr = clr || Color( 205, 205, 205, 255 )
 
-	p:SetTextColor( Color( 205, 205, 205, 255 ) )
+	p:SetTextColor( clr )
 
 	surface.SetDrawColor( Color( 0, 0, 0, 0 ) )
 	surface.DrawRect( 0, 0, w, h )

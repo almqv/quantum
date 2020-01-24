@@ -65,12 +65,12 @@ SWEP.Secondary.Ammo = ""
 SWEP.Secondary.Delay = 0.25
 
 function SWEP:Initialize()
-	if CLIENT || !IsValid(self:GetOwner()) then return true end
 	self:SetHoldType( "normal" )
 end
 
 function SWEP:Deploy()
-	--self:GetOwner():DrawWorldModel( false )
+	if( CLIENT || !IsValid(self:GetOwner()) ) then return true end
+	self:GetOwner():DrawWorldModel( false )
 	return true
 end
 
@@ -101,7 +101,6 @@ function SWEP:PrimaryAttack()
 			print( translateVector( "Angle", LocalPlayer():GetAngles() ) )
 		end
 	end
-	return false
 end
 
 function SWEP:SecondaryAttack() 
@@ -109,11 +108,10 @@ function SWEP:SecondaryAttack()
 		if( LocalPlayer():IsSuperAdmin() ) then
 			LocalPlayer():ChatPrint( "Check console for output.\n" )
 			Quantum.Debug( "--Camera Data--" )
-			print( translateVector( "Vector", LocalPlayer():GetPos() ) )
+			print( translateVector( "Vector", LocalPlayer():GetBonePosition( LocalPlayer():LookupBone( "ValveBiped.Bip01_Head1" ) ) ) )
 			print( translateVector( "Angle", LocalPlayer():GetAngles() ) )
 		end
 	end
-	return false
 end
 
 function SWEP:Reload()
