@@ -119,6 +119,7 @@ if SERVER then
 		include( "settings/sh_effects.lua" )
 		include( "settings/sh_crafting_stations.lua" )
 		include( "settings/sh_recipes.lua" )
+		include( "settings/sv_crafting_stations_locations.lua" )
 	end
 
 	local function loadPlugins()
@@ -155,30 +156,8 @@ if SERVER then
 		Quantum.Server.Loaded = true
 
 	end
-
-	local function loadStations( luaRefresh )
-		print( luaRefresh, Quantum.Server.Loaded, Quantum.Server.LoadedStations )
-		local basepath = "gamemodes/" .. folname .. "/gamemode/settings/"
-		print( basepath )
-
-		if( !luaRefresh ) then
-			include( basepath .. "sv_crafting_stations_locations.lua" )
-		elseif( luaRefresh && Quantum.Server.Loaded && Quantum.Server.LoadedStations ) then
-			include( basepath .. "sv_crafting_stations_locations.lua" )
-		end
-	end
-
-	hook.Add( "PlayerInitialSpawn", "Quantum_Init_Stations_Load", function()  
-		Quantum.Debug( "Spawning crafting stations..." )
-		
-		if( #player.GetAll() == 1 ) then -- spawn the stations when the first player joins
-			loadStations()
-			Quantum.Server.LoadedStations = true
-		end
-	end)
 	
 	Quantum.Server.Load() 
-	loadStations( true )
 
 	MsgC( "\n" )
 end

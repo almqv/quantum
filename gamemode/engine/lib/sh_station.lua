@@ -33,6 +33,7 @@ end
 
 if SERVER then
 	Quantum.Server.Station = {}
+	Quantum.Server.StationsPos = {}
 
 	function Quantum.Server.Station.Spawn( stationid, pos, ang ) -- internal function
 		local ent = ents.Create( "q_crafting_station" )
@@ -45,12 +46,26 @@ if SERVER then
 	local function floorVectorString( vec )
 		return tostring(math.floor( vec.x )) .. ", " .. tostring(math.floor( vec.y )) .. ", " .. tostring(math.floor( vec.z ))
 	end
+
+	function Quantum.Server.Station.Register( stationid, vec, angle )
+		Quantum.Server.StationsPos[#Quantum.Server.StationsPos + 1] = {
+			id = stationid,
+			pos = vec,
+			ang = angle
+		}
+	end
 	
 	function Quantum.Server.Station.Create( id, tbl )
 		local stationTbl = Quantum.Station.Get( id )
 	
 		if( stationTbl != nil ) then
 			Quantum.Server.Station.Spawn( id, tbl.pos, tbl.ang )
+		end
+	end
+
+	function Quantum.Server.Station.SpawnAllRegistered()
+		for i, station in pairs( Quantum.Server.StationsPos ) do
+			Quantum.Server.Station.Create( station.id, { pos = station.pos, ang = station.ang } )
 		end
 	end
 
@@ -67,6 +82,19 @@ if SERVER then
 	end
 
 	Quantum.Server.Station.RemoveAll() -- remove all stations on lua refresh
+
+	if( Quantum.Server.StationsSpawned ) then
+		Quantum.Server.Station.SpawnAllRegistered() -- and create new ones
+	end
+
+	hook.Add( "PlayerInitialSpawn", "Quantum_Init_Stations_Load", function()  
+		Quantum.Debug( "Spawning registered crafting stations..." )
+		
+		if( #player.GetAll() == 1 ) then -- spawn the stations when the first player joins
+			Quantum.Server.Station.SpawnAllRegistered()
+			Quantum.Server.StationsSpawned = true
+		end
+	end)
 
 	hook.Add( "KeyRelease", "Quantum_Station_KeyRelease", function( pl, key ) 
 		if( pl.isloaded ) then
