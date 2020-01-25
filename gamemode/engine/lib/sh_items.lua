@@ -59,6 +59,6 @@ if SERVER then
 	end
 
 	function Quantum.Server.Item.SpawnItemAtPlayer( pl, itemid, amount ) -- Quantum.Server.Item.SpawnItemAtPlayer( Entity(1), "potatoe", 1 ) 
-		Quantum.Server.Item.SpawnItem( pl:GetPos() + ( pl:GetForward() * 40 ) + Vector( 0, 0, 40 ), itemid, amount )
+		Quantum.Server.Item.SpawnItem( pl:GetPos() + ( pl:GetForward() * 40 ) + Vector( 0, 0, 40 ), itemid, amount )  -- Quantum.Server.Item.SpawnItemAtPlayer( Entity(1), "jetpack", 1 ) 
 	end
 end

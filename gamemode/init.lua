@@ -21,7 +21,8 @@ if SERVER then
 	AddCSLuaFile( "shared.lua" )
 
 	-- Content --
-	local path = "gamemodes/" .. GM.FolderName .. "/gamemode/content/materials/quantum/server_banner.png"
+	local folname = GM.FolderName
+	local path = "gamemodes/" .. folname .. "/gamemode/content/materials/quantum/server_banner.png"
 	resource.AddSingleFile( path )
 
 	resource.AddSingleFile( "materials/quantum/mic_icon48.png" ) -- add the mic icon
@@ -120,17 +121,7 @@ if SERVER then
 		include( "settings/sh_recipes.lua" )
 	end
 
-	local function loadStations()
-		include( "settings/sv_crafting_stations_locations.lua" )
-	end
-	hook.Add( "PostGamemodeLoaded", "Quantum_Init_Stations_Load", function()  
-		Quantum.Debug( "Spawning crafting stations..." )
-		loadStations()
-	end)
-
 	local function loadPlugins()
-		
-
 		local fol = GM.FolderName .. "/plugins/"
 		local pluginFiles = file.Find( fol .. "plugin_*.lua", "LUA" )
 
@@ -148,6 +139,7 @@ if SERVER then
 		end
 	end
 	
+	
 	function Quantum.Server.Load()
 		-- Add all of the base files
 		loadCoreFiles()
@@ -159,9 +151,34 @@ if SERVER then
 
 		-- Plugins
 		loadPlugins()
+
+		Quantum.Server.Loaded = true
+
 	end
+
+	local function loadStations( luaRefresh )
+		print( luaRefresh, Quantum.Server.Loaded, Quantum.Server.LoadedStations )
+		local basepath = "gamemodes/" .. folname .. "/gamemode/settings/"
+		print( basepath )
+
+		if( !luaRefresh ) then
+			include( basepath .. "sv_crafting_stations_locations.lua" )
+		elseif( luaRefresh && Quantum.Server.Loaded && Quantum.Server.LoadedStations ) then
+			include( basepath .. "sv_crafting_stations_locations.lua" )
+		end
+	end
+
+	hook.Add( "PlayerInitialSpawn", "Quantum_Init_Stations_Load", function()  
+		Quantum.Debug( "Spawning crafting stations..." )
+		
+		if( #player.GetAll() == 1 ) then -- spawn the stations when the first player joins
+			loadStations()
+			Quantum.Server.LoadedStations = true
+		end
+	end)
 	
 	Quantum.Server.Load() 
-	loadStations()
+	loadStations( true )
+
 	MsgC( "\n" )
 end

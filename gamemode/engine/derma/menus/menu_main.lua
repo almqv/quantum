@@ -80,7 +80,7 @@ function main.open(dt)
 		local padding_s = 4 * resScale
 
 		local buttonWidth = 255 * resScale
-		local buttonColor = Color( 20, 20, 20, 100 )
+		local buttonColor = Color( 20, 20, 20, 180 )
 		local buttonTextColor = Color( 255, 255, 255, 255 )
 		local buttonFont = "q_button2"
 

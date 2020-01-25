@@ -367,7 +367,7 @@ function iteminfo.giveoptions( p, page )
 
 end
 
-function iteminfo.givetooltip( p, page )
+function iteminfo.givetooltip( p, page, addW )
 	local item = p:GetParent().item
 	local parWidth, parHeight = p:GetParent():GetSize()
 	
@@ -492,10 +492,15 @@ function iteminfo.givetooltip( p, page )
 
 	p.ItemTooltipPanel = tooltip -- set the tooltip
 
+	local addToW = 0
+	if( addW ) then
+		addToW = tooltip.w
+	end
+
 	p.Think = function( self )
 		self.ItemTooltipPanel:SetVisible( self:IsHovered() )
 		if( self:IsHovered() ) then
-			self.ItemTooltipPanel:SetPos( gui.MouseX() - tooltip.w/2, gui.MouseY() - ( tooltip.h + padding ) )
+			self.ItemTooltipPanel:SetPos( gui.MouseX() - tooltip.w/2 + addToW, gui.MouseY() - ( tooltip.h + padding ) )
 		end
 	end
 

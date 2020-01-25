@@ -40,7 +40,7 @@ local function createItemAmountLabel( icon, item )
 	return icon.amountpanel
 end
 
-local function createItemPanel( x, y, scale, parent, frame )
+local function createItemPanel( x, y, scale, parent, frame, addW )
 	local p = vgui.Create( "DPanel", parent )
 	p:SetSize( itemWidth * scale, itemHeight * scale )
 	p.w, p.h = p:GetSize()
@@ -67,7 +67,7 @@ local function createItemPanel( x, y, scale, parent, frame )
 				p.icon.tooltip:Remove() -- remove the old
 			end
 
-			p.icon.tooltip = iteminfo.givetooltip( p.icon, frame ) -- create a new
+			p.icon.tooltip = iteminfo.givetooltip( p.icon, frame, addW ) -- create a new
 			p.icon.tooltip:CreateInfo() 
 
 			p.icon:SetVisible( true )
@@ -120,20 +120,29 @@ function menu.open( dt )
 	if( !Quantum.Client.CurStationMenu ) then
 		Quantum.Client.IsInMenu = true
 
+		local back = vgui.Create( "DPanel" )
+		back:SetSize( sw, sh )
+		back.Paint = function( self )
+			theme.renderblur( self, 20, 20 )
+		end
+
 		local f = vgui.Create( "DFrame" )
 		Quantum.Client.CurStationMenu = f
-		f:SetSize( sw, sh )
+		f:SetSize( 1100 * resScale, 800 * resScale )
 		f.w, f.h = f:GetSize()
+		f:SetPos( sw/2 - f.w/2, sh/2 - f.h/2 )
+
 		f:SetTitle( "" )
 		f:SetDraggable( false )
 		f:ShowCloseButton( false )
 		f:MakePopup()
 		f.Paint = function( self, w, h ) 
-			surface.SetDrawColor( 0, 0, 0, 40 )
+			surface.SetDrawColor( 0, 0, 0, 120 )
 			surface.DrawRect( 0, 0, w, h )
 			theme.renderblur( self, 10, 10 )
 		end
 		function f:OnClose()
+			back:Remove()
 			Quantum.Client.IsInMenu = false
 			Quantum.Client.CurStationMenu = nil
 			Quantum.Client.Cam.Stop()
@@ -162,7 +171,7 @@ function menu.open( dt )
 
 		-- Title --
 		local bar = vgui.Create( "DPanel", f )
-		bar:SetSize( f.w, padding*5 )
+		bar:SetSize( f.w, padding*4 )
 		bar.w, bar.h = bar:GetSize()
 		bar:SetPos( 0, 0 )
 		bar.Paint = function( self ) theme.blurpanel( self ) end
@@ -171,7 +180,7 @@ function menu.open( dt )
 		-- Inventory title --
 		title = vgui.Create( "DLabel", bar )
 		title:SetText( stationTbl.name || "ERROR name=nil" )
-		title:SetFont( "q_header_s" )
+		title:SetFont( "q_header_vs" )
 		title:SetTextColor( Color( 255, 255, 255, 255 ) )
 		title.Paint = function( self )
 			theme.pagetext( self )
@@ -184,7 +193,7 @@ function menu.open( dt )
 		---- recipe list ----
 
 		local list = vgui.Create( "DPanel", f )
-		list:SetSize( 400 * resScale, f.h - bar.h )
+		list:SetSize( f.w/4.2, f.h - bar.h )
 		list.w, list.h = list:GetSize()
 		list:SetPos( 0, bar.h )
 		list.Paint = function( self )
@@ -193,6 +202,7 @@ function menu.open( dt )
 
 		local scroll = vgui.Create( "DScrollPanel", list )
 		scroll:SetSize( list.w, list.h )
+		scroll.w, scroll.h = scroll:GetSize()
 
 		local vbar = scroll:GetVBar()
 		function vbar:Paint() theme.borderpanel( vbar, Color( 200, 200, 200, 200 ) ) end
@@ -217,17 +227,50 @@ function menu.open( dt )
 			theme.blurpanel( self, Color( 255, 255, 255, 1 ) )
 		end
 
-		local items = {
-			"test",
-			"test2",
-			"potatoe",
-			"bomb"
-		}
-		for i=1, 10 do  ---- ADD CRAFT SELECT PANELS HERE
-			local p = createItemPanel( 200, 200*(i-1), 1.25, scroll, f )
-			p.SetItem( table.Random( items ) )
-		end
+		local resBars = {}
+		local selectedBar 
+		for i, resID in pairs( recipes ) do
+			resBars[resID] = vgui.Create( "DPanel", scroll )
+			resBars[resID].resTbl = Quantum.Recipe.Get( resID )
+			resBars[resID].resItemTbl = Quantum.Item.Get( resID )
 
+			resBars[resID]:SetSize( scroll.w, 30 * resScale )
+			resBars[resID].w, resBars[resID].h = resBars[resID]:GetSize()
+
+			resBars[resID]:SetPos( 0, resBars[resID].h * (i-1) + padding*i )
+			resBars[resID].x, resBars[resID].y = resBars[resID]:GetPos()
+
+			resBars[resID].Paint = function( self, w, h )
+				surface.SetDrawColor( 255, 255, 255, 1 )
+				surface.DrawRect( 0, 0, w, h )
+			end
+
+			resBars[resID].txt_panel = vgui.Create( "DLabel", resBars[resID] )
+			resBars[resID].txt_panel:SetText( resBars[resID].resTbl.name )
+			resBars[resID].txt_panel:SetFont( "q_text" )
+			resBars[resID].txt_panel:SetTextColor( theme.color.setalpha(resBars[resID].resItemTbl.rarity.color, 200) )
+
+			resBars[resID].txt_panel:SizeToContents()
+			resBars[resID].txt_panel.w, resBars[resID].txt_panel.h = resBars[resID].txt_panel:GetSize()
+
+			resBars[resID].txt_panel:SetPos( padding, resBars[resID].h/2 - resBars[resID].txt_panel.h/2 )
+
+			local overlay = vgui.Create( "DButton", resBars[resID] )
+			overlay:SetText("")
+			overlay:SetSize( resBars[resID].w, resBars[resID].h )
+			overlay:SetPos( 0, 0 )
+			overlay.Paint = function( self, w, h ) 
+				theme.sharpbutton( self, Color( 0, 0, 0, 0 ), 10, 80 )
+			end
+
+			overlay.DoClick = function( self )
+				selectedBar = resBars[resID]
+			end
+			overlay.OnCursorEntered = function() surface.PlaySound( "UI/buttonrollover.wav" ) end
+		end
+		if( #resBars > 0 ) then
+			selectedBar = resBars[1]
+		end
 
 	end
 end

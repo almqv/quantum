@@ -25,8 +25,15 @@ function Quantum.Recipe.Add( itemid, station, tbl )
 	Quantum.Recipes[ itemid ].delay = math.Clamp( Quantum.Recipes[ itemid ].delay, Quantum.MinCraftDelay, Quantum.MaxCraftDelay ) 
 
 	-- add the recipe to the stations recipe list --
-	if( returnTbl.station != nil ) then
+	if( station != nil ) then
+		if( Quantum.Stations[ returnTbl.station ].recipes == nil ) then
+			Quantum.Stations[ returnTbl.station ].recipes = {}
+		end
 		table.insert( Quantum.Stations[ returnTbl.station ].recipes, itemid )
+	else
+		if SERVER then
+			Quantum.Error( "Recipe '" .. itemid .. "' does not have a station! You will not be able to craft this item!" )
+		end
 	end
 
 	return returnTbl

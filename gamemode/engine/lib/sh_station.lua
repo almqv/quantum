@@ -15,7 +15,7 @@ function Quantum.Station.Add( id, tbl )
 		stationid = id,
 		name = tbl.name || "Crafting Station", -- name of the station
 		model = tbl.model || "models/props_phx/facepunch_barrel.mdl",
-		recipes = tbl.recipes || {}
+		recipes = tbl.recipes 
 	}
 
 	Quantum.Stations[ id ] = returnTbl 

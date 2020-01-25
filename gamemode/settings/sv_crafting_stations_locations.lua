@@ -6,11 +6,6 @@
 --   \_\ /_/    \_\_|_| |_| |_|_|\___|\___|_| |_| /_/  
 
 Quantum.Server.Station.Create( "barrel", {
-	pos = Vector( 10, 0, 0 ),
-	ang = Angle( 0, 0, 0 )
-})
-
-Quantum.Server.Station.Create( "barrel", {
-	pos = Vector( 11972.8359375, 8478.060546875, 8.03125 ),
-	ang = Angle( 0, -166.42593383789, 0 )
+	pos = Vector( 747.13494873047, 10483.685546875, 7168.0317382813 ),
+	ang = Angle( 0, -118.23150634766, 0 )
 })

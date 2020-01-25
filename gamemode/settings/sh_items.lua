@@ -44,3 +44,16 @@ Quantum.Item.Create( "potatoe", {
 	equipslot = Quantum.EquipSlots.Head,
 	consumeeffect = "eat_potatoe"
 } )
+
+-- weapon_gta_sa_jetpack.lua
+
+Quantum.Item.Create( "jetpack", {
+	name = "Jetpack", 
+	desc = "A jet engine strapped onto your back? Sounds fun!",
+	model = "models/sa_jetpack.mdl",
+	stack = 1, 
+	soulbound = false, 
+	rarity = Quantum.Rarity.Legendary,
+	equipslot = Quantum.EquipSlots.Weapon,
+	equipgive = "weapon_gta_sa_jetpack"
+} )
