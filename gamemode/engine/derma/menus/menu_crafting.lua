@@ -264,6 +264,7 @@ function menu.open( dt )
 			end
 
 			overlay.DoClick = function( self )
+				surface.PlaySound( "UI/buttonclick.wav" )
 				selectedBar = resBars[resID]
 			end
 			overlay.OnCursorEntered = function() surface.PlaySound( "UI/buttonrollover.wav" ) end
