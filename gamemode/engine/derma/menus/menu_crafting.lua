@@ -231,16 +231,11 @@ function menu.open( dt )
 		local resBars = {}
 		local selectedBar 
 
-		local selTxt = vgui.Create( "DLabel", cont )
-		selTxt:SetText( "Select a recipe" )
-		selTxt:SetFont( "q_info" )
-		selTxt:SetTextColor( Color( 255, 255, 255 ) )
-		selTxt:SizeToContents()
-		selTxt.w, selTxt.h = selTxt:GetSize()
-		selTxt:SetPos( cont.w/2 - selTxt.w/2, cont.h/2 - selTxt.h/2 - padding*10 )
-
 		for i, resID in pairs( recipes ) do
 			resBars[resID] = vgui.Create( "DPanel", scroll )
+
+			if( i == 1 ) then selectedBar = resBars[resID] end
+
 			resBars[resID].resTbl = Quantum.Recipe.Get( resID )
 			resBars[resID].resItemTbl = Quantum.Item.Get( resID )
 
@@ -282,7 +277,7 @@ function menu.open( dt )
 				selectedBar = resBars[resID]
 				selTxt:Remove()
 			end
-			
+
 			overlay.OnCursorEntered = function() surface.PlaySound( "UI/buttonrollover.wav" ) end
 		end
 
