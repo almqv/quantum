@@ -93,6 +93,46 @@ local function createItemPanel( x, y, scale, parent, frame, addW, giveToolTip )
 
 	return p
 end
+local function getItemSlots( itemid )
+	local inv = Quantum.Client.Inventory 
+
+	if( inv != nil ) then
+		local indexes = {}
+
+		for i, item in pairs( inv ) do
+			if( item != nil ) then
+				if( item[1] == itemid ) then
+					indexes[ #indexes + 1 ] = i
+				end
+			end
+		end
+
+		return indexes
+	else
+		Quantum.Error( "Could not get item slots. Inventory is nil!" )
+	end
+end
+
+local function calcAmountOfItem( itemid )
+	local slots = getItemSlots( itemid )
+	local inv = Quantum.Client.Inventory 
+	local count = 0
+
+	if( slots != nil ) then
+		for i, slot in pairs( slots ) do
+			if( inv[slot] != nil ) then
+				if( inv[slot][2] == nil ) then 
+					count = count + 1 
+				else
+					count = count + inv[slot][2]
+				end
+			end
+		end
+		return count
+	else
+		return 0
+	end
+end
 
 function menu.open( dt )
 
@@ -282,6 +322,24 @@ function menu.open( dt )
 			resBars[resID].cont.title:SizeToContents()
 			resBars[resID].cont.title.w, resBars[resID].cont.title.h = resBars[resID].cont.title:GetSize()
 			resBars[resID].cont.title:SetPos( resBars[resID].cont.icon.x + resBars[resID].cont.icon.w + padding*2, resBars[resID].cont.icon.y )
+			resBars[resID].cont.title.x, resBars[resID].cont.title.y = resBars[resID].cont.title:GetPos()
+
+			resBars[resID].cont.craft = vgui.Create( "DButton", resBars[resID].cont )
+			resBars[resID].cont.craft:SetText( "Create Item" )
+			resBars[resID].cont.craft:SetFont( "q_button_m" ) 
+			resBars[resID].cont.craft:SetTextColor( Color( 255, 255, 255 ) ) 
+			resBars[resID].cont.craft:SizeToContents()
+			resBars[resID].cont.craft.w, resBars[resID].cont.craft.h = resBars[resID].cont.craft:GetSize()
+			resBars[resID].cont.craft:SetPos( resBars[resID].cont.title.x, resBars[resID].cont.title.y + resBars[resID].cont.craft.h + padding )
+			resBars[resID].cont.craft.Paint = function( self )
+				theme.sharpblurrbutton( self )
+			end
+			resBars[resID].cont.craft.DoClick = function( self )
+				surface.PlaySound( "UI/buttonclick.wav" )
+				f:Close()
+				-- SEND NET CRAFT HERE --
+			end
+			resBars[resID].cont.craft.OnCursorEntered = function() surface.PlaySound( "UI/buttonrollover.wav" ) end
 			
 			-- reagents txt
 			resBars[resID].cont.reagentsTXT = vgui.Create( "DLabel", resBars[resID].cont )
@@ -291,8 +349,71 @@ function menu.open( dt )
 			resBars[resID].cont.reagentsTXT:SizeToContents()
 			resBars[resID].cont.reagentsTXT.w, resBars[resID].cont.reagentsTXT.h = resBars[resID].cont.reagentsTXT:GetSize()
 			resBars[resID].cont.reagentsTXT:SetPos( resBars[resID].cont.icon.x, resBars[resID].cont.icon.y + resBars[resID].cont.icon.h + padding*5 )
+			resBars[resID].cont.reagentsTXT.x, resBars[resID].cont.reagentsTXT.y = resBars[resID].cont.reagentsTXT:GetPos()
 
-			
+			-- reagents scroll
+			local diffPadding = ( resBars[resID].cont.reagentsTXT.y + resBars[resID].cont.reagentsTXT.h + padding )
+			resBars[resID].cont.reagents = vgui.Create( "DScrollPanel", resBars[resID].cont )
+			resBars[resID].cont.reagents:SetSize( mw, mh - diffPadding )
+			resBars[resID].cont.reagents.w, resBars[resID].cont.reagents.h = resBars[resID].cont.reagents:GetSize()
+			resBars[resID].cont.reagents:SetPos( 0, diffPadding )
+			resBars[resID].cont.reagents.Paint = Quantum.EmptyFunction
+
+			-- reagents panels
+			local itemid
+			local amount
+			local itemtbl 
+			local count = 0
+
+			local itemPanels = {}
+
+			local regScale = 1.5
+
+			for i, reg in pairs( resBars[resID].resTbl.recipe ) do
+				itemid = reg.item
+				amount = reg.amount
+				itemtbl = Quantum.Item.Get( itemid )
+
+				if( itemtbl != nil ) then
+					count = count + 1
+
+					itemPanels[count] = vgui.Create( "DPanel", resBars[resID].cont.reagents )
+					itemPanels[count]:SetSize( 600 * resScale, itemHeight*regScale + padding*2 )
+					itemPanels[count].w, itemPanels[count].h = itemPanels[count]:GetSize() --
+					itemPanels[count]:SetPos( resBars[resID].cont.reagentsTXT.x + padding, itemPanels[count].h*(count-1) + padding*(count-1) )
+					itemPanels[count].Paint = function( self, w, h )
+						surface.SetDrawColor( Color( 0, 0, 0, 120 ) )
+						surface.DrawRect( 0, 0, w, h )
+					end
+
+					itemPanels[count].icon = createItemPanel( (itemWidth*regScale)/2 + padding*2, itemPanels[count].h/2, regScale, itemPanels[count], f )
+					itemPanels[count].icon.SetItem( itemid )
+
+					local itemname = vgui.Create( "DLabel", itemPanels[count] )
+					itemname:SetText( itemtbl.name )
+					itemname:SetFont( "q_info" )
+					itemname:SetTextColor( theme.color.setalpha( itemtbl.rarity.color, 220 ) )
+					itemname:SizeToContents()
+					itemname.w, itemname.h = itemname:GetSize()
+					itemname:SetPos( itemPanels[count].w/2 - itemname.w/2 + itemPanels[count].icon.w/2, padding )
+					itemname.x, itemname.y = itemname:GetPos()
+
+					local itemamount = vgui.Create( "DLabel", itemPanels[count] )
+					itemamount.amount = calcAmountOfItem( itemid )
+					itemamount:SetText( tostring( itemamount.amount ) .. " / " .. amount )
+					itemamount:SetFont( "q_header_vs" )
+					if( itemamount.amount >= amount ) then
+						itemamount:SetTextColor( Color( 255, 255, 255, 220 ) )
+					else
+						itemamount:SetTextColor( Color( 255, 155, 155, 220 ) )
+					end
+					itemamount:SizeToContents()
+					itemamount.w, itemamount.h = itemamount:GetSize()
+					itemamount:SetPos( itemPanels[count].w/2 - itemamount.w/2 + itemPanels[count].icon.w/2, itemname.y + itemamount.h + padding )
+
+				end
+
+			end
 
 			resBars[resID].cont:SetVisible( false )
 
