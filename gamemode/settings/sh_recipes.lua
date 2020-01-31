@@ -6,7 +6,7 @@
 --   \_\ /_/    \_\_|_| |_| |_|_|\___|\___|_| |_| /_/  
 
 
-Quantum.Recipe.Add( "potatoe", "barrel", { --Quantum.Server.Crafting.MakeItem( Entity(1), "potatoe" )
+Quantum.Recipe.Add( "potatoe", "barrel", {
 	name = "Legendary Potatoe Recipe",
 	amount = 1,
 	delay = 5,

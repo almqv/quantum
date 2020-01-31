@@ -33,14 +33,14 @@ local function createItemAmountLabel( icon, item )
 	icon.amountpanel = vgui.Create( "DLabel", icon )
 	icon.amountpanel:SetText( tostring( item.amount ) )
 	icon.amountpanel:SetTextColor( Color( 205, 205, 205, 255 ) )
-	icon.amountpanel:SetFont( "q_item_amount" )
+	icon.amountpanel:SetFont( "q_info" )
 	icon.amountpanel:SizeToContents()
 	icon.amountpanel.w, icon.amountpanel.h = icon.amountpanel:GetSize()
 	icon.amountpanel:SetPos( ( icon.w - icon.amountpanel.w ) - padding_s, icon.h - icon.amountpanel.h )
 	return icon.amountpanel
 end
 
-local function createItemPanel( x, y, scale, parent, frame, addW )
+local function createItemPanel( x, y, scale, parent, frame, addW, giveToolTip )
 	local p = vgui.Create( "DPanel", parent )
 	p:SetSize( itemWidth * scale, itemHeight * scale )
 	p.w, p.h = p:GetSize()
@@ -67,8 +67,10 @@ local function createItemPanel( x, y, scale, parent, frame, addW )
 				p.icon.tooltip:Remove() -- remove the old
 			end
 
-			p.icon.tooltip = iteminfo.givetooltip( p.icon, frame, addW ) -- create a new
-			p.icon.tooltip:CreateInfo() 
+			if( giveToolTip == true ) then
+				p.icon.tooltip = iteminfo.givetooltip( p.icon, frame, addW ) -- create a new
+				p.icon.tooltip:CreateInfo() 
+			end
 
 			p.icon:SetVisible( true )
 			p.icon:SetModel( itemTbl.model )
@@ -233,9 +235,6 @@ function menu.open( dt )
 
 		for i, resID in pairs( recipes ) do
 			resBars[resID] = vgui.Create( "DPanel", scroll )
-
-			if( i == 1 ) then selectedBar = resBars[resID] end
-
 			resBars[resID].resTbl = Quantum.Recipe.Get( resID )
 			resBars[resID].resItemTbl = Quantum.Item.Get( resID )
 
@@ -260,6 +259,32 @@ function menu.open( dt )
 
 			resBars[resID].txt_panel:SetPos( padding, resBars[resID].h/2 - resBars[resID].txt_panel.h/2 )
 
+			---- content page ----
+			resBars[resID].cont = vgui.Create( "DPanel", cont )
+			resBars[resID].cont:SetSize( cont:GetSize() )
+			resBars[resID].cont.Paint = function( self ) end
+			resBars[resID].cont.w ,resBars[resID].cont.h = resBars[resID].cont:GetSize()
+			local mw, mh = resBars[resID].cont.w ,resBars[resID].cont.h
+
+			-- icon
+			resBars[resID].cont.icon = createItemPanel( mw/8, mh/8, 2, resBars[resID].cont, f )
+			resBars[resID].cont.icon.SetItem( resID )
+
+			if( resBars[resID].resTbl.amount > 1 ) then
+				createItemAmountLabel( resBars[resID].cont.icon, resBars[resID].resTbl )
+			end
+
+			-- title
+			resBars[resID].cont.title = vgui.Create( "DLabel", resBars[resID].cont )
+			resBars[resID].cont.title:SetText( resBars[resID].resTbl.name )
+			resBars[resID].cont.title:SetFont( "q_header_vs" )
+			resBars[resID].cont.title:SetTextColor( theme.color.setalpha( resBars[resID].resItemTbl.rarity.color, 255 ) )
+			resBars[resID].cont.title:SizeToContents()
+			resBars[resID].cont.title.w, resBars[resID].cont.title.h = resBars[resID].cont.title:GetSize()
+			resBars[resID].cont.title:SetPos( resBars[resID].cont.icon.x + resBars[resID].cont.icon.w + padding*2, resBars[resID].cont.icon.y )
+
+			resBars[resID].cont:SetVisible( false )
+
 			local overlay = vgui.Create( "DButton", resBars[resID] )
 			overlay:SetText("")
 			overlay:SetSize( resBars[resID].w, resBars[resID].h )
@@ -274,11 +299,17 @@ function menu.open( dt )
 
 			overlay.DoClick = function( self )
 				surface.PlaySound( "UI/buttonclick.wav" )
+				selectedBar.cont:SetVisible( false )
 				selectedBar = resBars[resID]
-				selTxt:Remove()
+				resBars[resID].cont:SetVisible( true )
 			end
 
 			overlay.OnCursorEntered = function() surface.PlaySound( "UI/buttonrollover.wav" ) end
+
+			if( i == 1 ) then 
+				selectedBar = resBars[resID] 
+				selectedBar.cont:SetVisible( true )
+			end
 		end
 
 	end

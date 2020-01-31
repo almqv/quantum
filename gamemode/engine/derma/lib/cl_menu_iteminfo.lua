@@ -222,7 +222,6 @@ function iteminfo.giveoptions( p, page )
 			end
 
 		else
-			print( "FALSE", page.equippanels[item.equipslot].GetCurrentEquipedIndex(), index )
 			op.equip = vgui.Create( "DButton", options )
 			op.equip:SetText( "Unequip (" .. Quantum.EquipSlotsNames[item.equipslot] .. ")" )
 			op.equip:SetFont( "q_item_option_button" )
@@ -493,14 +492,14 @@ function iteminfo.givetooltip( p, page, addW )
 	p.ItemTooltipPanel = tooltip -- set the tooltip
 
 	local addToW = 0
-	if( addW ) then
+	if( addW == true ) then
 		addToW = tooltip.w
 	end
 
 	p.Think = function( self )
 		self.ItemTooltipPanel:SetVisible( self:IsHovered() )
 		if( self:IsHovered() ) then
-			self.ItemTooltipPanel:SetPos( gui.MouseX() - tooltip.w/2 + addToW, gui.MouseY() - ( tooltip.h + padding ) )
+			self.ItemTooltipPanel:SetPos( (gui.MouseX() - tooltip.w/2) + addToW, gui.MouseY() - (tooltip.h + padding*2) )
 		end
 	end
 
