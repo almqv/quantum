@@ -222,6 +222,7 @@ function menu.open( dt )
 
 		local cont = vgui.Create( "DPanel", f )
 		cont:SetSize( f.w - list.w, f.h - bar.h )
+		cont.w, cont.h = cont:GetSize()
 		cont:SetPos( list.w, bar.h )
 		cont.Paint = function( self ) 
 			theme.blurpanel( self, Color( 255, 255, 255, 1 ) )
@@ -229,6 +230,15 @@ function menu.open( dt )
 
 		local resBars = {}
 		local selectedBar 
+
+		local selTxt = vgui.Create( "DLabel", cont )
+		selTxt:SetText( "Select a recipe" )
+		selTxt:SetFont( "q_info" )
+		selTxt:SetTextColor( Color( 255, 255, 255 ) )
+		selTxt:SizeToContents()
+		selTxt.w, selTxt.h = selTxt:GetSize()
+		selTxt:SetPos( cont.w/2 - selTxt.w/2, cont.h/2 - selTxt.h/2 - padding*10 )
+
 		for i, resID in pairs( recipes ) do
 			resBars[resID] = vgui.Create( "DPanel", scroll )
 			resBars[resID].resTbl = Quantum.Recipe.Get( resID )
@@ -261,16 +271,19 @@ function menu.open( dt )
 			overlay:SetPos( 0, 0 )
 			overlay.Paint = function( self, w, h ) 
 				theme.sharpbutton( self, Color( 0, 0, 0, 0 ), 10, 80 )
+				if( selectedBar == self:GetParent() ) then
+					surface.SetDrawColor( Color( 255, 255, 255, 10 ) )
+					surface.DrawRect( 0, 0, w, h )
+				end
 			end
 
 			overlay.DoClick = function( self )
 				surface.PlaySound( "UI/buttonclick.wav" )
 				selectedBar = resBars[resID]
+				selTxt:Remove()
 			end
+			
 			overlay.OnCursorEntered = function() surface.PlaySound( "UI/buttonrollover.wav" ) end
-		end
-		if( #resBars > 0 ) then
-			selectedBar = resBars[1]
 		end
 
 	end

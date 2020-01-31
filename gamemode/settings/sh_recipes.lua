@@ -24,3 +24,12 @@ Quantum.Recipe.Add( "test", "barrel", {
 		{ item = "potatoe", amount = 1 }
 	}
 })
+
+Quantum.Recipe.Add( "test2", "barrel", { 
+	name = "Test2 Recipe",
+	amount = 5,
+	delay = 5,
+	recipe = {
+		{ item = "potatoe", amount = 1 }
+	}
+})
