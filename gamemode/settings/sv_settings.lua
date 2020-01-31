@@ -113,8 +113,7 @@ Quantum.Server.Settings.IdlePainSounds.Female = {
 
 --- Features to be added ---
 Quantum.Server.Settings.MaxJobLevel = 250
-Quantum.Server.Settings.MaxJobSlots = Vector( 12418.626953125, 9959.9345703125, 320.03125 )
-Angle( 65.102394104004, -2.1179277896881, 0 )
+Quantum.Server.Settings.MaxJobSlots = 2
 
 Quantum.Server.Settings.MaxSkillLevel = 100
 

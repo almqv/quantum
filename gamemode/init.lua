@@ -120,6 +120,8 @@ if SERVER then
 		include( "settings/sh_crafting_stations.lua" )
 		include( "settings/sh_recipes.lua" )
 		include( "settings/sv_crafting_stations_locations.lua" )
+
+		Quantum.Server.Station.UpdateAll()
 	end
 
 	local function loadPlugins()

@@ -24,6 +24,7 @@ function Quantum.Station.Add( id, tbl )
 end
 
 function Quantum.Station.Get( id )
+	if( isnumber(id) ) then return nil end
 	return Quantum.Stations[id]
 end	
 
@@ -33,12 +34,8 @@ end
 
 if SERVER then
 	Quantum.Server.Station = {} 
-	
-
-	if( Stations == nil ) then
-		Stations = {}
-		Stations.Locations = {}
-	end
+	Quantum.Server.Stations = {}
+	Quantum.Server.Stations.Locations = {}
 
 	function Quantum.Server.Station.Spawn( stationid, pos, ang ) -- internal function
 		local ent = ents.Create( "q_crafting_station" )
@@ -53,16 +50,20 @@ if SERVER then
 	end
 
 	function Quantum.Server.Station.Register( stationid, vec, angle )
-		if( Stations.Locations == nil ) then 
+		if( Quantum.Server.Stations.Locations == nil ) then 
 			Quantum.Error( "Station tbl is nil" )
 		end
-		Quantum.Debug( "Registering station '" .. tostring( stationid ) .. "'." )
-		Stations.Locations[ #Stations.Locations + 1] = {
+
+		if( Quantum.Station.Get( stationid ) == nil ) then 
+			Quantum.Error( "The station id is not valid! (" .. tostring( #Quantum.Server.Stations.Locations + 1 ) .. ")" ) 
+		end
+
+		Quantum.Debug( "Registering station '" .. tostring( stationid ) .. "' (" .. tostring(#Quantum.Server.Stations.Locations + 1) .. ")" )
+		Quantum.Server.Stations.Locations[#Quantum.Server.Stations.Locations + 1] = {
 			id = stationid,
 			pos = vec,
 			ang = angle
 		}
-		print(Stations.Locations[#Stations.Locations])
 	end
 	
 	function Quantum.Server.Station.Create( id, tbl )
@@ -74,8 +75,7 @@ if SERVER then
 	end
 
 	function Quantum.Server.Station.SpawnAllRegistered()
-		for i, station in pairs( Stations.Locations ) do
-			print("spawning")
+		for i, station in pairs( Quantum.Server.Stations.Locations ) do
 			Quantum.Server.Station.Create( station.id, { pos = station.pos, ang = station.ang } )
 		end
 	end
@@ -93,14 +93,10 @@ if SERVER then
 	end
 
 	function Quantum.Server.Station.UpdateAll()
-		--Quantum.Server.Station.RemoveAll() -- remove all stations on lua refresh
-
+		Quantum.Debug( "Updating station locations..." )
+		Quantum.Server.Station.RemoveAll() -- remove all stations on lua refresh
 		Quantum.Server.Station.SpawnAllRegistered() -- and create new ones
 	end
-
-	print("##############")
-	PrintTable( Stations.Locations )
-	print("##############")
 
 	hook.Add( "PlayerInitialSpawn", "Quantum_Init_Stations_Load", function()  
 		Quantum.Debug( "Spawning registered crafting stations..." )
@@ -116,8 +112,10 @@ if SERVER then
 			if( key == IN_USE ) then
 				local ent = pl:GetEyeTraceNoCursor().Entity
 				if( ent:GetClass() == "q_crafting_station" ) then
-					pl:SetLocalVelocity( Vector( 0, 0, 0 ) ) 
-					Quantum.Net.OpenMenu( pl, "crafting", { stationEnt = ent, station = ent.stationid } )
+					if( ent:GetPos():Distance( pl:GetPos() ) <= 100 ) then
+						pl:SetLocalVelocity( Vector( 0, 0, 0 ) ) 
+						Quantum.Net.OpenMenu( pl, "crafting", { stationEnt = ent, station = ent.stationid } )
+					end
 				end
 			end
 		end
