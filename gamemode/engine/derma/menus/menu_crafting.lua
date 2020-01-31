@@ -31,7 +31,7 @@ end
 
 local function createItemAmountLabel( icon, item )
 	icon.amountpanel = vgui.Create( "DLabel", icon )
-	icon.amountpanel:SetText( tostring( item.amount ) )
+	icon.amountpanel:SetText( tostring( item.amount ) .. "x" )
 	icon.amountpanel:SetTextColor( Color( 205, 205, 205, 255 ) )
 	icon.amountpanel:SetFont( "q_info" )
 	icon.amountpanel:SizeToContents()
@@ -282,6 +282,17 @@ function menu.open( dt )
 			resBars[resID].cont.title:SizeToContents()
 			resBars[resID].cont.title.w, resBars[resID].cont.title.h = resBars[resID].cont.title:GetSize()
 			resBars[resID].cont.title:SetPos( resBars[resID].cont.icon.x + resBars[resID].cont.icon.w + padding*2, resBars[resID].cont.icon.y )
+			
+			-- reagents txt
+			resBars[resID].cont.reagentsTXT = vgui.Create( "DLabel", resBars[resID].cont )
+			resBars[resID].cont.reagentsTXT:SetText( "Reagents:" )
+			resBars[resID].cont.reagentsTXT:SetFont( "q_info" )
+			resBars[resID].cont.reagentsTXT:SetTextColor( Color( 255, 255, 255, 200 ) )
+			resBars[resID].cont.reagentsTXT:SizeToContents()
+			resBars[resID].cont.reagentsTXT.w, resBars[resID].cont.reagentsTXT.h = resBars[resID].cont.reagentsTXT:GetSize()
+			resBars[resID].cont.reagentsTXT:SetPos( resBars[resID].cont.icon.x, resBars[resID].cont.icon.y + resBars[resID].cont.icon.h + padding*5 )
+
+			
 
 			resBars[resID].cont:SetVisible( false )
 
