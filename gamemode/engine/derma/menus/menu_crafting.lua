@@ -307,7 +307,7 @@ function menu.open( dt )
 			local mw, mh = resBars[resID].cont.w ,resBars[resID].cont.h
 
 			-- icon
-			resBars[resID].cont.icon = createItemPanel( mw/8, mh/8, 2, resBars[resID].cont, f )
+			resBars[resID].cont.icon = createItemPanel( mw/8, mh/8, 2, resBars[resID].cont, back, false, true )
 			resBars[resID].cont.icon.SetItem( resID )
 
 			if( resBars[resID].resTbl.amount > 1 ) then
@@ -386,7 +386,7 @@ function menu.open( dt )
 						surface.DrawRect( 0, 0, w, h )
 					end
 
-					itemPanels[count].icon = createItemPanel( (itemWidth*regScale)/2 + padding*2, itemPanels[count].h/2, regScale, itemPanels[count], f )
+					itemPanels[count].icon = createItemPanel( (itemWidth*regScale)/2 + padding*2, itemPanels[count].h/2, regScale, itemPanels[count], back, false, true )
 					itemPanels[count].icon.SetItem( itemid )
 
 					local itemname = vgui.Create( "DLabel", itemPanels[count] )

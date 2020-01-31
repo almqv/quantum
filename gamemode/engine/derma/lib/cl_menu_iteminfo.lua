@@ -379,6 +379,7 @@ function iteminfo.givetooltip( p, page, addW )
 	tooltip.Paint = function( self )
 		theme.iteminfopanel( self )
 	end
+	tooltip:SetDrawOnTop( true )
 
 	tooltip.Think = function( self ) -- prevents tooltip from showing when a item is showing its options
 		if( page.showtooltips != nil ) then
