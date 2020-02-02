@@ -13,17 +13,18 @@ if CLIENT then
 	SWEP.DrawAmmo = false
 	SWEP.DrawCrosshair = false
 
+	local devmode = GetConVar( "developer" )
 	function SWEP:DrawHUD()
-		if( self:GetOwner():IsSuperAdmin() && !Quantum.Client.IsInMenu ) then
-			surface.SetTextPos( 10, 10 )
+		if( devmode:GetBool() == true && !Quantum.Client.IsInMenu ) then
+			surface.SetTextPos( 10, 150 )
 			surface.SetTextColor( Color( 200, 200, 200, 200 ) )
 			surface.SetFont( "Default" )
 			surface.DrawText( "Developer Mode" )
 
-			surface.SetTextPos( 10, 25 )
+			surface.SetTextPos( 10, 165 )
 			surface.DrawText( "Hitpos: " .. tostring( self:GetOwner():GetEyeTrace().HitPos ) )
 
-			surface.SetTextPos( 10, 40 )
+			surface.SetTextPos( 10, 180 )
 			surface.DrawText( "Angle: " .. tostring( self:GetOwner():GetAngles() ) )
 		end
 	end
@@ -31,7 +32,7 @@ if CLIENT then
 	local cubeMat = Material( "vgui/white" )
 
 	hook.Add( "PostDrawOpaqueRenderables", "Quantum_Client_DeveloperHands_HitPos", function() 
-		if( LocalPlayer():IsSuperAdmin() && !Quantum.Client.IsInMenu ) then
+		if( devmode:GetBool() == true && !Quantum.Client.IsInMenu ) then
 			if( IsValid( LocalPlayer():GetActiveWeapon() ) ) then
 				if( LocalPlayer():GetActiveWeapon():GetClass() == "quantum_hands" ) then
 					local trace = LocalPlayer():GetEyeTrace()
@@ -94,7 +95,8 @@ function SWEP:PrimaryAttack()
 			self:GetOwner():PickupObject( ent ) 
 		end
 	else
-		if( LocalPlayer():IsSuperAdmin() ) then
+		local devmode = GetConVar( "developer" )
+		if( devmode:GetBool() == true ) then
 			LocalPlayer():ChatPrint( "Check console for output.\n" )
 			Quantum.Debug( "--Hitpos Data--" )
 			print( translateVector( "Vector", LocalPlayer():GetEyeTrace().HitPos ) )
@@ -105,7 +107,8 @@ end
 
 function SWEP:SecondaryAttack() 
 	if CLIENT then
-		if( LocalPlayer():IsSuperAdmin() ) then
+		local devmode = GetConVar( "developer" )
+		if( devmode:GetBool() == true ) then
 			LocalPlayer():ChatPrint( "Check console for output.\n" )
 			Quantum.Debug( "--Camera Data--" )
 			print( translateVector( "Vector", LocalPlayer():GetBonePosition( LocalPlayer():LookupBone( "ValveBiped.Bip01_Head1" ) ) ) )
