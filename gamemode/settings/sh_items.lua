@@ -11,7 +11,8 @@ Quantum.Item.Create( "test", {
 	model = "models/props_phx/gears/bevel12.mdl",
 	soulbound = true, 
 	rarity = Quantum.Rarity.Rare, 
-	equipslot = Quantum.EquipSlots.Chest
+	equipslot = Quantum.EquipSlots.Chest,
+	equipeffect = "test_chest"
 } )
 
 Quantum.Item.Create( "test2", {
@@ -42,7 +43,8 @@ Quantum.Item.Create( "potatoe", {
 	soulbound = false, 
 	rarity = Quantum.Rarity.Legendary,
 	equipslot = Quantum.EquipSlots.Head,
-	consumeeffect = "eat_potatoe"
+	consumeeffect = "eat_potatoe",
+	equipeffect = "equip_potatoe"
 } )
 
 -- weapon_gta_sa_jetpack.lua

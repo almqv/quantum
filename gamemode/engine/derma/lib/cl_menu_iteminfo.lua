@@ -192,7 +192,6 @@ function iteminfo.giveoptions( p, page )
 	if( item.equipslot != nil ) then -- Equip
 
 		if( page.equippanels[item.equipslot].GetCurrentEquipedIndex() != index ) then
-			print( "TRUE", page.equippanels[item.equipslot].GetCurrentEquipedIndex(), index )
 			op.equip = vgui.Create( "DButton", options )
 			op.equip:SetText( "Equip (" .. Quantum.EquipSlotsNames[item.equipslot] .. ")" )
 			op.equip:SetFont( "q_item_option_button" )
@@ -454,7 +453,7 @@ function iteminfo.givetooltip( p, page, addW )
 				use:SetPos( title.x, yposBase )
 				use.x, use.y = use:GetPos()
 
-				yposBase = yposBase + use.y + padding_s
+				yposBase = yposBase + use.h + padding_s
 			end
 		end
 
@@ -472,7 +471,27 @@ function iteminfo.givetooltip( p, page, addW )
 				eat:SetPos( title.x, yposBase )
 				eat.x, eat.y = eat:GetPos()
 
-				yposBase = yposBase + eat.y + padding_s
+				yposBase = yposBase + eat.h + padding_s
+			end
+		end
+
+		if( self.item.equipeffect != nil ) then
+
+			if( self.item.equipslot != nil ) then
+				local effectTbl = Quantum.Effect.Get( self.item.equipeffect )
+
+				if( effectTbl.desc != nil ) then
+					local equipDesc = vgui.Create( "DLabel", self )
+					equipDesc:SetText( "Equip: " .. effectTbl.desc || "ERROR DESC EQUIP" )
+					equipDesc:SetFont( "q_tooltip_desc" )
+					equipDesc:SetTextColor( Color( 18, 224, 66, 255 ) )
+					equipDesc:SizeToContents()
+					equipDesc.w, equipDesc.h = equipDesc:GetSize()
+					equipDesc:SetPos( title.x, yposBase )
+					equipDesc.x, equipDesc.y = equipDesc:GetPos()
+
+					yposBase = yposBase + equipDesc.h + padding_s
+				end
 			end
 		end
 

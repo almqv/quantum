@@ -19,6 +19,7 @@ local scale = Quantum.Client.ResolutionScale
 local barW, barH = 400 * scale, 25 * scale
 local radius = 1.05 * scale
 local padding = 5 * scale
+local padding_s = padding/2
 local sw, sh = ScrW(), ScrH()
 
 local function SetAlpha( color, alpha )
@@ -30,18 +31,29 @@ local function renderStatHUD()
 	local lasthp = hp
 	local maxhp = LocalPlayer():GetMaxHealth()
 
+	local armor = LocalPlayer():Armor()
+	local maxarmor = 200
+
 	-- Health border
-	surface.SetDrawColor( 0, 0, 0, 200 )
+	surface.SetDrawColor( 20, 20, 20, 200 )
 	surface.DrawRect( sw/2 - barW/2, sh*0.9, barW, barH )
 
+	-- Border bars
+	surface.SetDrawColor( 52, 180, 235, 200, 220 ) 
+
+	local armorWidth = math.Clamp( (barW - padding_s) * armor/maxarmor, 0, barW - padding_s )
+	surface.DrawRect( ( sw/2 - armorWidth/2 ), (sh*0.9) + padding_s/2, armorWidth, barH - padding_s )
+
 	-- Health bar
-	surface.SetDrawColor( 168, 62, 50, 255 )
-	surface.DrawRect( ( sw/2 - barW/2 ) + padding/2, (sh*0.9) + padding/2, math.Clamp( (barW - padding) * hp/maxhp, 0, barW - padding ), barH - padding )
+	surface.SetDrawColor( 168, 62, 50, 255 ) 
+
+	local healthWidth = math.Clamp( (barW - padding) * hp/maxhp, 0, barW - padding )
+	surface.DrawRect( ( sw/2 - healthWidth/2 ), (sh*0.9) + padding/2, healthWidth, barH - padding )
 
 	-- Health Text
 	surface.SetFont( "q_HUD" )
 	surface.SetTextColor( 255, 255, 255, 255 )
-	local hptxt = tostring( 100 * (hp/maxhp) .. "%" )
+	local hptxt = tostring( hp )
 	local txtW, txtH = surface.GetTextSize( hptxt )
 	surface.SetTextPos( ( ( sw/2 - txtW/2 ) + padding/2 ), ( ( sh*0.9 - txtH/3 ) ) )
 	surface.DrawText( hptxt )

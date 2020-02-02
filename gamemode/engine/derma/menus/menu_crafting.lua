@@ -325,6 +325,7 @@ function menu.open( dt )
 			resBars[resID].cont.title.x, resBars[resID].cont.title.y = resBars[resID].cont.title:GetPos()
 
 			resBars[resID].cont.craft = vgui.Create( "DButton", resBars[resID].cont )
+			resBars[resID].cont.craft.enabled = true
 			resBars[resID].cont.craft:SetText( "Create Item" )
 			resBars[resID].cont.craft:SetFont( "q_button_m" ) 
 			resBars[resID].cont.craft:SetTextColor( Color( 255, 255, 255 ) ) 
@@ -332,12 +333,20 @@ function menu.open( dt )
 			resBars[resID].cont.craft.w, resBars[resID].cont.craft.h = resBars[resID].cont.craft:GetSize()
 			resBars[resID].cont.craft:SetPos( resBars[resID].cont.title.x, resBars[resID].cont.title.y + resBars[resID].cont.craft.h + padding )
 			resBars[resID].cont.craft.Paint = function( self )
-				theme.sharpblurrbutton( self )
+				if( self.enabled ) then
+					theme.sharpblurrbutton( self, Color( 110, 255, 110, 120 ) )
+				else
+					theme.sharpblurrbutton( self, Color( 255, 110, 110, 120 ) )
+				end
 			end
 			resBars[resID].cont.craft.DoClick = function( self )
-				surface.PlaySound( "UI/buttonclick.wav" )
-				f:Close()
-				-- SEND NET CRAFT HERE --
+				if( self.enabled ) then
+					surface.PlaySound( "UI/buttonclick.wav" )
+					f:Close()
+					-- SEND NET CRAFT HERE --
+				else
+					surface.PlaySound( "common/wpn_denyselect.wav" )
+				end
 			end
 			resBars[resID].cont.craft.OnCursorEntered = function() surface.PlaySound( "UI/buttonrollover.wav" ) end
 			
@@ -378,7 +387,7 @@ function menu.open( dt )
 					count = count + 1
 
 					itemPanels[count] = vgui.Create( "DPanel", resBars[resID].cont.reagents )
-					itemPanels[count]:SetSize( 600 * resScale, itemHeight*regScale + padding*2 )
+					itemPanels[count]:SetSize( 750 * resScale, itemHeight*regScale + padding*2 )
 					itemPanels[count].w, itemPanels[count].h = itemPanels[count]:GetSize() --
 					itemPanels[count]:SetPos( resBars[resID].cont.reagentsTXT.x + padding, itemPanels[count].h*(count-1) + padding*(count-1) )
 					itemPanels[count].Paint = function( self, w, h )
@@ -406,6 +415,9 @@ function menu.open( dt )
 						itemamount:SetTextColor( Color( 255, 255, 255, 220 ) )
 					else
 						itemamount:SetTextColor( Color( 255, 155, 155, 220 ) )
+						if( resBars[resID].cont.craft.enabled == true ) then
+							resBars[resID].cont.craft.enabled = false
+						end
 					end
 					itemamount:SizeToContents()
 					itemamount.w, itemamount.h = itemamount:GetSize()
