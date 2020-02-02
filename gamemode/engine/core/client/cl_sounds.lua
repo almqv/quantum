@@ -11,3 +11,10 @@ sound.Add( {
 	volume = 0.75,
 	sound = "music/HL2_song23_SuitSong3.mp3"
 } )
+
+sound.Add( {
+	name = "Quantum_Crafting_Loop",
+	channel = CHAN_STATIC,
+	volume = 0.75,
+	sound = "physics/cardboard/cardboard_box_scrape_rough_loop1.wav"
+} )

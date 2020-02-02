@@ -44,6 +44,7 @@ Quantum.IntCode = {
 	UNEQUIP_ITEM = 5,
 	DESTROY_ITEM = 6, -- to be added
 	UPDATE = 7,
+	CRAFT_RECIPE = 8,
 	BIT_SIZE = 5
 }
 

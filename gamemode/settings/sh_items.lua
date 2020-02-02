@@ -16,8 +16,8 @@ Quantum.Item.Create( "test", {
 } )
 
 Quantum.Item.Create( "test2", {
-	name = "Trash Item Test", 
-	desc = "This is literall trash\nLine breaker test :D\n\nTest :D",
+	name = "Scrap", 
+	desc = "A pile of scrap parts.",
 	model = "models/props_phx/gears/bevel12.mdl",
 	stack = 10, 
 	soulbound = false, 

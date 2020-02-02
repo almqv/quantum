@@ -164,6 +164,7 @@ function Quantum.Net.Inventory.Update( pl )
 end
 
 local intcodeFunctions = {
+	---- INVENTORY NETWORKING ----
 	[Quantum.IntCode.SET_ITEM] = function( pl, index, itemid, amount ) -- if the client is trying to set an item then kick the player
 		Quantum.Warn( "Player [" .. pl:Nick() .. " | " .. pl:SteamID() .. "] tried to use a blacklisted Intcode function called from the client!" )
 		pl:Kick( "[Quantum Security] Tried to use a invalid Intcode function. Nice try." ) 
@@ -182,6 +183,11 @@ local intcodeFunctions = {
 	end,
 	[Quantum.IntCode.UNEQUIP_ITEM] = function( pl, equipslot, itemid, amount )
 		Quantum.Server.Inventory.UnEquipItem( pl, equipslot )
+	end,
+	
+	---- CRAFTING NETWORKING ----
+	[Quantum.IntCode.CRAFT_RECIPE] = function( pl, index, itemid, amount )
+		Quantum.Server.Crafting.MakeItem( pl, itemid )
 	end
 }
 

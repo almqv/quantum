@@ -33,3 +33,21 @@ Quantum.Recipe.Add( "test2", "barrel", {
 		{ item = "potatoe", amount = 1 }
 	}
 })
+
+Quantum.Recipe.Add( "m9k_colt1911", "barrel", { 
+	name = "Colt 1911",
+	amount = 1,
+	delay = 5,
+	recipe = {
+		{ item = "test2", amount = 5 }
+	}
+})
+
+Quantum.Recipe.Add( "jetpack", "barrel", { 
+	name = "A Jet Engine & Duct Tape",
+	amount = 1,
+	delay = 5,
+	recipe = {
+		{ item = "test2", amount = 5 }
+	}
+})

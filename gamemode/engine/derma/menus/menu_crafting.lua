@@ -343,7 +343,8 @@ function menu.open( dt )
 				if( self.enabled ) then
 					surface.PlaySound( "UI/buttonclick.wav" )
 					f:Close()
-					-- SEND NET CRAFT HERE --
+					-- NET CRAFT --
+					Quantum.Client.InventoryNet.CraftRecipe( resBars[resID].resTbl.creates )
 				else
 					surface.PlaySound( "common/wpn_denyselect.wav" )
 				end

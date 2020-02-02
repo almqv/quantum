@@ -128,3 +128,15 @@ function Quantum.Client.InventoryNet.UnequipItem( equipindex )
 	-- 	end
 	-- end
 end
+
+function Quantum.Client.InventoryNet.CraftRecipe( itemid )
+	local res = Quantum.Recipe.Get( itemid )
+
+	if( res != nil ) then
+		net.Start( "quantum_item_action" )
+			Quantum.WriteIntcode( Quantum.IntCode.CRAFT_RECIPE )
+			net.WriteInt( 1, Quantum.calculateNeededBits( Quantum.Inventory.Size ) )
+			net.WriteString( res.creates )
+		net.SendToServer()
+	end
+end

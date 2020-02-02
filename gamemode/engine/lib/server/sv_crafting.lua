@@ -27,6 +27,9 @@ local function cancelCrafting( pl )
 	if( timer.Exists( "Quantum_Crafting_" .. pl:SteamID64() ) ) then
 		timer.Stop( "Quantum_Crafting_" .. pl:SteamID64() )
 		setPlayerIsCrafting( pl, false )
+		if( pl.craftSound != nil ) then
+			pl.craftSound:Stop()
+		end
 	end
 end
 
@@ -47,7 +50,11 @@ function Quantum.Server.Crafting.MakeItem( pl, itemid )
 			-- and then craft this item instead
 			setPlayerIsCrafting( pl, true )
 
+			pl.craftSound = CreateSound( pl, "physics/cardboard/cardboard_box_scrape_rough_loop1.wav" )
+
 			if( isPlayerCrafting( pl ) ) then
+				pl.craftSound:Play()
+				pl.craftSound:ChangeVolume( 0.2 )
 
 				timer.Create( "Quantum_Crafting_" .. pl:SteamID64(), recipe.delay, 1, function() 
 					-- remove the ingridients from the players inv
@@ -62,7 +69,6 @@ function Quantum.Server.Crafting.MakeItem( pl, itemid )
 						for i, slot in pairs( slots ) do
 							if( itemCount < reqItem.amount ) then 
 								itemCount = itemCount + inv[slot][2]
-								print( inv[slot][2] )
 								Quantum.Server.Inventory.RemoveSlotItem( pl, char, slot, inv[slot][2] )
 							end
 
@@ -76,6 +82,7 @@ function Quantum.Server.Crafting.MakeItem( pl, itemid )
 					Quantum.Notify.ItemCrafted( pl, Quantum.Item.Get( recipe.creates ), recipe.amount )
 					setPlayerIsCrafting( pl, false ) -- when everything is done then set this to false
 
+					pl.craftSound:Stop()
 					pl:EmitSound( Quantum.Server.Settings.ItemPickupSound ) -- make a sound on craft
 				end)
 

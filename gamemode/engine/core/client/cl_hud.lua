@@ -38,8 +38,8 @@ local function renderStatHUD()
 	surface.SetDrawColor( 20, 20, 20, 200 )
 	surface.DrawRect( sw/2 - barW/2, sh*0.9, barW, barH )
 
-	-- Border bars
-	surface.SetDrawColor( 52, 180, 235, 200, 220 ) 
+	-- Armor bar
+	surface.SetDrawColor( 52, 180, 255, 200, 200 ) 
 
 	local armorWidth = math.Clamp( (barW - padding_s) * armor/maxarmor, 0, barW - padding_s )
 	surface.DrawRect( ( sw/2 - armorWidth/2 ), (sh*0.9) + padding_s/2, armorWidth, barH - padding_s )
@@ -110,6 +110,14 @@ local function createCraftPanel()
 	craft:SizeToContents()
 	craft.w, craft.h = craft:GetSize()
 	craft:SetPos( sw/2 - craft.w/2, sh*0.65 - craft.h/2 )
+
+	craft.Paint = function( self, w, h )
+		surface.SetDrawColor( Color( 0, 0, 0, 180 ) )
+		surface.DrawOutlinedRect( 0, 0, w, h )
+
+		surface.SetDrawColor( Color( 255, 255, 255, 50 ) )
+		surface.DrawOutlinedRect( 0, 0, w, h )
+	end
 
 	craft.frac = 0
 	craft.fadein = true
