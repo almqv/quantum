@@ -45,12 +45,6 @@ local function renderStatHUD()
 	local txtW, txtH = surface.GetTextSize( hptxt )
 	surface.SetTextPos( ( ( sw/2 - txtW/2 ) + padding/2 ), ( ( sh*0.9 - txtH/3 ) ) )
 	surface.DrawText( hptxt )
-
-	-- Crosshair
-	-- if( Quantum.Client.ShowCrosshair ) then
-	-- 	surface.SetDrawColor( 255, 255, 255, 200 )
-	-- 	surface.DrawRect( sw/2 - radius, sh/2 - radius, radius*2, radius*2 )
-	-- end
 end
 
 local function renderItemInfoHUD()
@@ -150,7 +144,7 @@ end
 
 local function renderCharNamesHUD3D2D()
 	local entsNear = ents.FindInSphere( LocalPlayer():GetPos(), Quantum.CharInfoDisplayDistance )
-	local txtPadding = 32 * scale
+	local txtPadding = 38 * scale
 
 	for i, ent in pairs( entsNear ) do
 		if( ent:IsPlayer() && ent != LocalPlayer() ) then
@@ -169,10 +163,19 @@ local function renderCharNamesHUD3D2D()
 
 				local isServerMasterOnDuty = ent:GetNWBool( "q_servermaster_onduty" )
 				if( isServerMasterOnDuty ) then pos.z = pos.z + 4 end
+
+				surface.SetFont( "q_char_hud_name" )
+				local txtW, txtH = surface.GetTextSize( name )
+				local W, H = txtW + padding*5, txtH - padding/2
 				
 				cam.Start3D2D( pos, ang, 0.125 )
-					draw.SimpleText( name, "q_char_hud_name", 0, 0, Color( 245, 245, 245, 255 * distFrac ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 
+					--surface.SetDrawColor( Color( 0, 0, 0, 200 ) )
+					--surface.DrawRect( -txtW/2, -txtH/2, txtW, txtH )
+					draw.RoundedBox( padding*2.5, -W/2, -H/2, W, H, Color( 0, 0, 0, 200 * distFrac )  )
+
+					draw.SimpleText( name, "q_char_hud_name", 0, 0, Color( 245, 245, 245, 255 * distFrac ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+					
 					if( isServerMasterOnDuty ) then
 						draw.SimpleText( "<Server Master>", "q_char_hud_name", 0, txtPadding, Color( 100, 150, 245, 255 * distFrac ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 					end
