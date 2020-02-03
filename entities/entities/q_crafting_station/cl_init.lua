@@ -12,21 +12,50 @@ local ang
 local mdlHeight
 local p, q
 
+local txtW, txtH 
+local stationTbl
+local stationName 
+
+local barW, barH
+local scale = Quantum.Client.ResolutionScale
+local padding = 10 * scale
+
 function ENT:Draw()
+	if( !stationTbl ) then
+		stationTbl = Quantum.Station.Get( self:GetNWInt( "q_station_id" ) )
+		stationName = stationTbl.name
+	end
 	self:DrawModel() 
 
-	pos, ang = self:GetPos(), self:GetAngles()
+	if( stationTbl.showname == true ) then
+		pos, ang = self:GetPos(), self:GetAngles()
 
-	p, q = self:GetRenderBounds()
-	mdlHeight = q.z - p.z
+		p, q = self:GetRenderBounds()
+		mdlHeight = q.z - p.z
 
-	pos = pos + ang:Up() * (mdlHeight + 10)
+		pos = pos + ang:Up() * (mdlHeight + 20)
 
-	-- rotate around axis
+		-- rotate around axis
+		ang:RotateAroundAxis( ang:Forward(), 90 )
+		ang:RotateAroundAxis( ang:Right(), 90 )
 
-	cam.Start3D2D( pos, ang, 0.15 )
-		surface.SetTextColor( Color( 255, 255, 255 ) )
-		surface.SetFont( "q_title" )
-		surface.DrawText( "aihofhsdifhiosdfh" )
-	cam.End3D2D()
+		ang.y = LocalPlayer():EyeAngles().y - 90
+
+		cam.Start3D2D( pos, ang, 0.15 )
+			surface.SetTextColor( Color( 255, 255, 255 ) )
+			surface.SetFont( "q_title" )
+			txtW, txtH = surface.GetTextSize( stationName )
+
+			barW, barH = txtW + padding, txtH + padding
+
+			surface.SetDrawColor( 0, 0, 0, 150 )
+			surface.DrawRect( -barW/2, -padding/2, barW, barH )
+
+			surface.SetDrawColor( 255, 255, 255, 255 )
+			surface.DrawOutlinedRect( -barW/2, -padding/2, barW, barH )
+
+			surface.SetTextPos( -txtW/2, 0 )
+			surface.DrawText( stationName )
+		cam.End3D2D()
+	end
 end

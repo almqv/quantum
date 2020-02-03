@@ -50,14 +50,6 @@ local scenes = {
 	["rp_dunwood_eu"] = {
 		[1] = {
 			[1] = {
-				fov = 60,
-				velocity = 1,
-				pos1 = Vector( -8481.490234375, 10434.901367188, 161.60014343262 ),
-				ang1 = Angle( 13.865054130554, 112.71305084229, 0 )
-			}
-		},
-		[2] = {
-			[1] = {
 				fov = 80,
 				velocity = 1,
 				pos1 = Vector( 3845.0456542969, 10594.700195313, 1220.03125 ),
@@ -79,7 +71,7 @@ function main.open(dt)
 		local padding = 10 * resScale
 		local padding_s = 4 * resScale
 
-		local buttonWidth = 255 * resScale
+		local buttonWidth = 400 * resScale
 		local buttonColor = Color( 20, 20, 20, 180 )
 		local buttonTextColor = Color( 255, 255, 255, 255 )
 		local buttonFont = "q_button2"
@@ -145,9 +137,12 @@ function main.open(dt)
 
 
 		---- BUTTONS ----
-		local xbasepos = padding*6
-		local ybasepos = sh*0.85 - padding*20
+		local xbasepos = 0 --padding*6
+		local ybasepos = sh*0.775 - padding*20
 		local ypos = ybasepos
+
+		local contBtnAlign = 5
+
 		-- resume button 
 
 		if( dt.cont.resume ) then
@@ -166,6 +161,8 @@ function main.open(dt)
 
 			res.Paint = function( self )
 				--theme.sharpbutton( self, buttonColor )
+				-- theme.fadebutton( self, 1, Color( 90, 90, 240 ) )
+				theme.fadebutton( self, 1 )
 			end
 			res.DoClick = function( self )
 				surface.PlaySound( "UI/buttonclick.wav" )
@@ -174,7 +171,7 @@ function main.open(dt)
 				Quantum.Client.IsInMenu = false
 			end
 			res.OnCursorEntered = function() surface.PlaySound( "UI/buttonrollover.wav" ) end
-			res:SetContentAlignment( 4 )
+			res:SetContentAlignment( contBtnAlign )
 
 			ypos = ypos + res.h + padding * 1.5
 		end
@@ -204,6 +201,7 @@ function main.open(dt)
 
 		play.Paint = function( self )
 			--theme.sharpbutton( self, buttonColor )
+			theme.fadebutton( self, 1 )
 		end
 
 		play.DoClick = function( self )
@@ -212,7 +210,7 @@ function main.open(dt)
 			Quantum.Client.Menu.Menus["character"].open( dt )
 		end
 		play.OnCursorEntered = function() surface.PlaySound( "UI/buttonrollover.wav" ) end
-		play:SetContentAlignment( 4 )
+		play:SetContentAlignment( contBtnAlign )
 
 		ypos = ypos + play.h + padding * 1.5
 
@@ -232,12 +230,13 @@ function main.open(dt)
 
 		settings.Paint = function( self )
 			--theme.sharpbutton( self, buttonColor )
+			theme.fadebutton( self, 1 )
 		end
 		settings.DoClick = function( self )
 			surface.PlaySound( "UI/buttonclick.wav" )
 		end
 		settings.OnCursorEntered = function() surface.PlaySound( "UI/buttonrollover.wav" ) end
-		settings:SetContentAlignment( 4 )
+		settings:SetContentAlignment( contBtnAlign )
 
 		ypos = ypos + settings.h + padding * 1.5
 
@@ -257,13 +256,14 @@ function main.open(dt)
 
 		ws.Paint = function( self )
 			--theme.sharpbutton( self, buttonColor )
+			theme.fadebutton( self, 1 )
 		end
 		ws.DoClick = function( self )
 			surface.PlaySound( "UI/buttonclick.wav" )
 			gui.OpenURL( Quantum.WorkshopLink )
 		end
 		ws.OnCursorEntered = function() surface.PlaySound( "UI/buttonrollover.wav" ) end
-		ws:SetContentAlignment( 4 )
+		ws:SetContentAlignment( contBtnAlign )
 
 		ypos = ypos + ws.h + padding * 1.5
 
@@ -283,13 +283,14 @@ function main.open(dt)
 
 		inv.Paint = function( self )
 			--theme.sharpbutton( self, buttonColor )
+			theme.fadebutton( self, 1 )
 		end
 		inv.DoClick = function( self )
 			surface.PlaySound( "UI/buttonclick.wav" )
 			gui.OpenURL( Quantum.DiscordInvite )
 		end
 		inv.OnCursorEntered = function() surface.PlaySound( "UI/buttonrollover.wav" ) end
-		inv:SetContentAlignment( 4 )
+		inv:SetContentAlignment( contBtnAlign )
 
 		ypos = ypos + inv.h + padding * 1.5
 
@@ -309,6 +310,7 @@ function main.open(dt)
 
 		quit.Paint = function( self )
 			--theme.sharpbutton( self, buttonColor )
+			theme.fadebutton( self, 1 )
 		end
 		quit.DoClick = function( self )
 			surface.PlaySound( "UI/buttonclick.wav" )
@@ -317,7 +319,7 @@ function main.open(dt)
 			end)
 		end
 		quit.OnCursorEntered = function() surface.PlaySound( "UI/buttonrollover.wav" ) end
-		quit:SetContentAlignment( 4 )
+		quit:SetContentAlignment( contBtnAlign )
 
 	end
 end

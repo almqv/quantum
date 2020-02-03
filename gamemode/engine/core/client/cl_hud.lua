@@ -113,7 +113,7 @@ local function createCraftPanel()
 
 	craft.Paint = function( self, w, h )
 		surface.SetDrawColor( Color( 0, 0, 0, 180 ) )
-		surface.DrawOutlinedRect( 0, 0, w, h )
+		surface.DrawRect( 0, 0, w, h )
 
 		surface.SetDrawColor( Color( 255, 255, 255, 50 ) )
 		surface.DrawOutlinedRect( 0, 0, w, h )

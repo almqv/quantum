@@ -187,6 +187,71 @@ function theme.titleframe( p )
 	surface.DrawOutlinedRect( -scale*2, 0, w + 4 * scale, h )
 end
 
+function theme.fadepanel( p, dir, color, startalpha, intervall )
+	local w, h = p:GetSize()
+	color = color || Color( 0, 0, 0 )
+	local alpha = startalpha || 200
+	dir = dir || 1
+	intervall = intervall || 2
+
+	surface.SetDrawColor( color )
+	surface.SetAlphaMultiplier( 1 )
+
+	if( dir == 1 ) then
+		for iw=1, w, intervall do
+			surface.SetDrawColor( Color( color.r, color.g, color.b, alpha * math.Clamp( (w-(iw-1)) / w, 0, 1 ) ) )
+			surface.DrawRect( iw - 1, 0, intervall, h )
+		end
+	elseif( dir == 2 ) then
+		for iw=1, w, intervall do
+			surface.SetDrawColor( Color( color.r, color.g, color.b, alpha * math.Clamp( (w-(iw-1)) / w, 0, 1 ) ) )
+			surface.DrawRect( w - (iw - 1), 0, intervall, h )
+		end
+	end
+end
+
+function theme.fadepanelborder( p, dir, color, color2, startalpha, intervall )
+	local w, h = p:GetSize()
+	color = color || Color( 0, 0, 0 )
+	color2 = color2 || Color( 0, 0, 0 )
+	local alpha = startalpha || 200
+	dir = dir || 1
+	intervall = intervall || 1
+
+	local ih = 2*scale
+
+	theme.fadepanel( p, dir, color, startalpha, intervall )
+
+	-- border
+	if( dir == 1 ) then
+		for iw=1, w, intervall do
+			surface.SetDrawColor( Color( color2.r, color2.g, color2.b, alpha * math.Clamp( (w-(iw-1)) / w, 0, 1 ) ) )
+
+			surface.DrawRect( iw - 1, 0, intervall, ih )
+			surface.DrawRect( iw - 1, h - ih/2, intervall, ih )
+		end
+	elseif( dir == 2 ) then
+		for iw=1, w, intervall do ------------------- NOT DONE
+			surface.SetDrawColor( Color( color2.r, color2.g, color2.b, alpha * math.Clamp( (w-(iw-1)) / w, 0, 1 ) ) )
+			surface.DrawRect( w - (iw - 1), 0, intervall, 2 )
+		end
+	end
+end
+
+function theme.fadebutton( b, dir, inColor )
+	local w, h = b:GetSize()
+	local brdColor = Color( 0, 0, 0 )
+	inColor = inColor || Color( 0, 0, 0, 100 )
+
+	if( !b:IsHovered() ) then
+		brdColor = Color( 0, 0, 0 )
+	else
+		brdColor = Color( 116, 185, 255 )
+	end
+	theme.fadepanelborder( b, dir, Color( brdColor.r * 0.4, brdColor.g * 0.4, brdColor.b * 0.4 ) , brdColor )
+	
+end
+
 ---- Color Manipulation ----
 theme.color = {}
 

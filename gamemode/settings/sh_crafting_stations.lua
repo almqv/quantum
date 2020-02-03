@@ -8,5 +8,12 @@
 -- Add all of the station "categories" here --
 Quantum.Station.Add( "barrel", {
 	name = "Crafting Barrel",
-	model = "models/props_phx/facepunch_barrel.mdl"
+	model = "models/props_phx/facepunch_barrel.mdl",
+	showname = true
+})
+
+Quantum.Station.Add( "barrel2", {
+	name = "Test Barrel 2",
+	model = "models/props_phx/facepunch_barrel.mdl",
+	showname = false
 })
