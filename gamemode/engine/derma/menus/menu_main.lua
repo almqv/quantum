@@ -108,38 +108,51 @@ function main.open(dt)
 		version.w, version.h = version:GetSize()
 		version:SetPos( padding, padding )
 
-		local title = vgui.Create( "DLabel", f )
+		local tFrame = vgui.Create( "DPanel", f )
+		tFrame:SetSize( sw, 150 * resScale )
+		tFrame.w, tFrame.h = tFrame:GetSize()
+		tFrame:SetPos( 0, sh/4.5 - tFrame.h/2 )
+		tFrame.Paint = function( self, w, h )
+			theme.titleframe( self )
+		end
+
+		local title = vgui.Create( "DLabel", tFrame )
 		title:SetText( Quantum.ServerTitle || "[ERROR COULD NOT FIND TITLE]" )
 		title:SetFont( "q_title" )
 		title:SetTextColor( Color( 255, 255, 255, 225 ) )
 		title:SizeToContents()
 		title.w, title.h = title:GetSize()
-		title:SetPos( sw/2 - title.w/2, sh/5 - title.h/2 )
-		title.x, title.y = title:GetPos()
 		title.Paint = function( self )
-			theme.blurpanel( self, Color( 0, 0, 0, 150 ) )
+			--theme.blurpanel( self, Color( 0, 0, 0, 150 ) )
 		end
 
-		local sub = vgui.Create( "DLabel", f )
+		local sub = vgui.Create( "DLabel", tFrame )
 		sub:SetText( "Run by Quantum, created by AlmTech" )
 		sub:SetFont( "q_subtitle" )
 		sub:SetTextColor( Color( 255, 255, 255, 150 ) )
 		sub:SizeToContents()
 		sub.w, sub.h = sub:GetSize()
-		sub:SetPos( sw/2 - sub.w/2, title.y + sub.h + padding*2.45 )
-		sub.x, sub.y = sub:GetPos()
 		sub.Paint = function( self )
-			theme.blurpanel( self, Color( 0, 0, 0, 90 ) )
+			--theme.blurpanel( self, Color( 0, 0, 0, 90 ) )
 		end
+
+		---- Align it ----
+		title:SetPos( tFrame.w/2 - title.w/2, tFrame.h/2 - ( title.h + sub.h )/2 )
+		title.x, title.y = title:GetPos()
+
+		sub:SetPos( tFrame.w/2 - sub.w/2, title.y + sub.h + padding*2 )
+		sub.x, sub.y = sub:GetPos()
 
 
 		---- BUTTONS ----
-
+		local xbasepos = padding*6
+		local ybasepos = sh*0.85 - padding*20
+		local ypos = ybasepos
 		-- resume button 
 
 		if( dt.cont.resume ) then
 			local res = vgui.Create( "DButton", f )
-			res:SetText( "Resume" )
+			res:SetText( "Resume Game" )
 			res:SetFont( buttonFont )
 			res:SetTextColor( buttonTextColor )
 
@@ -148,11 +161,11 @@ function main.open(dt)
 			res:SetSize( buttonWidth, res.h )
 			res.w, res.h = res:GetSize()
 
-			res:SetPos( sw/2 - res.w/2, sub.y + res.h + padding * 20 )
+			res:SetPos( xbasepos, ypos )
 			res.x, res.y = res:GetPos()
 
 			res.Paint = function( self )
-				theme.sharpbutton( self, buttonColor )
+				--theme.sharpbutton( self, buttonColor )
 			end
 			res.DoClick = function( self )
 				surface.PlaySound( "UI/buttonclick.wav" )
@@ -161,6 +174,9 @@ function main.open(dt)
 				Quantum.Client.IsInMenu = false
 			end
 			res.OnCursorEntered = function() surface.PlaySound( "UI/buttonrollover.wav" ) end
+			res:SetContentAlignment( 4 )
+
+			ypos = ypos + res.h + padding * 1.5
 		end
 
 		-- play button
@@ -174,23 +190,20 @@ function main.open(dt)
 		play:SetSize( buttonWidth, play.h )
 		play.w, play.h = play:GetSize()
 
-		play.x, play.y = sw/2 - play.w/2, sub.y + play.h + padding*20
 		if( dt.cont.resume ) then
 			play:SetText( "Change Character" )
 			play:SizeToContents()
 			play.w, play.h = play:GetSize()
 			play:SetSize( buttonWidth, play.h )
 			play.w, play.h = play:GetSize()
-
-			play.y = play.y + play.h + padding*2
 		end
 
 		play:SetTextColor( buttonTextColor )
 
-		play:SetPos( play.x, play.y )
+		play:SetPos( xbasepos, ypos )
 
 		play.Paint = function( self )
-			theme.sharpbutton( self, buttonColor )
+			--theme.sharpbutton( self, buttonColor )
 		end
 
 		play.DoClick = function( self )
@@ -199,6 +212,9 @@ function main.open(dt)
 			Quantum.Client.Menu.Menus["character"].open( dt )
 		end
 		play.OnCursorEntered = function() surface.PlaySound( "UI/buttonrollover.wav" ) end
+		play:SetContentAlignment( 4 )
+
+		ypos = ypos + play.h + padding * 1.5
 
 		-- Settings button
 		local settings = vgui.Create( "DButton", f )
@@ -211,16 +227,19 @@ function main.open(dt)
 		settings:SetSize( buttonWidth, settings.h )
 		settings.w, settings.h = settings:GetSize()
 
-		settings:SetPos( sw/2 - settings.w/2, play.y + settings.h + padding*2 )
+		settings:SetPos( xbasepos, ypos )
 		settings.x, settings.y = settings:GetPos()
 
 		settings.Paint = function( self )
-			theme.sharpbutton( self, buttonColor )
+			--theme.sharpbutton( self, buttonColor )
 		end
 		settings.DoClick = function( self )
 			surface.PlaySound( "UI/buttonclick.wav" )
 		end
 		settings.OnCursorEntered = function() surface.PlaySound( "UI/buttonrollover.wav" ) end
+		settings:SetContentAlignment( 4 )
+
+		ypos = ypos + settings.h + padding * 1.5
 
 		-- Workshop button
 		local ws = vgui.Create( "DButton", f )
@@ -233,17 +252,20 @@ function main.open(dt)
 		ws:SetSize( buttonWidth, ws.h )
 		ws.w, ws.h = ws:GetSize()
 
-		ws:SetPos( sw/2 - ws.w/2, settings.y + ws.h + padding*2 )
+		ws:SetPos( xbasepos, ypos )
 		ws.x, ws.y = ws:GetPos()
 
 		ws.Paint = function( self )
-			theme.sharpbutton( self, buttonColor )
+			--theme.sharpbutton( self, buttonColor )
 		end
 		ws.DoClick = function( self )
 			surface.PlaySound( "UI/buttonclick.wav" )
 			gui.OpenURL( Quantum.WorkshopLink )
 		end
 		ws.OnCursorEntered = function() surface.PlaySound( "UI/buttonrollover.wav" ) end
+		ws:SetContentAlignment( 4 )
+
+		ypos = ypos + ws.h + padding * 1.5
 
 		-- Discord server invite button
 		local inv = vgui.Create( "DButton", f )
@@ -256,17 +278,20 @@ function main.open(dt)
 		inv:SetSize( buttonWidth, inv.h )
 		inv.w, inv.h = inv:GetSize()
 
-		inv:SetPos( sw/2 - inv.w/2, ws.y + inv.h + padding*2 )
+		inv:SetPos( xbasepos, ypos )
 		inv.x, inv.y = inv:GetPos()
 
 		inv.Paint = function( self )
-			theme.sharpbutton( self, buttonColor )
+			--theme.sharpbutton( self, buttonColor )
 		end
 		inv.DoClick = function( self )
 			surface.PlaySound( "UI/buttonclick.wav" )
 			gui.OpenURL( Quantum.DiscordInvite )
 		end
 		inv.OnCursorEntered = function() surface.PlaySound( "UI/buttonrollover.wav" ) end
+		inv:SetContentAlignment( 4 )
+
+		ypos = ypos + inv.h + padding * 1.5
 
 		-- Quit button
 		local quit = vgui.Create( "DButton", f )
@@ -279,11 +304,11 @@ function main.open(dt)
 		quit:SetSize( buttonWidth, quit.h )
 		quit.w, quit.h = quit:GetSize()
 
-		quit:SetPos( sw/2 - quit.w/2, inv.y + quit.h + padding*2 )
+		quit:SetPos( xbasepos, ypos )
 		quit.x, quit.y = quit:GetPos()
 
 		quit.Paint = function( self )
-			theme.sharpbutton( self, buttonColor )
+			--theme.sharpbutton( self, buttonColor )
 		end
 		quit.DoClick = function( self )
 			surface.PlaySound( "UI/buttonclick.wav" )
@@ -292,6 +317,7 @@ function main.open(dt)
 			end)
 		end
 		quit.OnCursorEntered = function() surface.PlaySound( "UI/buttonrollover.wav" ) end
+		quit:SetContentAlignment( 4 )
 
 	end
 end

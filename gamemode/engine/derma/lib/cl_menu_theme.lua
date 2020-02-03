@@ -179,6 +179,14 @@ function theme.iteminfobutton( b, txtClr )
 	end
 end
 
+function theme.titleframe( p )
+	local w, h = p:GetSize()
+	theme.renderblur( p, 25, 10 )
+	theme.blurpanel( p, Color( 0, 0, 0, 100 ) )
+	surface.SetDrawColor( 0, 0, 0, 100 )
+	surface.DrawOutlinedRect( -scale*2, 0, w + 4 * scale, h )
+end
+
 ---- Color Manipulation ----
 theme.color = {}
 
