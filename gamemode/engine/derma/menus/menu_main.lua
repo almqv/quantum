@@ -76,6 +76,11 @@ function main.open(dt)
 		local buttonTextColor = Color( 255, 255, 255, 255 )
 		local buttonFont = "q_button_l"
 
+		surface.SetFont( buttonFont )
+		local x, buttonHeight = surface.GetTextSize( "AAAAA" )
+		buttonHeight = buttonHeight + padding
+		x = nil
+
 		local f = vgui.Create( "DFrame" )
 		f:SetSize( sw, sh )
 		f:SetTitle( "" )
@@ -147,20 +152,16 @@ function main.open(dt)
 
 		if( dt.cont.resume ) then
 			local res = vgui.Create( "DButton", f )
-			res:SetText( "Resume Game" )
+			res:SetText( "" )
 			res.txt = "Resume Game"
 
-			res:SizeToContents()
-			res.w, res.h = res:GetSize()
-			res:SetSize( buttonWidth, res.h )
+			res:SetSize( buttonWidth, buttonHeight )
 			res.w, res.h = res:GetSize()
 
 			res:SetPos( xbasepos, ypos )
 			res.x, res.y = res:GetPos()
 
 			res.Paint = function( self )
-				--theme.sharpbutton( self, buttonColor )
-				-- theme.fadebutton( self, 1, Color( 90, 90, 240 ) )
 				theme.fadebutton( self, 1, nil, buttonFont, buttonTextColor )
 			end
 			res.DoClick = function( self )
@@ -181,21 +182,11 @@ function main.open(dt)
 		play:SetText( "" ) -- why cant we just set the texts posistion :(
 		play.txt = "Play"
 
-		play:SizeToContents()
-		play.w, play.h = play:GetSize()
-
-		surface.SetFont( buttonFont )
-		play.w, play.h = surface.GetTextSize( "AAAAA" )
-
-		play:SetSize( buttonWidth, play.h )
+		play:SetSize( buttonWidth, buttonHeight )
 		play.w, play.h = play:GetSize()
 
 		if( dt.cont.resume ) then
-			play:SetText( "Change Character" )
-			play:SizeToContents()
-			play.w, play.h = play:GetSize()
-			play:SetSize( buttonWidth, play.h )
-			play.w, play.h = play:GetSize()
+			play.txt = "Change Character"
 		end
 
 		play:SetTextColor( buttonTextColor )
@@ -221,12 +212,8 @@ function main.open(dt)
 		local settings = vgui.Create( "DButton", f )
 		settings:SetText( "" )
 		settings.txt = "Settings"
-		settings:SetFont( buttonFont )
-		settings:SetTextColor( buttonTextColor )
 
-		settings:SizeToContents()
-		settings.w, settings.h = settings:GetSize()
-		settings:SetSize( buttonWidth, settings.h )
+		settings:SetSize( buttonWidth, buttonHeight )
 		settings.w, settings.h = settings:GetSize()
 
 		settings:SetPos( xbasepos, ypos )
@@ -248,12 +235,8 @@ function main.open(dt)
 		local ws = vgui.Create( "DButton", f )
 		ws:SetText( "" )
 		ws.txt = "Steam Workshop"
-		ws:SetFont( buttonFont )
-		ws:SetTextColor( buttonTextColor )
 
-		ws:SizeToContents()
-		ws.w, ws.h = ws:GetSize()
-		ws:SetSize( buttonWidth, ws.h )
+		ws:SetSize( buttonWidth, buttonHeight )
 		ws.w, ws.h = ws:GetSize()
 
 		ws:SetPos( xbasepos, ypos )
@@ -276,12 +259,8 @@ function main.open(dt)
 		local inv = vgui.Create( "DButton", f )
 		inv:SetText( "" )
 		inv.txt = "Discord Invite"
-		inv:SetFont( buttonFont )
-		inv:SetTextColor( buttonTextColor )
 
-		inv:SizeToContents()
-		inv.w, inv.h = inv:GetSize()
-		inv:SetSize( buttonWidth, inv.h )
+		inv:SetSize( buttonWidth, buttonHeight )
 		inv.w, inv.h = inv:GetSize()
 
 		inv:SetPos( xbasepos, ypos )
@@ -304,12 +283,8 @@ function main.open(dt)
 		local quit = vgui.Create( "DButton", f )
 		quit:SetText( "" )
 		quit.txt = "Disconnect"
-		quit:SetFont( buttonFont )
-		quit:SetTextColor( buttonTextColor )
 
-		quit:SizeToContents()
-		quit.w, quit.h = quit:GetSize()
-		quit:SetSize( buttonWidth, quit.h )
+		quit:SetSize( buttonWidth, buttonHeight )
 		quit.w, quit.h = quit:GetSize()
 
 		quit:SetPos( xbasepos, ypos )
