@@ -39,6 +39,19 @@ function Quantum.Notify.ItemCrafted( pl, item, amount )
 	pl:SendLua( luaFunc ) 
 end
 
+function Quantum.Notify.ItemGathered( pl, item, amount )
+	local amtStr = ""
+	if( amount > 1 ) then amtStr = tostring(amount) .. "x " end
+
+	local itemColor = item.rarity.color || baseClr
+	local itemName = item.name || "[ERROR name=nil]"
+
+	local luaArgs = makeColorAString(baseClr) .. ",'You gathered '," .. makeColorAString(baseClr) .. ",'" .. tostring(amtStr) .. "'," .. makeColorAString(itemColor) .. ","  .. "'" .. tostring(itemName) .. "'"
+	local luaFunc = "chat.AddText(" .. luaArgs .. ")"
+
+	pl:SendLua( luaFunc ) 
+end
+
 function Quantum.Notify.Deny( pl, text )
 
 	local luaArgs = makeColorAString( Color( 245, 20, 20 ) ) .. ",'" .. tostring( text ) .. "'"

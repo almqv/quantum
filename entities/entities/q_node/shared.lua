@@ -8,7 +8,7 @@
 ENT.Type = "anim"
 ENT.Base = "base_entity"
  
-ENT.PrintName = "Quantum Station"
+ENT.PrintName = "Quantum Node"
 ENT.Author = "AlmTech"
 ENT.Contact = "elias@almtech.se"
 ENT.Spawnable = false

@@ -16,6 +16,7 @@ if SERVER then
 	AddCSLuaFile( "settings/sh_effects.lua" )
 	AddCSLuaFile( "settings/sh_recipes.lua" )
 	AddCSLuaFile( "settings/sh_crafting_stations.lua" )
+	AddCSLuaFile( "settings/sh_nodes.lua" )
 
 	AddCSLuaFile( "cl_init.lua" )
 	AddCSLuaFile( "shared.lua" )
@@ -120,6 +121,7 @@ if SERVER then
 		include( "settings/sh_crafting_stations.lua" )
 		include( "settings/sh_recipes.lua" )
 		include( "settings/sv_crafting_stations_locations.lua" )
+		include( "settings/sh_nodes.lua" )
 
 		Quantum.Server.Station.UpdateAll()
 	end

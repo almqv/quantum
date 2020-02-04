@@ -5,11 +5,8 @@
 --  \ \   / ____ \| | | | | | | |  __/ (__| | | |  / / 
 --   \_\ /_/    \_\_|_| |_| |_|_|\___|\___|_| |_| /_/  
 
-ENT.Type = "anim"
-ENT.Base = "base_entity"
- 
-ENT.PrintName = "Quantum Station"
-ENT.Author = "AlmTech"
-ENT.Contact = "elias@almtech.se"
-ENT.Spawnable = false
-ENT.AdminSpawnable = false
+include( "shared.lua" )
+
+function ENT:Draw()
+	self:DrawModel() 
+end

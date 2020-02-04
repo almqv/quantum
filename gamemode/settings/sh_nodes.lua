@@ -5,11 +5,12 @@
 --  \ \   / ____ \| | | | | | | |  __/ (__| | | |  / / 
 --   \_\ /_/    \_\_|_| |_| |_|_|\___|\___|_| |_| /_/  
 
-ENT.Type = "anim"
-ENT.Base = "base_entity"
- 
-ENT.PrintName = "Quantum Station"
-ENT.Author = "AlmTech"
-ENT.Contact = "elias@almtech.se"
-ENT.Spawnable = false
-ENT.AdminSpawnable = false
+Quantum.Node.Create( "stone", {
+	name = "Stone",
+	model = "",
+	toolids = {"q_hands"},
+	give = {
+		{ item = "test2", amount = 1 }
+	},
+	giveprobability = 1/2
+} ) 
