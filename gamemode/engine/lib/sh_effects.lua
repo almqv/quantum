@@ -129,4 +129,22 @@ if SERVER then -- server only functions
 		Quantum.Effect.RemoveAll( ply ) -- remove all effects 
 	end)
 
+	hook.Add( "PlayerSpawn", "Quantum_Effects_GiveEquippedEffects", function( ply ) 
+		local char = Quantum.Server.Char.GetCurrentCharacter( ply )
+
+		if( char != nil ) then
+			local equippedItems = Quantum.Server.Inventory.GetEquippedItems( ply, char ) -- add all of the effects given by equipped items
+			local slotItemID
+			local itemTbl
+			for i, tbl in pairs( equippedItems ) do
+				slotItemID = Quantum.Server.Inventory.GetSlotItem( char, tbl.slot )[1]
+				itemTbl = Quantum.Item.Get( slotItemID )
+
+				if( itemTbl.equipeffect != nil ) then
+					print("GIVE")
+					Quantum.Effect.Give( ply, itemTbl.equipeffect )
+				end
+			end
+		end
+	end)
 end

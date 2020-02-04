@@ -150,6 +150,10 @@ function menu.open( dt )
 		end
 	end
 
+	if( recipes == nil ) then
+		return
+	end
+	
 	local items = Quantum.Client.Inventory 
 	local equipped = Quantum.Client.Equipped
 

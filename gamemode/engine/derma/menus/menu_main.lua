@@ -78,7 +78,7 @@ function main.open(dt)
 
 		surface.SetFont( buttonFont )
 		local x, buttonHeight = surface.GetTextSize( "AAAAA" )
-		buttonHeight = buttonHeight + padding
+		buttonHeight = buttonHeight + padding/2
 		x = nil
 
 		local f = vgui.Create( "DFrame" )
