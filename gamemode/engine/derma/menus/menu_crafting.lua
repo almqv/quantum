@@ -392,15 +392,16 @@ function menu.open( dt )
 					count = count + 1
 
 					itemPanels[count] = vgui.Create( "DPanel", resBars[resID].cont.reagents )
-					itemPanels[count]:SetSize( 750 * resScale, itemHeight*regScale + padding*2 )
+					itemPanels[count]:SetSize( cont.w, itemHeight*regScale + padding*2 ) -- 750 * resScale
 					itemPanels[count].w, itemPanels[count].h = itemPanels[count]:GetSize() --
-					itemPanels[count]:SetPos( resBars[resID].cont.reagentsTXT.x + padding, itemPanels[count].h*(count-1) + padding*(count-1) )
+					itemPanels[count]:SetPos( 0, itemPanels[count].h*(count-1) + padding*(count-1) ) --resBars[resID].cont.reagentsTXT.x + padding
 					itemPanels[count].Paint = function( self, w, h )
-						surface.SetDrawColor( Color( 0, 0, 0, 120 ) )
-						surface.DrawRect( 0, 0, w, h )
+						-- surface.SetDrawColor( Color( 0, 0, 0, 120 ) )
+						-- surface.DrawRect( 0, 0, w, h )
+						theme.fadepanelborder( self, 1 )
 					end
 
-					itemPanels[count].icon = createItemPanel( (itemWidth*regScale)/2 + padding*2, itemPanels[count].h/2, regScale, itemPanels[count], back, false, true )
+					itemPanels[count].icon = createItemPanel( (itemWidth*regScale)/2 + padding*4, itemPanels[count].h/2, regScale, itemPanels[count], back, false, true )
 					itemPanels[count].icon.SetItem( itemid )
 
 					local itemname = vgui.Create( "DLabel", itemPanels[count] )
@@ -409,7 +410,7 @@ function menu.open( dt )
 					itemname:SetTextColor( theme.color.setalpha( itemtbl.rarity.color, 220 ) )
 					itemname:SizeToContents()
 					itemname.w, itemname.h = itemname:GetSize()
-					itemname:SetPos( itemPanels[count].w/2 - itemname.w/2 + itemPanels[count].icon.w/2, padding )
+					itemname:SetPos( itemPanels[count].w/2 - itemname.w/2, padding ) -- + itemPanels[count].icon.w/2
 					itemname.x, itemname.y = itemname:GetPos()
 
 					local itemamount = vgui.Create( "DLabel", itemPanels[count] )
@@ -426,7 +427,7 @@ function menu.open( dt )
 					end
 					itemamount:SizeToContents()
 					itemamount.w, itemamount.h = itemamount:GetSize()
-					itemamount:SetPos( itemPanels[count].w/2 - itemamount.w/2 + itemPanels[count].icon.w/2, itemname.y + itemamount.h + padding )
+					itemamount:SetPos( itemPanels[count].w/2 - itemamount.w/2, itemname.y + itemamount.h + padding ) -- + itemPanels[count].icon.w/2
 
 				end
 
