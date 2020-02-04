@@ -238,7 +238,7 @@ function theme.fadepanelborder( p, dir, color, color2, startalpha, intervall )
 	end
 end
 
-function theme.fadebutton( b, dir, inColor )
+function theme.fadebutton( b, dir, inColor, font, txtColor )
 	local w, h = b:GetSize()
 	local brdColor = Color( 0, 0, 0 )
 	inColor = inColor || Color( 0, 0, 0, 100 )
@@ -249,6 +249,14 @@ function theme.fadebutton( b, dir, inColor )
 		brdColor = Color( 116, 185, 255 )
 	end
 	theme.fadepanelborder( b, dir, Color( brdColor.r * 0.4, brdColor.g * 0.4, brdColor.b * 0.4 ) , brdColor )
+
+	-- render the text
+	local txt = b.txt || "ERROR txt=nil"
+	surface.SetFont( font || "Default" )
+	surface.SetTextColor( txtColor || Color( 255, 255, 255, 255 ) )
+	local tw, th = surface.GetTextSize( txt )
+	surface.SetTextPos( w/8, h/2 - th/2 )
+	surface.DrawText( txt )
 	
 end
 

@@ -74,7 +74,7 @@ function main.open(dt)
 		local buttonWidth = 400 * resScale
 		local buttonColor = Color( 20, 20, 20, 180 )
 		local buttonTextColor = Color( 255, 255, 255, 255 )
-		local buttonFont = "q_button2"
+		local buttonFont = "q_button_l"
 
 		local f = vgui.Create( "DFrame" )
 		f:SetSize( sw, sh )
@@ -141,15 +141,14 @@ function main.open(dt)
 		local ybasepos = sh*0.775 - padding*20
 		local ypos = ybasepos
 
-		local contBtnAlign = 5
+		local contBtnAlign = 4
 
 		-- resume button 
 
 		if( dt.cont.resume ) then
 			local res = vgui.Create( "DButton", f )
 			res:SetText( "Resume Game" )
-			res:SetFont( buttonFont )
-			res:SetTextColor( buttonTextColor )
+			res.txt = "Resume Game"
 
 			res:SizeToContents()
 			res.w, res.h = res:GetSize()
@@ -162,7 +161,7 @@ function main.open(dt)
 			res.Paint = function( self )
 				--theme.sharpbutton( self, buttonColor )
 				-- theme.fadebutton( self, 1, Color( 90, 90, 240 ) )
-				theme.fadebutton( self, 1 )
+				theme.fadebutton( self, 1, nil, buttonFont, buttonTextColor )
 			end
 			res.DoClick = function( self )
 				surface.PlaySound( "UI/buttonclick.wav" )
@@ -179,11 +178,15 @@ function main.open(dt)
 		-- play button
 		local play = vgui.Create( "DButton", f )
 		
-		play:SetText( "Play" )
-		play:SetFont( buttonFont )
+		play:SetText( "" ) -- why cant we just set the texts posistion :(
+		play.txt = "Play"
 
 		play:SizeToContents()
 		play.w, play.h = play:GetSize()
+
+		surface.SetFont( buttonFont )
+		play.w, play.h = surface.GetTextSize( "AAAAA" )
+
 		play:SetSize( buttonWidth, play.h )
 		play.w, play.h = play:GetSize()
 
@@ -201,7 +204,7 @@ function main.open(dt)
 
 		play.Paint = function( self )
 			--theme.sharpbutton( self, buttonColor )
-			theme.fadebutton( self, 1 )
+			theme.fadebutton( self, 1, nil, buttonFont, buttonTextColor )
 		end
 
 		play.DoClick = function( self )
@@ -216,7 +219,8 @@ function main.open(dt)
 
 		-- Settings button
 		local settings = vgui.Create( "DButton", f )
-		settings:SetText( "Settings" )
+		settings:SetText( "" )
+		settings.txt = "Settings"
 		settings:SetFont( buttonFont )
 		settings:SetTextColor( buttonTextColor )
 
@@ -230,7 +234,7 @@ function main.open(dt)
 
 		settings.Paint = function( self )
 			--theme.sharpbutton( self, buttonColor )
-			theme.fadebutton( self, 1 )
+			theme.fadebutton( self, 1, nil, buttonFont, buttonTextColor )
 		end
 		settings.DoClick = function( self )
 			surface.PlaySound( "UI/buttonclick.wav" )
@@ -242,7 +246,8 @@ function main.open(dt)
 
 		-- Workshop button
 		local ws = vgui.Create( "DButton", f )
-		ws:SetText( "Steam Workshop" )
+		ws:SetText( "" )
+		ws.txt = "Steam Workshop"
 		ws:SetFont( buttonFont )
 		ws:SetTextColor( buttonTextColor )
 
@@ -256,7 +261,7 @@ function main.open(dt)
 
 		ws.Paint = function( self )
 			--theme.sharpbutton( self, buttonColor )
-			theme.fadebutton( self, 1 )
+			theme.fadebutton( self, 1, nil, buttonFont, buttonTextColor )
 		end
 		ws.DoClick = function( self )
 			surface.PlaySound( "UI/buttonclick.wav" )
@@ -269,7 +274,8 @@ function main.open(dt)
 
 		-- Discord server invite button
 		local inv = vgui.Create( "DButton", f )
-		inv:SetText( "Discord Invite" )
+		inv:SetText( "" )
+		inv.txt = "Discord Invite"
 		inv:SetFont( buttonFont )
 		inv:SetTextColor( buttonTextColor )
 
@@ -283,7 +289,7 @@ function main.open(dt)
 
 		inv.Paint = function( self )
 			--theme.sharpbutton( self, buttonColor )
-			theme.fadebutton( self, 1 )
+			theme.fadebutton( self, 1, nil, buttonFont, buttonTextColor )
 		end
 		inv.DoClick = function( self )
 			surface.PlaySound( "UI/buttonclick.wav" )
@@ -296,7 +302,8 @@ function main.open(dt)
 
 		-- Quit button
 		local quit = vgui.Create( "DButton", f )
-		quit:SetText( "Disconnect" )
+		quit:SetText( "" )
+		quit.txt = "Disconnect"
 		quit:SetFont( buttonFont )
 		quit:SetTextColor( buttonTextColor )
 
@@ -310,7 +317,7 @@ function main.open(dt)
 
 		quit.Paint = function( self )
 			--theme.sharpbutton( self, buttonColor )
-			theme.fadebutton( self, 1 )
+			theme.fadebutton( self, 1, nil, buttonFont, buttonTextColor )
 		end
 		quit.DoClick = function( self )
 			surface.PlaySound( "UI/buttonclick.wav" )
