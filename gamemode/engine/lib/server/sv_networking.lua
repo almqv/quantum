@@ -43,6 +43,10 @@ local function checkCacheTable( ply, cache_id, dt )
 end
 
 local function CacheDatatableMethod( id, datatable, ply )
+	if( ply.cache == nil ) then 
+		ply.cache = {} 
+		Quantum.Error( "Players cache is nil, creating..." )
+	end -- failsafe
 	ply.cache[id] = checkCacheTable( ply, id, datatable ) -- check caching tables etc
 	Quantum.Debug( "(" .. tostring(ply) .. " | " .. tostring(id) .. ") Removing known data in cache from datatable..." )
 	if( ply.cache[id] ~= nil ) then
@@ -60,7 +64,7 @@ local function CacheDatatableMethod( id, datatable, ply )
 			end
 		end
 	end
-	--datatable.id = id -- give it the id so that the client side could handle it
+
 	-- Always give the id since it is highly "valuable".
 	-- Don't want the client mixing up the NPC, which this caching system could do if not handled correctly.
 	return { id = id, cont = datatable }
@@ -83,6 +87,7 @@ local function SendDatatableToClient( client, dt, type )
 end
 
 function Quantum.Net.OpenMenu( pl, type, dt )
+	if( pl.cache == nil ) then Quantum.Error( "Warning! " .. tostring(pl) .. " tried to open a menu before they had loaded into the server!" ) end
 	SendDatatableToClient( pl, dt, type )
 end
 
