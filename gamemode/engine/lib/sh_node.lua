@@ -7,6 +7,7 @@
 
 Quantum.Node = {} -- lib
 Quantum.Nodes = {} -- container for vars
+Quantum.NodesLocations = {}
 
 function Quantum.Node.Create( nodeid, tbl ) 
 	local node = {
@@ -65,15 +66,24 @@ if SERVER then
 		end
 	end
 
+	function Quantum.Node.RemoveAllPerma()
+		for k, node in pairs( ents.FindByClass("q_node") ) do
+			node:Remove()
+		end
+	end
+
 	function Quantum.Node.Register( nodeid, vec, ang1 )
-		Quantum.Nodes[ #Quantum.Nodes + 1 ] = { id = nodeid, pos = vec, ang = ang1 }
+		Quantum.NodesLocations[ #Quantum.NodesLocations + 1 ] = { id = nodeid, pos = vec, ang = ang1 }
 	end
 
 	function Quantum.Node.SpawnAllRegistered()
 		local nodeTbl
-		for k, v in pairs( Quantum.Nodes ) do
+		for k, v in pairs( Quantum.NodesLocations ) do
 			nodeTbl = Quantum.Node.Get( v.id )
 			if( nodeTbl != nil ) then
+				Quantum.Debug( "----Node-Spawning-Info----" )
+				PrintTable(v)
+				Quantum.Debug( "--------------------------" )
 				Quantum.Node.Spawn( v.id, v.pos, v.ang, nodeTbl.respawndelay, nodeTbl.probability )
 			else
 				Quantum.Error( "Tried to spawn an invalid node ('" .. v.id .. "')!" )
@@ -86,6 +96,13 @@ if SERVER then
 		
 		if( #player.GetAll() == 1 ) then -- spawn the stations when the first player joins
 			Quantum.Node.SpawnAllRegistered()
+		end
+	end)
+
+	hook.Add( "PlayerDisconnected", "Quantum_Nodes_RemoveOnNoPlayers", function() 
+		Quantum.Debug( "Removing all nodes..." )
+		if( #player.GetAll() - 1 <= 0 ) then
+			Quantum.Node.RemoveAllPerma()
 		end
 	end)
 
