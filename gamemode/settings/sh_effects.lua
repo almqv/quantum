@@ -29,12 +29,14 @@ Quantum.Effect.Create( "equip_potatoe", {
 		pl.runtimeEffect_timerActive_equip_potatoe = false
 	end,
 	runtimefunc = function( pl )
-		if( !pl.runtimeEffect_timerActive_equip_potatoe ) then
-			pl.runtimeEffect_timerActive_equip_potatoe = true
-			timer.Simple( 1, function() 
-				pl:SetHealth( math.Clamp( pl:Health() + 5, 1, pl:GetMaxHealth() ) )
-				pl.runtimeEffect_timerActive_equip_potatoe = false
-			end)
+		if( IsValid( pl ) ) then
+			if( !pl.runtimeEffect_timerActive_equip_potatoe ) then
+				pl.runtimeEffect_timerActive_equip_potatoe = true
+				timer.Simple( 1, function() 
+					pl:SetHealth( math.Clamp( pl:Health() + 5, 1, pl:GetMaxHealth() ) )
+					pl.runtimeEffect_timerActive_equip_potatoe = false
+				end)
+			end
 		end
 	end,
 	stopfunc = function( pl )

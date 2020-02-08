@@ -63,7 +63,9 @@ hook.Add( "EntityTakeDamage", "Quantum_PlayerDamage_SoundEffect", function( pl, 
 		end)
 
 		timer.Simple( 60, function() 
-			timer.Remove( "Quantum_PlayerHurtSounds_" .. tostring( pl:SteamID64() ) ) -- remove the timer for the player
+			if( IsValid( pl ) ) then
+				timer.Remove( "Quantum_PlayerHurtSounds_" .. tostring( pl:SteamID64() ) ) -- remove the timer for the player
+			end
 		end)
 
 	end
