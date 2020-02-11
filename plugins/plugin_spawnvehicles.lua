@@ -3,8 +3,6 @@
 -- You may remove this if you want.
 if SERVER then
 	local plugin = {}
-	print("loaded beta stuff")
-
 	plugin.vechilesTypes = {
 		["jeep"] = function( pos, ang )
 			local ent = simfphys.SpawnVehicleSimple( "sim_fphys_jeep", pos, ang )
