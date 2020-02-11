@@ -4,74 +4,39 @@
 -- < <     / /\ \ | | '_ ` _ \| |/ _ \/ __| '_ \    > >
 --  \ \   / ____ \| | | | | | | |  __/ (__| | | |  / / 
 --   \_\ /_/    \_\_|_| |_| |_|_|\___|\___|_| |_| /_/  
+
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "Hands"
+	SWEP.PrintName = "Quantum Tool"
 	SWEP.Slot = 0
-	SWEP.SlotPos = 0
+	SWEP.SlotPos = 1
 	SWEP.DrawAmmo = false
 	SWEP.DrawCrosshair = false
-
-	local devmode = GetConVar( "developer" )
-	function SWEP:DrawHUD()
-		if( devmode:GetBool() == true && !Quantum.Client.IsInMenu ) then
-			surface.SetTextPos( 10, 150 )
-			surface.SetTextColor( Color( 200, 200, 200, 200 ) )
-			surface.SetFont( "Default" )
-			surface.DrawText( "Developer Mode" )
-
-			surface.SetTextPos( 10, 165 )
-			surface.DrawText( "Hitpos: " .. tostring( self:GetOwner():GetEyeTrace().HitPos ) )
-
-			surface.SetTextPos( 10, 180 )
-			surface.DrawText( "Angle: " .. tostring( self:GetOwner():GetAngles() ) )
-		end
-	end
-	
-	local cubeMat = Material( "vgui/white" )
-
-	hook.Add( "PostDrawOpaqueRenderables", "Quantum_Client_DeveloperHands_HitPos", function() 
-		if( devmode:GetBool() == true && !Quantum.Client.IsInMenu ) then
-			if( IsValid( LocalPlayer():GetActiveWeapon() ) ) then
-				if( LocalPlayer():GetActiveWeapon():GetClass() == "quantum_hands" ) then
-					local trace = LocalPlayer():GetEyeTrace()
-					local angle = trace.HitNormal:Angle()
-
-					render.SetMaterial( cubeMat )
-					render.DrawBox( trace.HitPos, Angle( 0, 0, 0), Vector( 0, 0, 0 ), Vector( 2, 2, 2 ), Color( 255, 25, 25, 100 ) )
-					
-					render.DrawLine( trace.HitPos, trace.HitPos + 12 * angle:Forward(), Color( 255, 0, 0 ), true )
-					render.DrawLine( trace.HitPos, trace.HitPos + 12 * -angle:Right(), Color( 0, 255, 0 ), true )
-					render.DrawLine( trace.HitPos, trace.HitPos + 12 * angle:Up(), Color( 0, 0, 255 ), true )
-				end
-			end
-		end
-	end)
 end
 
-SWEP.WorldModel = ""
+SWEP.WorldModel = "models/weapons/w_crowbar.mdl"
+SWEP.ViewModel = "models/weapons/c_crowbar.mdl"
 SWEP.UseHands = true
+SWEP.Weight = 4
 
 SWEP.Primary.ClipSize = -1
-SWEP.Primary.DefaultClip = 0
+SWEP.Primary.DefaultClip = -1
 SWEP.Primary.Automatic = false
 SWEP.Primary.Ammo = ""
-SWEP.Primary.Delay = 0.25
 
 SWEP.Secondary.ClipSize = -1
-SWEP.Secondary.DefaultClip = 0
+SWEP.Secondary.DefaultClip = -1
 SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = ""
-SWEP.Secondary.Delay = 0.25
 
 function SWEP:Initialize()
-	self:SetHoldType( "normal" )
+	self:SetHoldType( "melee" )
 end
 
 function SWEP:Deploy()
 	if( CLIENT || !IsValid(self:GetOwner()) ) then return true end
-	self:GetOwner():DrawWorldModel( false )
+	self:GetOwner():DrawWorldModel( self.WorldModel != "" && self.WorldModel != nil )
 	return true
 end
 
@@ -83,38 +48,12 @@ function SWEP:PreDrawViewModel()
 	return true
 end
 
-local function translateVector( pre, vec )
-	return pre .. "( " .. tostring(vec.x) .. ", " .. tostring(vec.y) .. ", " .. tostring(vec.z) .. " )"
-end
-
 function SWEP:PrimaryAttack()
-	if SERVER then
-		local ent = self:GetOwner():GetEyeTraceNoCursor().Entity
-		if( IsValid( ent ) && ent:GetPos():Distance( self:GetOwner():GetPos() ) < 100 ) then
-			if ( ent:IsPlayerHolding() ) then return end
-			self:GetOwner():PickupObject( ent ) 
-		end
-	else
-		local devmode = GetConVar( "developer" )
-		if( devmode:GetBool() == true ) then
-			LocalPlayer():ChatPrint( "Check console for output.\n" )
-			Quantum.Debug( "--Hitpos Data--" )
-			print( translateVector( "Vector", LocalPlayer():GetEyeTrace().HitPos ) )
-			print( translateVector( "Angle", LocalPlayer():GetAngles() ) )
-		end
-	end
+	return
 end
 
 function SWEP:SecondaryAttack() 
-	if CLIENT then
-		local devmode = GetConVar( "developer" )
-		if( devmode:GetBool() == true ) then
-			LocalPlayer():ChatPrint( "Check console for output.\n" )
-			Quantum.Debug( "--Camera Data--" )
-			print( translateVector( "Vector", LocalPlayer():GetBonePosition( LocalPlayer():LookupBone( "ValveBiped.Bip01_Head1" ) ) ) )
-			print( translateVector( "Angle", LocalPlayer():GetAngles() ) )
-		end
-	end
+	return
 end
 
 function SWEP:Reload()
