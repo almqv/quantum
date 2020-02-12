@@ -72,13 +72,13 @@ Quantum.Item.Create( "pickaxe", {
 } )
 
 
----- RESOURCES ---- models/props_junk/rock001a.mdl
+---- RESOURCES ---- 
 
-Quantum.Item.Create( "stone", {
+Quantum.Item.Create( "rock", {
 	name = "Stone", 
-	--desc = "A stone",
+	desc = "A stone which could be sold to someone who wants it.",
 	model = "models/props_junk/rock001a.mdl",
-	stack = 5, 
+	stack = 15, 
 	soulbound = false, 
 	rarity = Quantum.Rarity.Common,
 } )

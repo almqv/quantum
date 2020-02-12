@@ -13,8 +13,8 @@ Quantum.CharInfoDisplayDistance = 400
 
 Quantum.Rarity = {
 	None = { txt = "gnomerd the mvp", color = Color( 0, 0, 0, 120 ) },
-	Trash = { txt = "Trash", color = Color( 150, 150, 150, 40 ) },
-	Common = { txt = "Common", color = Color( 250, 250, 250, 40 ) },
+	Trash = { txt = "Trash", color = Color( 120, 120, 120, 40 ) },
+	Common = { txt = "Common", color = Color( 150, 150, 150, 40 ) },
 	Rare = { txt = "Rare", color = Color( 48, 163, 230, 40 ) },
 	Epic = { txt = "Epic", color = Color( 220, 90, 90, 40 ) },
 	Legendary = { txt = "Legendary", color = Color( 235, 125, 52, 40 ) },
