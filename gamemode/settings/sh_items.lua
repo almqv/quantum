@@ -70,3 +70,15 @@ Quantum.Item.Create( "pickaxe", {
 	equipslot = Quantum.EquipSlots.Weapon,
 	equipgive = "tool_pickaxe"
 } )
+
+
+---- RESOURCES ---- models/props_junk/rock001a.mdl
+
+Quantum.Item.Create( "stone", {
+	name = "Stone", 
+	--desc = "A stone",
+	model = "models/props_junk/rock001a.mdl",
+	stack = 5, 
+	soulbound = false, 
+	rarity = Quantum.Rarity.Common,
+} )

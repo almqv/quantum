@@ -12,7 +12,9 @@ Quantum.Node.Create( "stone", {
 	model = "models/props/cs_militia/militiarock05.mdl",
 	toolids = miningTools,
 	give = {
-		{ item = "test2", amount = 1 }
+		{ item = "stone", amount = 1 },
+		{ item = "stone", amount = 2 },
+		{ item = "stone", amount = 3 }
 	},
 	giveprobability = 1/2,
 	health = 20,
@@ -24,7 +26,9 @@ Quantum.Node.Create( "bigstone", {
 	model = "models/props/cs_militia/militiarock03.mdl",
 	toolids = miningTools,
 	give = {
-		{ item = "test2", amount = 1 }
+		{ item = "stone", amount = 1 },
+		{ item = "stone", amount = 2 },
+		{ item = "stone", amount = 3 }
 	},
 	giveprobability = 3/4,
 	health = 20,
