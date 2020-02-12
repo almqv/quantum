@@ -47,8 +47,6 @@ Quantum.Item.Create( "potatoe", {
 	equipeffect = "equip_potatoe"
 } )
 
--- weapon_gta_sa_jetpack.lua
-
 Quantum.Item.Create( "jetpack", {
 	name = "Jetpack", 
 	desc = "A jet engine strapped onto your back? Sounds fun!",
@@ -58,4 +56,17 @@ Quantum.Item.Create( "jetpack", {
 	rarity = Quantum.Rarity.Legendary,
 	equipslot = Quantum.EquipSlots.Weapon,
 	equipgive = "weapon_gta_sa_jetpack"
+} )
+
+---- TOOLS ----
+
+Quantum.Item.Create( "pickaxe", {
+	name = "Pickaxe", 
+	desc = "This could be used for mining.",
+	model = "models/weapons/w_mgs_pickaxe.mdl",
+	stack = 1, 
+	soulbound = false, 
+	rarity = Quantum.Rarity.Common,
+	equipslot = Quantum.EquipSlots.Weapon,
+	equipgive = "tool_pickaxe"
 } )

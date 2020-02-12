@@ -21,10 +21,9 @@ local scale = Quantum.Client.ResolutionScale
 local padding = 10 * scale
 
 function ENT:Draw()
-	if( !stationTbl ) then
-		stationTbl = Quantum.Station.Get( self:GetNWInt( "q_station_id" ) )
-		stationName = stationTbl.name
-	end
+	stationTbl = Quantum.Station.Get( self:GetNWInt( "q_station_id" ) )
+	stationName = stationTbl.name
+
 	self:DrawModel() 
 
 	if( stationTbl.showname == true ) then

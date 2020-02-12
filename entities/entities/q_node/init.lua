@@ -37,8 +37,27 @@ function ENT:InitializeNode( nodeid, pos, ang )
 
 		self:SetPos( pos )
 		self:SetAngles( ang )
+		self:SetHealth( nodeTbl.health )
+		print( "#########", self:Health() )
 	else
 		Quantum.Error( "Node Table could not be found '" .. nodeid .. "'!" )
 		self:Remove()
+	end
+end
+
+function ENT:OnTakeDamage( dmgInfo )
+	if( !self.m_bApplyingDamage ) then
+		self.m_bApplyingDamage = true
+
+		self:TakeDamageInfo( dmgInfo )
+		print( self:Health() )
+
+		local attacker = dmgInfo:GetAttacker()
+		local wep = attacker:GetActiveWeapon()
+		if( IsValid( wep ) && IsValid( attacker ) ) then
+			Quantum.Node.Gather( attacker, wep:GetClass(), self )
+		end
+
+		self.m_bApplyingDamage = false
 	end
 end

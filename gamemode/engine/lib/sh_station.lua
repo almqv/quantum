@@ -112,9 +112,15 @@ if SERVER then
 			if( key == IN_USE ) then
 				local ent = pl:GetEyeTraceNoCursor().Entity
 				if( ent:GetClass() == "q_crafting_station" ) then
-					if( ent:GetPos():Distance( pl:GetPos() ) <= 100 ) then
-						pl:SetLocalVelocity( Vector( 0, 0, 0 ) ) 
-						Quantum.Net.OpenMenu( pl, "crafting", { stationEnt = ent, station = ent.stationid } )
+					local stationTbl = Quantum.Station.Get( ent.stationid )
+
+					if( stationTbl != nil ) then
+						if( stationTbl.recipes != nil ) then
+							if( ent:GetPos():Distance( pl:GetPos() ) <= 100 ) then
+								pl:SetLocalVelocity( Vector( 0, 0, 0 ) ) 
+								Quantum.Net.OpenMenu( pl, "crafting", { stationEnt = ent, station = ent.stationid } )
+							end
+						end
 					end
 				end
 			end

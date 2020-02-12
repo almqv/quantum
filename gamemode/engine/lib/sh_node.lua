@@ -15,7 +15,9 @@ function Quantum.Node.Create( nodeid, tbl )
 		model = tbl.model, 
 		toolids = tbl.toolids || { "q_hands" },
 		give = tbl.give || {},
-		giveprobability = tbl.giveprobability || 1
+		giveprobability = tbl.giveprobability || 1,
+		health = tbl.health || Quantum.Server.DefaultNodeHealth,
+		respawn = tbl.respawn || Quantum.Server.DefaultNodeRespawnTimer
 	}
 
 	node.id = nodeid
@@ -29,13 +31,13 @@ end
 
 if SERVER then
 
-	function Quantum.Node.Spawn( nodeid, vec, ang, respawndelay, probability )
+	function Quantum.Node.Spawn( nodeid, vec, ang )
 		local node = Quantum.Node.Get( nodeid )
 
 		local ent = ents.Create( "q_node" )
 		ent.node = node
-		ent.respawndelay = respawndelay || 30
-		ent.probability = probability || 1
+		ent.respawndelay = node.respawn || 30
+		ent.probability = node.probability || 1
 		ent:SetModel( node.model )
 		ent:SetPos( vec )
 		ent:SetAngles( ang )
@@ -48,9 +50,10 @@ if SERVER then
 
 		if( ent.node != nil ) then
 			local nodeid = nodeTbl.id
+			local pos, ang = ent:GetPos(), ent:GetAngles()
 			
 			timer.Simple( ent.respawndelay, function() 
-				Quantum.Node.Spawn( nodeid, ent:GetPos(), ent:GetAngles(), ent.respawndelay, ent.probability ) -- respawn it after x seconds
+				Quantum.Node.Spawn( nodeid, pos, ang, nodeTbl.respawn, nodeTbl.probability ) -- respawn it after x seconds
 			end)
 
 			ent:Remove() -- remove the node
@@ -84,7 +87,7 @@ if SERVER then
 				Quantum.Debug( "----Node-Spawning-Info----" )
 				PrintTable(v)
 				Quantum.Debug( "--------------------------" )
-				Quantum.Node.Spawn( v.id, v.pos, v.ang, nodeTbl.respawndelay, nodeTbl.probability )
+				Quantum.Node.Spawn( v.id, v.pos, v.ang )
 			else
 				Quantum.Error( "Tried to spawn an invalid node ('" .. v.id .. "')!" )
 			end
@@ -107,10 +110,9 @@ if SERVER then
 	end)
 
 	local function randomizeLootTable( tbl, prob )
-		local n = math.Rand( 0.00000000001, 1 )
-		Quantum.Debug( "Probability: " .. n .. " <= " .. prob )
+		local n = math.Rand( 0.001, 1 )
 		if( n <= prob ) then
-			local index = table.random( 1, #tbl )
+			local index = math.random( 1, #tbl )
 			return tbl[index].item, tbl[index].amount || 1
 		end
 	end
@@ -122,7 +124,7 @@ if SERVER then
 			local nodeid = nodeTbl.id
 			local toolids = nodeTbl.toolids
 
-			if( #toolids > 1 ) then
+			if( #toolids > 0 ) then
 				local canGather = false
 
 				for i, t in pairs( toolids ) do
@@ -134,16 +136,14 @@ if SERVER then
 
 				if( canGather ) then
 					local loot, amount = randomizeLootTable( nodeTbl.give, nodeTbl.giveprobability )
-
 					if( loot != nil ) then
 						Quantum.Server.Inventory.GiveItem( pl, loot, amount )
 						local itemTbl = Quantum.Item.Get( loot )
-						Quantum.Notify.ItemGathered( pl, itemTbl.name, amount )
+						Quantum.Notify.ItemGathered( pl, itemTbl, amount )
 					else
 						return
 					end
 				end
-
 			end
 		end
 	end

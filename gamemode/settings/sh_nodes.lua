@@ -5,24 +5,28 @@
 --  \ \   / ____ \| | | | | | | |  __/ (__| | | |  / / 
 --   \_\ /_/    \_\_|_| |_| |_|_|\___|\___|_| |_| /_/  
 
-local betaTools = { "q_hands" }
+local miningTools = { "tool_pickaxe" }
 
 Quantum.Node.Create( "stone", {
 	name = "Stone",
 	model = "models/props/cs_militia/militiarock05.mdl",
-	toolids = betaTools,
+	toolids = miningTools,
 	give = {
 		{ item = "test2", amount = 1 }
 	},
-	giveprobability = 1/2
+	giveprobability = 1/2,
+	health = 20,
+	respawn = 10
 } ) 
 
 Quantum.Node.Create( "bigstone", {
 	name = "Big Stone",
 	model = "models/props/cs_militia/militiarock03.mdl",
-	toolids = betaTools,
+	toolids = miningTools,
 	give = {
 		{ item = "test2", amount = 1 }
 	},
-	giveprobability = 3/4
+	giveprobability = 3/4,
+	health = 20,
+	respawn = 10
 } ) 

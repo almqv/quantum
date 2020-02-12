@@ -4,3 +4,7 @@
 -- < <     / /\ \ | | '_ ` _ \| |/ _ \/ __| '_ \    > >
 --  \ \   / ____ \| | | | | | | |  __/ (__| | | |  / / 
 --   \_\ /_/    \_\_|_| |_| |_|_|\___|\___|_| |_| /_/  
+
+Quantum.Server.DefaultNodeHealth = 10
+
+Quantum.Server.DefaultNodeRespawnTimer = 30
