@@ -157,7 +157,6 @@ end
 
 function menu.open( dt )
 	local items = Quantum.Client.Inventory 
-	PrintTable( items )
 	local equipped = Quantum.Client.Equipped
 
 	if( Quantum.Client.Character == nil ) then 
