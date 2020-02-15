@@ -42,6 +42,10 @@ if SERVER then
 		ent:SetPos( vec )
 		ent:SetAngles( ang )
 
+		ent:SetNWString( "q_node_id", nodeid )
+		ent:SetHealth( node.health )
+		print( "#########", ent:Health() )
+
 		ent:Spawn()
 	end
 
@@ -92,6 +96,16 @@ if SERVER then
 				Quantum.Error( "Tried to spawn an invalid node ('" .. v.id .. "')!" )
 			end
 		end
+	end
+
+	function Quantum.Node.UpdateAll()
+		Quantum.Debug( "Updating all nodes..." )
+		Quantum.Node.RemoveAllPerma()
+		Quantum.Node.SpawnAllRegistered()
+	end
+
+	if( #player.GetAll() > 0 ) then
+		Quantum.Node.UpdateAll() -- update all nodes on lua refresh
 	end
 
 	hook.Add( "PlayerInitialSpawn", "Quantum_Init_Nodes_Load", function()  
