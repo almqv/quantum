@@ -44,7 +44,6 @@ if SERVER then
 
 		ent:SetNWString( "q_node_id", nodeid )
 		ent:SetHealth( node.health )
-		print( "#########", ent:Health() )
 
 		ent:Spawn()
 	end

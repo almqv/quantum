@@ -31,7 +31,6 @@ function ENT:OnTakeDamage( dmgInfo )
 		if( self:Health() <= 0 ) then
 			Quantum.Node.Remove( self ) 
 		end
-		print( self:Health(), dmgInfo:GetDamage() )
 
 		local attacker = dmgInfo:GetAttacker()
 		local wep = attacker:GetActiveWeapon()
