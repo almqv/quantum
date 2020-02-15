@@ -126,7 +126,7 @@ if SERVER then
 		end
 	end
 
-	function Quantum.Node.Gather( pl, tool, ent )
+	function Quantum.Node.Gather( pl, tool, ent, dmgInfo )
 		local nodeTbl = ent.node
 
 		if( ent.node != nil ) then
@@ -144,6 +144,14 @@ if SERVER then
 				end
 
 				if( canGather ) then
+
+					if( dmgInfo != nil ) then
+						self:SetHealth( self:Health() - dmgInfo:GetDamage() )
+						if( self:Health() <= 0 ) then
+							Quantum.Node.Remove( self ) 
+						end
+					end
+
 					local loot, amount = randomizeLootTable( nodeTbl.give, nodeTbl.giveprobability )
 					if( loot != nil ) then
 						Quantum.Server.Inventory.GiveItem( pl, loot, amount )

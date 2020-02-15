@@ -6,6 +6,8 @@ if SERVER then
 	plugin.vechilesTypes = {
 		["jeep"] = function( pos, ang )
 			local ent = simfphys.SpawnVehicleSimple( "sim_fphys_jeep", pos, ang )
+			ent:SetFuel( 99999 )
+			print( ent:IsInitialized() )
 			return ent
 		end,
 		["duke"] = function( pos, ang )
@@ -14,20 +16,6 @@ if SERVER then
 		end,
 		["couch"] = function( pos, ang )
 			local ent = simfphys.SpawnVehicleSimple( "sim_fphys_couch", pos, ang )
-			return ent
-		end,
-		["heli"] = function( pos, ang )
-			local ent = ents.Create( "wac_hc_littlebird_mh6" )
-			if( !IsValid(ent) ) then
-				Quantum.Error( "Failed to create WAC helicopter" )
-				return
-			end
-			ent:SetPos( pos )
-			ent:SetAngles( Angle( 0, 0, 0 ) )
-
-			ent:Spawn()
-			ent:Activate()
-
 			return ent
 		end
 	}
