@@ -78,7 +78,7 @@ Quantum.Item.Create( "rock", {
 	name = "Stone", 
 	desc = "A stone which could be sold to someone who wants it.",
 	model = "models/props_junk/rock001a.mdl",
-	stack = 15, 
+	stack = 5, 
 	soulbound = false, 
 	rarity = Quantum.Rarity.Common,
 } )
