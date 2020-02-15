@@ -131,7 +131,8 @@ function iteminfo.giveoptions( p, page )
 	local itemPanel = p:GetParent()
 	local index = itemPanel.index
 	local item = itemPanel.item
-	local amount = item.amount
+	local amount = Quantum.Client.Inventory[index][2] -- get the item amount directly from the inventory
+
 	local parWidth, parHeight = itemPanel:GetSize()
 
 	local options = vgui.Create( "DPanel", page )
