@@ -160,6 +160,10 @@ if SERVER then
 
 		Quantum.Server.Loaded = true
 
+		if( #player.GetAll() > 0 ) then
+			Quantum.Node.UpdateAll() -- update all nodes on lua refresh
+		end
+
 	end
 	
 	Quantum.Server.Load() 

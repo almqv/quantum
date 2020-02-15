@@ -103,10 +103,6 @@ if SERVER then
 		Quantum.Node.SpawnAllRegistered()
 	end
 
-	if( #player.GetAll() > 0 ) then
-		Quantum.Node.UpdateAll() -- update all nodes on lua refresh
-	end
-
 	hook.Add( "PlayerInitialSpawn", "Quantum_Init_Nodes_Load", function()  
 		Quantum.Debug( "Spawning registered nodes..." )
 		
