@@ -10,7 +10,7 @@ Quantum.Server.Zone = {}
 Quantum.Server.Zone.Zones = {} -- all zones are rectangles where they go from vec1 to vec2
 
 function Quantum.Server.Zone.Register( zoneid, tbl )
-	if( Quantum.Server.Zone.Zones[zoneid] != nil ) then
+	if( Quantum.Server.Zone.Zones[zoneid] == nil ) then
 		local zone = {
 			name = tbl.name || "Unknown Zone",
 			id = zoneid,

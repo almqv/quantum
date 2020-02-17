@@ -39,3 +39,14 @@ function Quantum.Server.Property.Get( propid ) return Quantum.Server.Property.Pr
 function Quantum.Server.Property.SetOwner( propid, charid )
 	Quantum.Server.Property.Properties[propid].owner = charid
 end
+
+hook.Add( "Move", "Quantum_Move_Property_CheckInZone", function( ply, mv ) 
+	if( ply.isloaded ) then
+		if( mv:GetVelocity() != Vector( 0, 0, 0 ) ) then
+			local zone = Quantum.Server.Zone.GetCurrentZone( ply:GetPos() )
+			if( zone != nil ) then
+				ply:ChatPrint( zone.name )
+			end
+		end
+	end
+end)

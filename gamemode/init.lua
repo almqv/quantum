@@ -123,6 +123,7 @@ if SERVER then
 		include( "settings/sv_crafting_stations_locations.lua" )
 		include( "settings/sh_nodes.lua" )
 		include( "settings/sv_nodes_locations.lua" )
+		include( "settings/sv_properties.lua" )
 
 		Quantum.Server.Station.UpdateAll()
 	end
