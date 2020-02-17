@@ -19,6 +19,8 @@ Quantum.Server.Settings.ItemDespawnTimer = 300
 
 Quantum.Server.Settings.ItemPickupSound = "physics/cardboard/cardboard_box_impact_hard2.wav"
 
+Quantum.Server.Settings.ItemsGatheredSpawnInWorld = true
+
 Quantum.Server.Settings.InitSpawnLocation = { 
 	pos = Vector( 12418.626953125, 9959.9345703125, 320.03125 ),
 	ang = Angle( 0, -2.1179277896881, 0 )

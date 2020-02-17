@@ -146,17 +146,22 @@ if SERVER then
 				if( canGather ) then
 
 					if( dmgInfo != nil ) then
-						self:SetHealth( self:Health() - dmgInfo:GetDamage() )
-						if( self:Health() <= 0 ) then
-							Quantum.Node.Remove( self ) 
+						ent:SetHealth( ent:Health() - dmgInfo:GetDamage() )
+						if( ent:Health() <= 0 ) then
+							Quantum.Node.Remove( ent ) 
 						end
 					end
 
 					local loot, amount = randomizeLootTable( nodeTbl.give, nodeTbl.giveprobability )
 					if( loot != nil ) then
-						Quantum.Server.Inventory.GiveItem( pl, loot, amount )
-						local itemTbl = Quantum.Item.Get( loot )
-						Quantum.Notify.ItemGathered( pl, itemTbl, amount )
+						if( !Quantum.Server.Settings.ItemsGatheredSpawnInWorld ) then
+							Quantum.Server.Inventory.GiveItem( pl, loot, amount )
+							local itemTbl = Quantum.Item.Get( loot )
+							Quantum.Notify.ItemGathered( pl, itemTbl, amount )
+						else
+							local basepos = ent:GetPos()
+							Quantum.Server.Item.SpawnItem( basepos, loot, amount )
+						end
 					else
 						return
 					end
