@@ -159,12 +159,15 @@ if SERVER then
 							local itemTbl = Quantum.Item.Get( loot )
 							Quantum.Notify.ItemGathered( pl, itemTbl, amount )
 						else
-							local basepos = ent:GetPos()
-							-- calculate the entities collision bounds height
-							local p, q = ent:GetCollisionBounds() -- Z is the height
-							local height = q.z - p.z
+							local eyepos = pl:GetEyeTraceNoCursor()
+							if( eyepos.Entity == ent ) then
+								-- calculate the entities collision bounds height
+								local p, q = ent:GetCollisionBounds() -- Z is the height
 
-							Quantum.Server.Item.SpawnItem( basepos + Vector(0, 0, height), loot, amount )
+								local pos = LerpVector( 0.75, eyepos.StartPos, eyepos.HitPos )
+
+								Quantum.Server.Item.SpawnItem( pos, loot, amount )
+							end
 						end
 					else
 						return
