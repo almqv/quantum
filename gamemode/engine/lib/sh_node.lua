@@ -161,9 +161,6 @@ if SERVER then
 						else
 							local eyepos = pl:GetEyeTraceNoCursor()
 							if( eyepos.Entity == ent ) then
-								-- calculate the entities collision bounds height
-								local p, q = ent:GetCollisionBounds() -- Z is the height
-
 								local pos = LerpVector( 0.75, eyepos.StartPos, eyepos.HitPos )
 
 								Quantum.Server.Item.SpawnItem( pos, loot, amount )
