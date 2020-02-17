@@ -8,3 +8,5 @@
 Quantum.Server.DefaultNodeHealth = 10
 
 Quantum.Server.DefaultNodeRespawnTimer = 30
+
+Quantum.Server.DefualtPropertyPrice = 5000
