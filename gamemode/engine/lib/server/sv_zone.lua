@@ -41,3 +41,15 @@ function Quantum.Server.Zone.GetCurrentZone( vec )
 		end
 	end
 end
+
+function Quantum.Server.Zone.GetDoors( zoneid )
+	local zone = Quantum.Server.Zone.Get( zoneid )
+	local entInZone = {}
+	for i, ent in pairs( ents.FindInBox( zone.vec1, zone.vec2 ) ) do
+		if( Quantum.Server.DoorClasses[ ent:GetClass() ]) then
+			entInZone[i] = ent
+		end
+	end
+
+	return entInZone
+end
