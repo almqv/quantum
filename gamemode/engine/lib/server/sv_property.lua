@@ -83,6 +83,7 @@ end
 
 function Quantum.Server.Property.PlayerSwitchLock( pl, doorent )
 	local zone = Quantum.Server.Zone.GetCurrentZone( pl:GetPos() )
+	if( zone == nil ) then return end
 	if( Quantum.Server.Zone.DoorIsInZone(doorent, zone.id) ) then
 		local prop = Quantum.Server.Property.Get( zone.property )
 		if( prop.owner == pl || pl:IsSuperAdmin() ) then
