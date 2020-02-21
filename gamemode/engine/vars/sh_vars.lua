@@ -62,3 +62,13 @@ Quantum.DoorSounds = {
 	Lock = "doors/default_locked.wav",
 	Unlock = "doors/default_locked.wav"
 }
+
+Quantum.DefualtPropertyPrice = 5000
+
+Quantum.DoorClasses = {
+    ["func_door"] = true,
+    ["func_door_rotating"] = true,
+    ["prop_door_rotating"] = true,
+    ["func_movelinear"] = true,
+    ["prop_dynamic"] = true
+}

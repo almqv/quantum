@@ -8,13 +8,3 @@
 Quantum.Server.DefaultNodeHealth = 10
 
 Quantum.Server.DefaultNodeRespawnTimer = 30
-
-Quantum.Server.DefualtPropertyPrice = 5000
-
-Quantum.Server.DoorClasses = {
-    ["func_door"] = true,
-    ["func_door_rotating"] = true,
-    ["prop_door_rotating"] = true,
-    ["func_movelinear"] = true,
-    ["prop_dynamic"] = true
-}
