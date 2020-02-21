@@ -15,7 +15,9 @@ function Quantum.Server.Zone.Register( zoneid, tbl )
 			name = tbl.name || "Unknown Zone",
 			id = zoneid,
 			vec1 = tbl.vec1,
-			vec2 = tbl.vec2
+			vec2 = tbl.vec2,
+			property = tbl.property -- not used for normal zones
+			-- why cant lua just have classes :(
 		}
 
 		Quantum.Server.Zone.Zones[zoneid] = zone
@@ -52,4 +54,9 @@ function Quantum.Server.Zone.GetDoors( zoneid )
 	end
 
 	return entInZone
+end
+
+function Quantum.Server.Zone.DoorIsInZone( doorent, zoneid )
+	local doors = Quantum.Server.Zone.GetDoors( zoneid )
+	return table.HasValue( doors, doorent )
 end

@@ -19,10 +19,12 @@ function Quantum.Server.Property.Register( propid, tbl )
 			vec2 = tbl.vec2,
 			price = tbl.price || Quantum.Server.DefualtPropertyPrice
 		}
-		prop.zone = Quantum.Server.Zone.Register( propid .. "_zone", { -- register the zone for the property
+
+		prop.zone = Quantum.Server.Zone.Register( propid .. "_property", { -- register the zone for the property
 			name = prop.name, 
 			vec1 = prop.vec1, 
-			vec2 = prop.vec2
+			vec2 = prop.vec2,
+			property = propid
 		} )
 
 		Quantum.Server.Property.Properties[propid] = prop
@@ -54,7 +56,39 @@ end)
 -- Door functions --
 
 function Quantum.Server.Property.LockDoor( ent )
-	if( ent:GetClass() ) then -- doors/door_locked2.wav
+	if( Quantum.Server.DoorClasses[ent:GetClass()] && IsValid( ent ) ) then -- 
+		ent:Fire( "lock", "", 0 )
+		ent:EmitSound( Quantum.DoorSounds.Lock )
+		ent.islocked = true
+	end
+end
 
+function Quantum.Server.Property.UnlockDoor( ent )
+	if( Quantum.Server.DoorClasses[ent:GetClass()] && IsValid( ent ) ) then -- 
+		ent:Fire( "unlock", "", 0 )
+		ent:EmitSound( Quantum.DoorSounds.Unlock )
+		ent.islocked = false
+	end
+end
+
+function Quantum.Server.Property.SwitchLockDoor( ent )
+	if( Quantum.Server.DoorClasses[ent:GetClass()] && IsValid( ent ) ) then -- 
+		if( ent.islocked ) then
+			Quantum.Server.Property.UnlockDoor( ent )
+		else
+			Quantum.Server.Property.LockDoor( ent )
+		end
+	end
+end
+
+function Quantum.Server.Property.PlayerSwitchLock( pl, doorent )
+	local zone = Quantum.Server.Zone.GetCurrentZone( pl:GetPos() )
+	if( Quantum.Server.Zone.DoorIsInZone(doorent, zone.id) ) then
+		local prop = Quantum.Server.Property.Get( zone.property )
+		if( prop.owner == pl || pl:IsSuperAdmin() ) then
+			Quantum.Server.Property.SwitchLockDoor( doorent )
+		else
+			return
+		end
 	end
 end

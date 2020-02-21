@@ -57,3 +57,8 @@ end
 function Quantum.PrintPlayer( pl )
 	return "[" .. pl:Nick() .. "|" .. pl:SteamID() .. "]"
 end
+
+Quantum.DoorSounds = {
+	Lock = "doors/default_locked.wav",
+	Unlock = "doors/default_locked.wav"
+}

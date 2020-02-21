@@ -63,7 +63,7 @@ SWEP.Secondary.ClipSize = -1
 SWEP.Secondary.DefaultClip = 0
 SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = ""
-SWEP.Secondary.Delay = 0.25
+SWEP.Secondary.Delay = 0.75
 
 function SWEP:Initialize()
 	self:SetHoldType( "normal" )
@@ -106,6 +106,16 @@ function SWEP:PrimaryAttack()
 end
 
 function SWEP:SecondaryAttack() 
+
+	if SERVER then
+		local hitposEnt = self:GetOwner():GetEyeTraceNoCursor().Entity
+		if( Quantum.Server.DoorClasses[hitposEnt:GetClass()] && IsValid(hitposEnt) ) then -- if it is a door
+			if( hitposEnt:GetPos():Distance(self:GetOwner():GetPos()) <= 90 ) then
+				Quantum.Server.Property.PlayerSwitchLock( self:GetOwner(), hitposEnt ) -- then try to unlock/lock it
+			end
+		end
+	end
+
 	if CLIENT then
 		local devmode = GetConVar( "developer" )
 		if( devmode:GetBool() == true ) then
