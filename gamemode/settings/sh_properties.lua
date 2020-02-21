@@ -5,7 +5,7 @@
 --  \ \   / ____ \| | | | | | | |  __/ (__| | | |  / / 
 --   \_\ /_/    \_\_|_| |_| |_|_|\___|\___|_| |_| /_/  
 
-Quantum.Server.Property.Register( "house1", {
+Quantum.Property.Register( "house1", {
 	name = "Red House",
 	price = 10000,
 	vec1 = Vector( 761.43292236328, -3089.3618164063, 200.19812011719 ),

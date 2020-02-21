@@ -109,9 +109,9 @@ function SWEP:SecondaryAttack()
 
 	if SERVER then
 		local hitposEnt = self:GetOwner():GetEyeTraceNoCursor().Entity
-		if( Quantum.Server.DoorClasses[hitposEnt:GetClass()] && IsValid(hitposEnt) ) then -- if it is a door
+		if( Quantum.DoorClasses[hitposEnt:GetClass()] && IsValid(hitposEnt) ) then -- if it is a door
 			if( hitposEnt:GetPos():Distance(self:GetOwner():GetPos()) <= 90 ) then
-				Quantum.Server.Property.PlayerSwitchLock( self:GetOwner(), hitposEnt ) -- then try to unlock/lock it
+				Quantum.Property.PlayerSwitchLock( self:GetOwner(), hitposEnt ) -- then try to unlock/lock it
 			end
 		end
 	end

@@ -52,6 +52,7 @@ if CLIENT then
 		include( "settings/sh_crafting_stations.lua" )
 		include( "settings/sh_recipes.lua" )
 		include( "settings/sh_nodes.lua" )
+		include( "settings/sh_properties.lua" )
 	end
 
 	local function loadPlugins()
