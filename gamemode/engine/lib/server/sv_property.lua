@@ -34,7 +34,7 @@ end
 
 function Quantum.Server.Property.Get( propid ) return Quantum.Server.Property.Properties[propid] end
 
--- player functions --
+-- Player functions --
 
 function Quantum.Server.Property.SetOwner( propid, charid )
 	Quantum.Server.Property.Properties[propid].owner = charid
@@ -50,3 +50,11 @@ hook.Add( "Move", "Quantum_Move_Property_CheckInZone", function( ply, mv )
 		end
 	end
 end)
+
+-- Door functions --
+
+function Quantum.Server.Property.LockDoor( ent )
+	if( ent:GetClass() ) then -- doors/door_locked2.wav
+
+	end
+end
