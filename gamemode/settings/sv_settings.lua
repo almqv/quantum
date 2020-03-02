@@ -22,8 +22,8 @@ Quantum.Server.Settings.ItemPickupSound = "physics/cardboard/cardboard_box_impac
 Quantum.Server.Settings.ItemsGatheredSpawnInWorld = true
 
 Quantum.Server.Settings.InitSpawnLocation = { 
-	pos = Vector( 12418.626953125, 9959.9345703125, 320.03125 ),
-	ang = Angle( 0, -2.1179277896881, 0 )
+	pos = Vector( 2734.0334472656, 5066.060546875, 63.850269317627 ),
+	ang = Angle( 3.2735850811005, -173.51545715332, 0 )
 }
 
 Quantum.Server.Settings.SpawnLocations = {
@@ -38,6 +38,10 @@ Quantum.Server.Settings.SpawnLocations = {
 		["Hospital"] = { pos = Vector( -5102.2807617188, 10812.857421875, 256.03125 ), ang = Angle( 0, 40.045780181885, 0 ) }, 
 		
 		["Graveyard"] = { pos = Vector( 6220.7700195313, -12982.192382813, 248 ), ang = Angle( 0, -136.18241882324, 0 ) }
+	},
+
+	["RP_SouthSide"] = {
+		["Hospital"] = { pos = Vector( 7586.4912109375, 5226.1508789063, 7.6475238800049 ), ang = Angle( 0, -127.80423736572, 0 ) }
 	}
 
 }

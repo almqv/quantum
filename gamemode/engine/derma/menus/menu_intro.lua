@@ -128,6 +128,64 @@ local scenes = {
 			ang1 = Angle( -0.63365286588669, -4.9319581985474, 0 ),
 			ang2 = Angle( -2.0592522621155, 42.27123260498, 0 )
 		}
+	},
+	["RP_SouthSide"] = {
+		[1] = {
+			fov = 70,
+			velocity = 12,
+			pos1 = Vector( 1368.4291992188, 10858.263671875, 223.4137878418 ),
+			pos2 = Vector( 696.99578857422, 10961.203125, 225.74652099609 ), 
+			ang1 = Angle( 0.68631637096405, 165.18278503418, 0 ),
+			ang2 = Angle( 0.26391625404358, 94.69450378418, 0 )
+		},
+		[2] = { 
+			fov = 70,
+			velocity = 16,
+			pos1 = Vector( 5267.8354492188, -4528.1293945313, -237.05120849609 ),
+			pos2 = Vector( 5230.59375, -5460.64453125, -247.05084228516 ),
+			ang1 = Angle( 0.6544576883316, -113.82953643799, 0 ),
+			ang2 = Angle( -0.71832829713821, 34.855682373047, 0 )
+		},
+		[3] = {
+			fov = 70,
+			velocity = 12,
+			pos1 = Vector( 4746.53125, -820.14733886719, 245.23054504395 ),
+			pos2 = Vector( 6370.482421875, -690.12646484375, 247.95965576172 ),
+			ang1 = Angle( -1.5520542860031, 53.9260597229, 0 ),
+			ang2 = Angle(  0.34874564409256, 132.33442687988, 0 )
+		}, 
+		[4] = {
+			fov = 70,
+			velocity = 12,
+			pos1 = Vector( 11100.685546875, -13623.026367188, -142.84210205078 ),
+			pos2 = Vector( 11690.620117188, -13346.670898438, -172.52095031738 ),
+			ang1 = Angle( 2.8831143379211, 25.221273422241, 0 ),
+			ang2 = Angle( 1.5103136301041, 28.336471557617, 0 )
+		},
+		[5] = {
+			fov = 60,
+			velocity = 16,
+			pos1 = Vector( -9168.173828125, 3501.13671875, 8610.853515625 ),
+			pos2 = Vector( -10148.767578125, -4350.7163085938, 1860.8051757813 ),
+			ang1 = Angle( 48.132801055908, -50.447017669678, 0 ),
+			ang2 = Angle( 21.969816207886, -154.96385192871, 0 )
+		},
+		[6] = {
+			fov = 60,
+			velocity = 15,
+			pos1 = Vector( 8437.771484375, 13937.401367188, 1746.5352783203 ),
+			pos2 = Vector( 3200.0029296875, 14697.87109375, 2583.8791503906 ),
+			ang1 = Angle( -1.2141468524933, -164.51931762695, 0 ),
+			ang2 = Angle( -29.039636611938, -123.28386688232, 0 )
+		},
+		[7] = {
+			fov = 60,
+			velocity = 14,
+			pos1 = Vector( 2833.5769042969, 14572.4609375, 85.577995300293 ),
+			pos2 = Vector( 4496.3881835938, 14495.8671875, 84.486724853516 ),
+			ang1 = Angle( -0.63365286588669, -4.9319581985474, 0 ),
+			ang2 = Angle( -2.0592522621155, 42.27123260498, 0 )
+		}
 	}
 }
 
@@ -161,10 +219,11 @@ function intro.open()
 		f.w, f.h = f:GetSize()
 
 		f.Think = function( self )
-			if( Quantum.Client.Cam.Temp.Finished == true ) then -- if the scene is finished then close the menu and exit the cinematic
-				--self:Close() 
-				fade.transition( f, {}, 1, 1, 1, Color( 0, 0, 0, 255 ), true, Quantum.EmptyFunction, function() Quantum.Client.IsInMenu = false end )
-			end 
+			if( Quantum.Client.Cam.Temp ) then
+				if( Quantum.Client.Cam.Temp.Finished == true ) then -- if the scene is finished then close the menu and exit the cinematic
+					fade.transition( f, {}, 1, 1, 1, Color( 0, 0, 0, 255 ), true, Quantum.EmptyFunction, function() Quantum.Client.IsInMenu = false end )
+				end 
+			end
 		end
 
 		--- MUSIC ---
@@ -186,7 +245,13 @@ function intro.open()
 		end
 		skip.OnCursorEntered = function() surface.PlaySound( "UI/buttonrollover.wav" ) end
 
-		Quantum.Client.Cam.Start( scenes[game.GetMap()], false ) -- start the cinematic
+		if( scenes[game.GetMap()] ) then
+			Quantum.Client.Cam.Start( scenes[game.GetMap()], false ) -- start the cinematic
+		else
+			Quantum.Error( "Unable to get map scenes. Aborting cinematic intro..." )
+			fade.transition( f, {}, 1, 1, 1, Color( 0, 0, 0, 255 ), true, Quantum.EmptyFunction, function() Quantum.Client.IsInMenu = false end )
+			return 
+		end
 
 		local logdata = {
 			[1] = {
