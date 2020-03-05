@@ -163,6 +163,9 @@ local scenes = {
 			ang2 = Angle( 1.5103136301041, 28.336471557617, 0 )
 		},
 		[5] = { -- add scenes below
+			-- this map is a pure 11/10
+			-- for anyone reading this comment
+			-- download it now
 			fov = 60,
 			velocity = 16,
 			pos1 = Vector( -9168.173828125, 3501.13671875, 8610.853515625 ),
@@ -221,7 +224,9 @@ function intro.open()
 		f.Think = function( self )
 			if( Quantum.Client.Cam.Temp ) then
 				if( Quantum.Client.Cam.Temp.Finished == true ) then -- if the scene is finished then close the menu and exit the cinematic
-					fade.transition( f, {}, 1, 1, 1, Color( 0, 0, 0, 255 ), true, Quantum.EmptyFunction, function() Quantum.Client.IsInMenu = false end )
+					fade.transition( f, {}, 1, 1, 1, Color( 0, 0, 0, 255 ), true, Quantum.EmptyFunction, function() 
+					    Quantum.Client.IsInMenu = false 
+					end)
 				end 
 			end
 		end
@@ -241,7 +246,9 @@ function intro.open()
 		skip:SetPos( f.w - skip.w - padding, f.h - skip.h - padding )
 		skip.DoClick = function( self ) 
 			surface.PlaySound( "UI/buttonclick.wav" )
-			fade.transition( f, {}, 1, 1, 2, Color( 0, 0, 0, 255 ), true, Quantum.EmptyFunction, function() Quantum.Client.IsInMenu = false end ) -- close the intro but smoothly
+			fade.transition( f, {}, 1, 1, 2, Color( 0, 0, 0, 255 ), true, Quantum.EmptyFunction, function() 
+				Quantum.Client.IsInMenu = false -- close intro but smoothly
+			end)
 		end
 		skip.OnCursorEntered = function() surface.PlaySound( "UI/buttonrollover.wav" ) end
 
