@@ -13,8 +13,8 @@ Quantum.DiscordInvite = "https://discord.gg/heUJB4B"
 Quantum.WorkshopLink = "https://steamcommunity.com/sharedfiles/filedetails/?id=1842234130"
 
 Quantum.Inventory = {
-	Height = 10, -- NOTE: MAX HEIGHT=12
-	Width = 16, -- NOTE: MAX WIDTH=18
+	Height = 5, -- NOTE: MAX HEIGHT=12
+	Width = 8, -- NOTE: MAX WIDTH=18
 	MaxStackSize = 20 -- NOTE: MAX MaxStackSize=99
 }
 

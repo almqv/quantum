@@ -55,7 +55,7 @@ local scenes = {
 			}
 		}
 	},
-	["RP_SouthSide"] = {
+	["rp_southside"] = {
 		[1] = {
 			[1] = {
 				fov = 70,
@@ -99,8 +99,8 @@ function main.open(dt)
 			theme.renderblur( self, 2, 7 )
 		end
 
-		if( scenes[ game.GetMap() ] != nil ) then
-			Quantum.Client.Cam.Start( scenes[ game.GetMap() ][math.random( 1, table.Count(scenes[ game.GetMap() ])) ], false )
+		if( scenes[ string.lower(game.GetMap()) ] != nil ) then
+			Quantum.Client.Cam.Start( scenes[string.lower(game.GetMap())][math.random( 1, table.Count(scenes[string.lower(game.GetMap())])) ], false )
 		else
 			Quantum.Error( "There are no scenes for this map! Aborting scene..." )
 		end

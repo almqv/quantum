@@ -129,7 +129,7 @@ local scenes = {
 			ang2 = Angle( -2.0592522621155, 42.27123260498, 0 )
 		}
 	},
-	["RP_SouthSide"] = {
+	["rp_southside"] = {
 		[1] = {
 			fov = 70,
 			velocity = 12,
@@ -252,8 +252,8 @@ function intro.open()
 		end
 		skip.OnCursorEntered = function() surface.PlaySound( "UI/buttonrollover.wav" ) end
 
-		if( scenes[game.GetMap()] ) then
-			Quantum.Client.Cam.Start( scenes[game.GetMap()], false ) -- start the cinematic
+		if( scenes[ string.lower(game.GetMap()) ] ) then
+			Quantum.Client.Cam.Start( scenes[string.lower(game.GetMap())], false ) -- start the cinematic
 		else
 			Quantum.Error( "Unable to get map scenes. Aborting cinematic intro..." )
 			fade.transition( f, {}, 1, 1, 1, Color( 0, 0, 0, 255 ), true, Quantum.EmptyFunction, function() Quantum.Client.IsInMenu = false end )

@@ -17,7 +17,7 @@ local padding = 10 * resScale
 local padding_s = 4 * resScale
 local errorMdl = "models/player.mdl"
 
-local itemWidth, itemHeight = 65 * resScale, 65 * resScale
+local itemWidth, itemHeight = 95 * resScale, 95 * resScale
 
 local function createItemAmountLabel( icon, item )
 	icon.amountpanel = vgui.Create( "DLabel", icon )

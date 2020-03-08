@@ -114,7 +114,7 @@ local pages = {
 					ang1 = Angle( 1.5841090679169, 68.17308807373, 0 )
 				}
 			},
-			["RP_SouthSide"] = {
+			["rp_southside"] = {
 				[1] = {
 					fov = 65,
 					velocity = 1,
@@ -123,10 +123,10 @@ local pages = {
 				}
 			}
 		}
-		Quantum.Client.Cam.Start( p.scene[game.GetMap()], true )
+		Quantum.Client.Cam.Start( p.scene[string.lower(game.GetMap())], true )
 
 		p.OnRemove = function( self )
-			Quantum.Client.Cam.Start( parent.scene[game.GetMap()], true ) -- switch back to the parents scene
+			Quantum.Client.Cam.Start( parent.scene[string.lower(game.GetMap())], true ) -- switch back to the parents scene
 		end
 
 		local banner = vgui.Create( "DImage", p )
@@ -509,7 +509,7 @@ function menu.open( dt )
 					ang1 = Angle( 5.9394421577454, -49.899868011475, 0 )
 				}
 			},
-			["RP_SouthSide"] = {
+			["rp_southside"] = {
 				[1] = {
 					fov = 70,
 					velocity = 1,
@@ -518,7 +518,7 @@ function menu.open( dt )
 				}
 			}
 		}
-		Quantum.Client.Cam.Start( f.scene[game.GetMap()], true )
+		Quantum.Client.Cam.Start( f.scene[string.lower(game.GetMap())], true )
 
 		local args = {
 			CloseButtonText = "Return",
