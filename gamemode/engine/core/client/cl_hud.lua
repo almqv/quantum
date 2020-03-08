@@ -192,7 +192,7 @@ local function renderCharNamesHUD3D2D()
 
 					--surface.SetDrawColor( Color( 0, 0, 0, 200 ) )
 					--surface.DrawRect( -txtW/2, -txtH/2, txtW, txtH )
-					draw.RoundedBox( padding*2.5, -W/2, -H/2, W, H, Color( 0, 0, 0, 200 * distFrac )  )
+					-- draw.RoundedBox( padding*2.5, -W/2, -H/2, W, H, Color( 0, 0, 0, 200 * distFrac )  )
 
 					draw.SimpleText( name, "q_char_hud_name", 0, 0, Color( 245, 245, 245, 255 * distFrac ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 					
