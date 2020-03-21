@@ -40,7 +40,7 @@ Quantum.Server.Settings.SpawnLocations = {
 		["Graveyard"] = { pos = Vector( 6220.7700195313, -12982.192382813, 248 ), ang = Angle( 0, -136.18241882324, 0 ) }
 	},
 
-	["RP_SouthSide"] = {
+	["rp_southside_day"] = {
 		["Hospital"] = { pos = Vector( 7586.4912109375, 5226.1508789063, 7.6475238800049 ), ang = Angle( 0, -127.80423736572, 0 ) }
 	}
 

@@ -11,7 +11,8 @@ end)
 
 local function getNearestSpawn( pl )
 	local spawnposdist = {}
-	for id, spawnpoint in pairs( Quantum.Server.Settings.SpawnLocations[ game.GetMap() ] ) do
+	if( !Quantum.Server.Settings.SpawnLocations[string.lower(game.GetMap())] ) then return Vector(0,0,0), Angle(0,0,0) end
+	for id, spawnpoint in pairs( Quantum.Server.Settings.SpawnLocations[string.lower(game.GetMap())] ) do
 		spawnposdist[id] = { dist = spawnpoint.pos:Distance( pl.deathpos ), spawnpos = spawnpoint.pos, angle = spawnpoint.ang }
 	end
 
