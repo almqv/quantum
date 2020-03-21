@@ -20,41 +20,47 @@ local barW, barH
 local scale = Quantum.Client.ResolutionScale
 local padding = 10 * scale
 
+local txtAlpha = 0
+local plDist
+
 function ENT:Draw()
 	stationTbl = Quantum.Station.Get( self:GetNWInt( "q_station_id" ) )
-	stationName = stationTbl.name
 
-	self:DrawModel() 
+	if( stationTbl ) then
+		stationName = stationTbl.name
 
-	if( stationTbl.showname == true ) then
-		pos, ang = self:GetPos(), self:GetAngles()
+		self:DrawModel() 
 
-		p, q = self:GetRenderBounds()
-		mdlHeight = q.z - p.z
+		if( stationTbl.showname == true ) then
+			pos, ang = self:GetPos(), self:GetAngles()
 
-		pos = pos + ang:Up() * (mdlHeight + 20)
+			p, q = self:GetRenderBounds()
+			mdlHeight = q.z - p.z
 
-		-- rotate around axis
-		ang:RotateAroundAxis( ang:Forward(), 90 )
-		ang:RotateAroundAxis( ang:Right(), 90 )
+			pos = pos + ang:Up() * (mdlHeight + 20)
 
-		ang.y = LocalPlayer():EyeAngles().y - 90
+			-- rotate around axis
+			ang:RotateAroundAxis( ang:Forward(), 90 )
+			ang:RotateAroundAxis( ang:Right(), 90 )
 
-		cam.Start3D2D( pos, ang, 0.15 )
-			surface.SetTextColor( Color( 255, 255, 255 ) )
-			surface.SetFont( "q_title" )
-			txtW, txtH = surface.GetTextSize( stationName )
+			ang.y = LocalPlayer():EyeAngles().y - 90
 
-			barW, barH = txtW + padding, txtH + padding
+			-- distance calc
+			plDist = LocalPlayer():GetPos():Distance( self:GetPos() )
+			txtAlpha = Lerp( plDist/400, 255, 0 )
 
-			surface.SetDrawColor( 0, 0, 0, 150 )
-			surface.DrawRect( -barW/2, -padding/2, barW, barH )
+			if( txtAlpha > 0 ) then
+				cam.Start3D2D( pos, ang, 0.15 )
+					surface.SetTextColor( Color( 255, 255, 255, txtAlpha ) )
+					surface.SetFont( "q_title" )
+					txtW, txtH = surface.GetTextSize( stationName )
 
-			surface.SetDrawColor( 255, 255, 255, 255 )
-			surface.DrawOutlinedRect( -barW/2, -padding/2, barW, barH )
+					barW, barH = txtW + padding, txtH + padding
 
-			surface.SetTextPos( -txtW/2, 0 )
-			surface.DrawText( stationName )
-		cam.End3D2D()
+					surface.SetTextPos( -txtW/2, 0 )
+					surface.DrawText( stationName )
+				cam.End3D2D()
+			end
+		end
 	end
 end
