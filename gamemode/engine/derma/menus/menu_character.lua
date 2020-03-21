@@ -114,7 +114,7 @@ local pages = {
 					ang1 = Angle( 1.5841090679169, 68.17308807373, 0 )
 				}
 			},
-			["rp_southside"] = {
+			["rp_southside_day"] = {
 				[1] = {
 					fov = 65,
 					velocity = 1,
@@ -509,7 +509,7 @@ function menu.open( dt )
 					ang1 = Angle( 5.9394421577454, -49.899868011475, 0 )
 				}
 			},
-			["rp_southside"] = {
+			["rp_southside_day"] = {
 				[1] = {
 					fov = 70,
 					velocity = 1,

@@ -129,7 +129,7 @@ local scenes = {
 			ang2 = Angle( -2.0592522621155, 42.27123260498, 0 )
 		}
 	},
-	["rp_southside"] = {
+	["rp_southside_day"] = {
 		[1] = {
 			fov = 70,
 			velocity = 12,

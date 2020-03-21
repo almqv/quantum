@@ -55,7 +55,7 @@ local scenes = {
 			}
 		}
 	},
-	["rp_southside"] = {
+	["rp_southside_day"] = {
 		[1] = {
 			[1] = {
 				fov = 70,
