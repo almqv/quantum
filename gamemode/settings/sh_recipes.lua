@@ -43,11 +43,3 @@ Quantum.Recipe.Add( "m9k_colt1911", "barrel", {
 	}
 })
 
-Quantum.Recipe.Add( "jetpack", "barrel", { 
-	name = "A Jet Engine & Duct Tape",
-	amount = 1,
-	delay = 5,
-	recipe = {
-		{ item = "test2", amount = 5 }
-	}
-})
