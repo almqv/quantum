@@ -47,17 +47,6 @@ Quantum.Item.Create( "potatoe", {
 	equipeffect = "equip_potatoe"
 } )
 
-Quantum.Item.Create( "jetpack", {
-	name = "Jetpack", 
-	desc = "A jet engine strapped onto your back? Sounds fun!",
-	model = "models/sa_jetpack.mdl",
-	stack = 1, 
-	soulbound = false, 
-	rarity = Quantum.Rarity.Legendary,
-	equipslot = Quantum.EquipSlots.Weapon,
-	equipgive = "weapon_gta_sa_jetpack"
-} )
-
 ---- TOOLS ----
 
 Quantum.Item.Create( "pickaxe", {

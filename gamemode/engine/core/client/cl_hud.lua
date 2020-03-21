@@ -297,7 +297,7 @@ function GM:HUDPaint()
 			
 			if( Quantum.Client.Config.EnableHUD ) then
 				if( LocalPlayer():Alive() ) then
-					renderStatHUD()
+					-- renderStatHUD()
 					renderItemInfoHUD()
 					renderActionDelayHUD()
 				end
