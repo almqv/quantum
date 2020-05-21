@@ -8,6 +8,8 @@
 local miningTools = { "tool_pickaxe" }
 
 Quantum.Node.Create( "stone", {
+	type = Quantum.NodeType.resource,
+	canGather = true,
 	name = "Stone",
 	model = "models/props/cs_militia/militiarock05.mdl",
 	toolids = miningTools,
@@ -21,6 +23,8 @@ Quantum.Node.Create( "stone", {
 } ) 
 
 Quantum.Node.Create( "bigstone", {
+	type = Quantum.NodeType.resource,
+	canGather = true,
 	name = "Big Stone",
 	model = "models/props/cs_militia/militiarock03.mdl",
 	toolids = miningTools,

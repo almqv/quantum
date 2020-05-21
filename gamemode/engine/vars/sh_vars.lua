@@ -36,7 +36,7 @@ Quantum.EmptyFunction = function() end
 ---- NETWORKING VARS DO NOT TOUCH ----
 
 Quantum.IntCode = {
-	SET_ITEM = 0,
+	SET_ITEM = 0, 
 	DROP_ITEM = 1,
 	USE_ITEM = 2,
 	EAT_ITEM = 3,
@@ -57,6 +57,14 @@ end
 function Quantum.PrintPlayer( pl )
 	return "[" .. pl:Nick() .. "|" .. pl:SteamID() .. "]"
 end
+
+---- Node vars ----
+Quantum.NodeType = {
+	resource = "q_resource",
+	npc = "q_npc"
+}
+
+---- Property vars ----
 
 Quantum.DoorSounds = {
 	Lock = "doors/default_locked.wav",

@@ -9,12 +9,18 @@ Quantum.Node = {} -- lib
 Quantum.Nodes = {} -- container for vars
 Quantum.NodesLocations = {}
 
+function Quantum.Node.AddNodeType(id, entclass)
+	Quantum.NodeType[id] = entclass	-- for plugins and such
+end
+
 function Quantum.Node.Create( nodeid, tbl ) 
 	local node = {
 		name = tbl.name || "Unknown Node",
 		model = tbl.model, 
-		toolids = tbl.toolids || { "q_hands" },
-		give = tbl.give || {},
+		type = tbl.type || Quantum.NodeType.resource,
+		toolids = tbl.toolids || {}, -- if it's empty then you can use all sweps/tools
+		canGather = tbl.canGather || false,
+		give = tbl.give || {}, 
 		giveprobability = tbl.giveprobability || 1,
 		health = tbl.health || Quantum.Server.DefaultNodeHealth,
 		respawn = tbl.respawn || Quantum.Server.DefaultNodeRespawnTimer
@@ -34,7 +40,7 @@ if SERVER then
 	function Quantum.Node.Spawn( nodeid, vec, ang )
 		local node = Quantum.Node.Get( nodeid )
 
-		local ent = ents.Create( "q_node" )
+		local ent = ents.Create( node.type )
 		ent.node = node
 		ent.respawndelay = node.respawn || 30
 		ent.probability = node.probability || 1
@@ -66,14 +72,26 @@ if SERVER then
 		end
 	end
 
+	function Quantum.Node.GetAllEntities()
+		local out = {}
+
+		for k, nodetype in pairs( Quantum.NodeType ) do
+			for k, node in pairs( ents.FindByClass(nodetype) ) do
+				out[#out + 1] = node	
+			end
+		end
+
+		return out
+	end
+
 	function Quantum.Node.RemoveAll()
-		for k, node in pairs( ents.FindByClass("q_node") ) do
+		for k, node in pairs( Quantum.Node.GetAllEntities() ) do
 			Quantum.Node.Remove( node )
 		end
 	end
 
 	function Quantum.Node.RemoveAllPerma()
-		for k, node in pairs( ents.FindByClass("q_node") ) do
+		for k, node in pairs( Quantum.Node.GetAllEntities() ) do
 			node:Remove()
 		end
 	end
@@ -130,17 +148,22 @@ if SERVER then
 		local nodeTbl = ent.node
 
 		if( ent.node != nil ) then
+			if( !nodeTbl.canGather ) then return end
 			local nodeid = nodeTbl.id
 			local toolids = nodeTbl.toolids
 
-			if( #toolids > 0 ) then
+			if( toolids != nil ) then
 				local canGather = false
-
-				for i, t in pairs( toolids ) do
-					if( tool == t ) then
-						canGather = true
-						break
+				-- This is fucking retarded.
+				if( #toolids > 0 ) then
+					for i, t in pairs( toolids ) do
+						if( tool == t ) then
+							canGather = true
+							break
+						end
 					end
+				else
+					canGather = true
 				end
 
 				if( canGather ) then
