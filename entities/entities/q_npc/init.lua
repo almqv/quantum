@@ -11,16 +11,15 @@ AddCSLuaFile( "shared.lua" )
 include( "shared.lua" )
  
 function ENT:Initialize()
- 
-	self:PhysicsInit( SOLID_BSP )
-	self:SetMoveType( MOVETYPE_VPHYSICS )
-	self:SetSolid( SOLID_VPHYSICS )
-	self:SetCollisionGroup( COLLISION_GROUP_NONE )
-	self:SetModel("models/kleiner.mdl") -- mingebad model :)
+	-- just the usual npc stuff
+	self:SetModel( "models/kleiner.mdl" )
+	self:SetHullType( HULL_HUMAN )
+	self:SetHullSizeNormal()
 
-	local physObj = self:GetPhysicsObject()
-	if( IsValid( physObj ) ) then
-		physObj:EnableMotion( false ) 
-	end
+	self:SetNPCState( NPC_STATE_IDLE )
+	self:SetSolid( SOLID_BBOX )
+	self:CapabilitiesAdd( CAP_ANIMATEDFACE + CAP_TURN_HEAD )
+	self:SetUseType( SIMPLE_USE )
 
+	self:DropToFloor()
 end

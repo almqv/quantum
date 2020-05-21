@@ -64,6 +64,10 @@ Quantum.NodeType = {
 	npc = "q_npc"
 }
 
+Quantum.DefaultNodeHealth = 10
+
+Quantum.DefaultNodeRespawnTimer = 30
+
 ---- Property vars ----
 
 Quantum.DoorSounds = {

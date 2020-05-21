@@ -16,14 +16,14 @@ end
 function Quantum.Node.Create( nodeid, tbl ) 
 	local node = {
 		name = tbl.name || "Unknown Node",
-		model = tbl.model, 
+		model = tbl.model || "error", -- will create the infamous error model 
 		type = tbl.type || Quantum.NodeType.resource,
 		toolids = tbl.toolids || {}, -- if it's empty then you can use all sweps/tools
 		canGather = tbl.canGather || false,
 		give = tbl.give || {}, 
 		giveprobability = tbl.giveprobability || 1,
-		health = tbl.health || Quantum.Server.DefaultNodeHealth,
-		respawn = tbl.respawn || Quantum.Server.DefaultNodeRespawnTimer
+		health = tbl.health || Quantum.DefaultNodeHealth,
+		respawn = tbl.respawn || Quantum.DefaultNodeRespawnTimer
 	}
 
 	node.id = nodeid

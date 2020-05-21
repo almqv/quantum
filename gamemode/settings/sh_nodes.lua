@@ -5,6 +5,15 @@
 --  \ \   / ____ \| | | | | | | |  __/ (__| | | |  / / 
 --   \_\ /_/    \_\_|_| |_| |_|_|\___|\___|_| |_| /_/  
 
+-- NPC Nodes --
+Quantum.Node.Create( "generalvendor", {
+	type = Quantum.NodeType.NPC,
+	canGather = false,
+	name = "General Goods Vendor",
+	model = "models/kleiner.mdl",
+} ) 
+
+-- Resource Nodes --
 local miningTools = { "tool_pickaxe" }
 
 Quantum.Node.Create( "stone", {
