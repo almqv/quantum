@@ -18,8 +18,30 @@ function ENT:Initialize()
 
 	self:SetNPCState( NPC_STATE_IDLE )
 	self:SetSolid( SOLID_BBOX )
-	self:CapabilitiesAdd( CAP_ANIMATEDFACE + CAP_TURN_HEAD )
+	self:CapabilitiesAdd( CAP_ANIMATEDFACE )
+	self:CapabilitiesAdd( CAP_TURN_HEAD )
 	self:SetUseType( SIMPLE_USE )
 
+	self:SetSequence(self:SelectWeightedSequence(ACT_IDLE))
+
 	self:DropToFloor()
+end
+
+function ENT:Use()
+	if( self.node != nil ) then
+		-- open up dialogue menu
+		if( #self.node.voiceLines > 0 ) then
+			self:EmitSound(self.node.voiceLines[math.random(1, #self.node.voiceLines)])
+		end
+	end
+end
+
+function ENT:OnTakeDamage( dmgInfo )
+	if( !self.m_bApplyingDamage ) then
+		if( self.node != nil ) then
+			if( #self.node.damageSounds > 0 ) then
+				self:EmitSound( self.node.damageSounds[math.random(1, #self.node.damageSounds)] )
+			end
+		end
+	end
 end

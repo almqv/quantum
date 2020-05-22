@@ -23,7 +23,9 @@ function Quantum.Node.Create( nodeid, tbl )
 		give = tbl.give || {}, 
 		giveprobability = tbl.giveprobability || 1,
 		health = tbl.health || Quantum.DefaultNodeHealth,
-		respawn = tbl.respawn || Quantum.DefaultNodeRespawnTimer
+		respawn = tbl.respawn || Quantum.DefaultNodeRespawnTimer,
+		voiceLines = tbl.voiceLines || {},
+		damageSounds = tbl.damageSounds || {}
 	}
 
 	node.id = nodeid

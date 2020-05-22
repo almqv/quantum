@@ -7,10 +7,31 @@
 
 -- NPC Nodes --
 Quantum.Node.Create( "generalvendor", {
-	type = Quantum.NodeType.NPC,
-	canGather = false,
 	name = "General Goods Vendor",
 	model = "models/kleiner.mdl",
+	type = Quantum.NodeType.npc,
+
+	voiceLines = {
+		"vo/coast/odessa/nlo_cub_hello.wav",
+		"vo/coast/odessa/male01/nlo_citizen_greet01.wav",
+		"vo/coast/odessa/male01/nlo_citizen_greet02.wav",
+		"vo/coast/odessa/male01/nlo_citizen_greet03.wav",
+		"vo/coast/odessa/male01/nlo_citizen_greet04.wav"
+	},
+
+	damageSounds = {
+		"vo/npc/male01/ow01.wav",
+		"vo/npc/male01/ow02.wav",
+		"vo/npc/male01/pain01.wav",
+		"vo/npc/male01/pain02.wav",
+		"vo/npc/male01/pain03.wav",
+		"vo/npc/male01/pain04.wav",
+		"vo/npc/male01/pain05.wav",
+		"vo/npc/male01/pain06.wav",
+		"vo/npc/male01/pain07.wav",
+		"vo/npc/male01/pain08.wav",
+		"vo/npc/male01/pain09.wav"
+	},
 } ) 
 
 -- Resource Nodes --
