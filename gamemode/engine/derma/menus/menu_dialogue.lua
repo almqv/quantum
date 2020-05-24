@@ -71,6 +71,7 @@ function menu.open( dt )
 		f.w, f.h = f:GetSize()
 
 		local q = vgui.Create( "DLabel", f )
+		q:SetText("")
 
 	end
 end
