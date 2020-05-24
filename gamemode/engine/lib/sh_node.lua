@@ -25,7 +25,8 @@ function Quantum.Node.Create( nodeid, tbl )
 		health = tbl.health || Quantum.DefaultNodeHealth,
 		respawn = tbl.respawn || Quantum.DefaultNodeRespawnTimer,
 		voiceLines = tbl.voiceLines || {},
-		damageSounds = tbl.damageSounds || {}
+		damageSounds = tbl.damageSounds || {},
+		dialogueID = tbl.dialogueID 
 	}
 
 	node.id = nodeid

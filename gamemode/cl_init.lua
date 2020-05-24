@@ -53,6 +53,7 @@ if CLIENT then
 		include( "settings/sh_recipes.lua" )
 		include( "settings/sh_nodes.lua" )
 		include( "settings/sh_properties.lua" )
+		include( "settings/sh_dialogues.lua" )
 	end
 
 	local function loadPlugins()

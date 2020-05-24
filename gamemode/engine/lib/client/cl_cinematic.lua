@@ -7,14 +7,15 @@
 
 				Quantum.Client.Cam = {}
 
-function Quantum.Client.Cam.InvertAngle( ang ) return Angle( -ang.x, ang.y, -ang.z ) end -- Flip the camera 180* relative to target
+function Quantum.Client.Cam.InvertAngle( ang ) return Angle( ang.x, -ang.y, ang.z ) end -- Flip the camera 180* relative to target
 
 function Quantum.Client.Cam.Stop() 
 	hook.Remove( "CalcView", "Quantum_Cinematic" )
 	Quantum.Client.Cam.Temp = nil -- remove the var becuase it is unneeded
 end
 
-function Quantum.Client.Cam.Start( scene, loop )
+function Quantum.Client.Cam.Start( scene, loop, drawviewer )
+	drawviewer = drawviewer || false
 	if( scene == nil ) then
 		Quantum.Error( "Scene does not exist! Aborting..." )
 		return
@@ -43,7 +44,7 @@ function Quantum.Client.Cam.Start( scene, loop )
 		view.origin = LerpVector( frac, scene[Quantum.Client.Cam.Temp.scene_index].pos1, scene[Quantum.Client.Cam.Temp.scene_index].pos2 )
 		view.angles = LerpAngle( frac, scene[Quantum.Client.Cam.Temp.scene_index].ang1, scene[Quantum.Client.Cam.Temp.scene_index].ang2 )
 		view.fov = fov
-		view.drawviewer = true
+		view.drawviewer = drawviewer
 
 		if( view.origin:IsEqualTol( scene[Quantum.Client.Cam.Temp.scene_index].pos2, 1 ) ) then
 			if( Quantum.Client.Cam.Temp.scene_index + 1 <= #scene ) then

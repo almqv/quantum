@@ -10,6 +10,7 @@ Quantum.Node.Create( "generalvendor", {
 	name = "General Goods Vendor",
 	model = "models/kleiner.mdl",
 	type = Quantum.NodeType.npc,
+	dialogueID = "npc_generalvendor",
 
 	voiceLines = {
 		"vo/coast/odessa/nlo_cub_hello.wav",

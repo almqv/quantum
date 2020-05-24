@@ -14,7 +14,8 @@ local padding_s = 4 * scale
 
 local theme = Quantum.Client.Menu.GetAPI( "theme" )
 
-function log.createinfobox( logdata, parent )
+function log.createinfobox( logdata, parent, cinematic )
+	cinematic = cinematic || true
 	local fw, fh = parent:GetSize()
 	local logtitle = logdata[1].title
 	local logtext = logdata[1].text
@@ -74,7 +75,7 @@ function log.createinfobox( logdata, parent )
 	text:SetPos( scroll.w/2 - text.w/2, 0 )
 
 	text.Think = function( self ) 
-		if( Quantum.Client.Cam.Temp != nil ) then
+		if( Quantum.Client.Cam.Temp != nil && cinematic ) then
 			if( logdata[Quantum.Client.Cam.Temp.scene_index] != nil ) then
 				self:SetText( logdata[Quantum.Client.Cam.Temp.scene_index].text ) 
 			end

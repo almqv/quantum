@@ -44,3 +44,14 @@ function Quantum.Dialogue.AddResponse( id, qid, tbl, order )
 		})	
 	end
 end
+
+
+function Quantum.Dialogue.Get( id )
+	if CLIENT then
+		Quantum.Debug("Dialogue fetch:")
+		PrintTable(Quantum.DialogueTbl)
+		return Quantum.DialogueTbl[id]
+	else
+		Quantum.Error("Can not fetch dialogue table from serverside!")
+	end
+end

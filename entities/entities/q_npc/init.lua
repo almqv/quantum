@@ -27,11 +27,14 @@ function ENT:Initialize()
 	self:DropToFloor()
 end
 
-function ENT:Use()
+function ENT:Use( activator, caller )
 	if( self.node != nil ) then
-		-- open up dialogue menu
+		if( self.node.dialogueID ) then
+			-- open up dialogue menu
+			Quantum.Net.OpenMenu(activator, "dialogue", { ent = self, dialogueID = self.node.dialogueID })
+		end
 		if( #self.node.voiceLines > 0 ) then
-			self:EmitSound(self.node.voiceLines[math.random(1, #self.node.voiceLines)])
+			self:EmitSound(self.node.voiceLines[math.random(1, #self.node.voiceLines)]) -- emit a voiceline
 		end
 	end
 end
