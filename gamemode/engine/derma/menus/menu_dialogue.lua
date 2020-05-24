@@ -40,16 +40,23 @@ function menu.open( dt )
 		Quantum.Client.Cam.Start( scenes, true, false )
 
 		local dialogue = Quantum.Dialogue.Get( dt.cont.dialogueID )
+		local node
+		if( dt.cont.nodeid != nil ) then
+			node = Quantum.Node.Get(dt.cont.nodeid)
+		else
+			Quantum.Error("Unable to fetch node table. Node ID is nil.")
+			return 
+		end
 
 		local f = vgui.Create( "DFrame" )
 		f:SetSize( sw, sh )
 		f:SetTitle( "" )
 		f:ShowCloseButton( false )
+		local borderHeight = 90 * resScale
 		f.Paint = function( self, w, h ) 
 			surface.SetDrawColor( Color( 20, 20, 20, 255 ) )
-			local height = 90 * resScale
-			surface.DrawRect( 0, 0, w, height )
-			surface.DrawRect( 0, h - height, w, height )
+			surface.DrawRect( 0, 0, w, borderHeight )
+			surface.DrawRect( 0, h - borderHeight, w, borderHeight )
 		end
 		f:SetDraggable( false )
 		f:MakePopup()
@@ -70,9 +77,13 @@ function menu.open( dt )
 		end
 		f.w, f.h = f:GetSize()
 
-		local q = vgui.Create( "DLabel", f )
-		q:SetText("Test")
-
+		local title = vgui.Create( "DLabel", f ) -- dialogue title, useally the npcs name or something
+		title:SetText(node.name)
+		title:SetFont("q_header_s")
+		title:SetTextColor(Color(255, 255, 255, 120))
+		title:SizeToContents()
+		title.w, title.h = title:GetSize()
+		title:SetPos( padding*2, borderHeight/2 - title.h/2 )
 	end
 end
 

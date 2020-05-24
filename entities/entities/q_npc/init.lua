@@ -31,7 +31,7 @@ function ENT:Use( activator, caller )
 	if( self.node != nil ) then
 		if( self.node.dialogueID ) then
 			-- open up dialogue menu
-			Quantum.Net.OpenMenu(activator, "dialogue", { ent = self, dialogueID = self.node.dialogueID })
+			Quantum.Net.OpenMenu(activator, "dialogue", { ent = self, dialogueID = self.node.dialogueID, nodeid = self.node.id })
 		end
 		if( #self.node.voiceLines > 0 ) then
 			self:EmitSound(self.node.voiceLines[math.random(1, #self.node.voiceLines)]) -- emit a voiceline
