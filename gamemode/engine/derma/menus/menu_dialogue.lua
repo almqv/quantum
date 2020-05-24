@@ -5,16 +5,20 @@
 --  \ \   / ____ \| | | | | | | |  __/ (__| | | |  / / 
 --   \_\ /_/    \_\_|_| |_| |_|_|\___|\___|_| |_| /_/  
 
-GM.Name = "Quantum Framework"
-GM.Author = "AlmTech"
-GM.Email = "elias@almtech.se"
-GM.Website = "www.almtech.se"
+local menu = {}
 
-Quantum = {}
-Quantum.Version = "v0.5-beta"
+local snm = Quantum.Client.Menu.GetAPI( "net" )
+local theme = Quantum.Client.Menu.GetAPI( "theme" )
 
-include( "engine/sh_debug.lua" ) -- add the debug functions and stuff
+local resScale = Quantum.Client.ResolutionScale
+local sw, sh = ScrW(), ScrH()
+local padding = 10 * resScale
+local padding_s = 4 * resScale
 
-include( "settings/sh_settings.lua" )
+function menu.open( dt )
+	if( !f ) then
 
-include( "engine/vars/sh_vars.lua" ) -- include the shared constant vars
+	end
+end
+
+return menu

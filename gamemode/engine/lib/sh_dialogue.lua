@@ -10,27 +10,37 @@ Quantum.Dialogue = {}
 Quantum.DialogueTbl = {}
 
 function Quantum.Dialogue.Create( id, tbl )
+	tbl = tbl || {}
 	local dialogue = {
 		bye = tbl.bye || "Nevermind, goodbye.",
-		options = tbl.options || {}
 	}
 
 	Quantum.DialogueTbl[id] = dialogue
 	return dialogue
 end
 
+
 function Quantum.Dialogue.AddQuestion( id, qid, q )
-	Quantum.DialogueTbl[id][qid] = {
-		question = q || "...",
-		response = {}
-	}
-	return qid
+	if CLIENT then
+		if( Quantum.DialogueTbl[id] == nil ) then
+			Quantum.Error("Dialogue '" .. tostring(id) .. "' does not exist! Can not add question to it.")
+			return 
+		else
+			Quantum.DialogueTbl[id][qid] = {
+				question = q || "...",
+				response = {}
+			}
+			return qid
+		end
+	end
 end
 
 function Quantum.Dialogue.AddResponse( id, qid, tbl, order )
-	table.insert(Quantum.DialogueTbl[id][qid].response, order, {
-		text = tbl.text || "...",
-		func = tbl.func,
-		newqID = tbl.newqID
-	})	
+	if CLIENT then
+		table.insert(Quantum.DialogueTbl[id][qid].response, order, {
+			text = tbl.text || "...",
+			func = tbl.func, -- function to be ran on the client side
+			newqID = tbl.newqID -- if it leads to a new question, then forward it to its id, if nil then terminate conversation
+		})	
+	end
 end

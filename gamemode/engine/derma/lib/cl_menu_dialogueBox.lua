@@ -5,6 +5,8 @@
 --  \ \   / ____ \| | | | | | | |  __/ (__| | | |  / / 
 --   \_\ /_/    \_\_|_| |_| |_|_|\___|\___|_| |_| /_/  
 
+-- This is mainly used for cinematic, do not confuse it with NPC dialogue
+
 local log = {}
 local scale = Quantum.Client.ResolutionScale
 local padding = 10 * scale
