@@ -76,14 +76,29 @@ function menu.open( dt )
 			end
 		end
 		f.w, f.h = f:GetSize()
-
+		
+		f.dialogue = {}
+		local textColor = Color(255, 255, 255, 120)
+		
+		-- Title is static, can't be changed mid dialogue.
 		local title = vgui.Create( "DLabel", f ) -- dialogue title, useally the npcs name or something
 		title:SetText(node.name)
 		title:SetFont("q_header_s")
-		title:SetTextColor(Color(255, 255, 255, 120))
+		title:SetTextColor(textColor)
 		title:SizeToContents()
 		title.w, title.h = title:GetSize()
-		title:SetPos( padding*2, borderHeight/2 - title.h/2 )
+		title:SetPos(padding*2, borderHeight/2 - title.h/2)
+		
+		-- Dialogue question
+		f.dialogue.q = vgui.Create("DLabel", f)
+		f.dialogue.q:SetText(dialogue["init"].question)
+		f.dialogue.q:SetFont("q_dialogue_question")
+		f.dialogue.q:SetTextColor(textColor)
+		f.dialogue.q:SizeToContents()
+		f.dialogue.q.w, f.dialogue.q.h = f.dialogue.q:GetSize()
+		f.dialogue.q:SetPos(padding*2, sh - borderHeight/2 - f.dialogue.q.h)
+
+		return f
 	end
 end
 

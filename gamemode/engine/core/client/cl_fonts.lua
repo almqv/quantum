@@ -186,3 +186,9 @@ surface.CreateFont( "q_craft_hud_text", {
 	size = 25 * Quantum.Client.ResolutionScale,
 	antialias = true
 })
+
+surface.CreateFont( "q_dialogue_question", {
+	font = "Arial",
+	size = 38 * Quantum.Client.ResolutionScale,
+	antialias = true
+})
