@@ -12,6 +12,16 @@ local padding_s = 4 * scale
 
 local theme = Quantum.Client.Menu.GetAPI( "theme" )
 
+function log.appendLinesToStr(tbl)
+	local out = ""
+	for _, l in SortedPairs(tbl) do
+		if(l != nil) then
+			out = out .. l
+		end
+	end
+	return out
+end
+
 function log.genTextLinebreak( txt, font, maxW )
 	local wordlist = string.Split( txt, " " ) -- all words are seperated by spaces
 	local lines = {}
@@ -33,17 +43,22 @@ function log.genTextLinebreak( txt, font, maxW )
 			for _, wordI in pairs(wordsUsed) do
 				wordlist[wordI] = nil
 			end
+		else
+			-- append the last sentence
+			table.insert(lines, log.appendLinesToStr(wordlist))
 		end
 	end
 	return lines
 end
 
-function log.appendLinesToStr(tbl)
-	local out = ""
-	for _, l in SortedPairs(tbl) do
-		out = out .. l
-	end
-	return out
+
+function log.setHeightToLines( p, lines, font, add )
+	add = add || 0
+	surface.SetFont(font)
+	local _, h = surface.GetTextSize("Quantum")
+	print(#lines)
+	PrintTable(lines)
+	p:SetHeight((#lines * h) + (#lines * padding_s) + add)
 end
 
 function log.createDialogueBox( logdata, parent )
@@ -54,9 +69,17 @@ function log.createDialogueBox( logdata, parent )
 	local box = vgui.Create( "DPanel", parent )
 	local maxW, maxH = 775 * scale, 160 * scale
 	box:SetSize( maxW, maxH )
-	box.Paint = function( self, w, h ) 
-	surface.SetDrawColor( 20, 20, 20, 220 )
+	box.Paint = function( self, w, h )
+		-- background blur
+		theme.renderblur( self, 2, 7 )
+		
+		-- background
+		surface.SetDrawColor( 20, 20, 20, 220 )
 		surface.DrawRect( 0, 0, w, h )
+
+		-- outline
+		surface.SetDrawColor( 220, 220, 220, 100)
+		surface.DrawOutlinedRect( 0, 0, w, h )
 	end
 	
 	local scroll = vgui.Create( "DScrollPanel", box )
@@ -78,12 +101,12 @@ function log.createDialogueBox( logdata, parent )
 	text:SetText(log.appendLinesToStr(text.lines))
 	text:SetTextColor( Color( 240, 240, 240, 255 ) )
 	text:SetWidth( maxW )
-	text:SizeToContentsY()
+	text:SizeToContentsY()	
 
 	text.w, text.h = text:GetSize()
 	text:SetPos(padding, padding)
 	
-	box:SizeToChildren( false, true )
+	log.setHeightToLines(box, text.lines, text:GetFont(), padding*2)
 	
 	box.w, box.h = box:GetSize()
 	if( box.h > maxH ) then 
