@@ -260,6 +260,7 @@ function theme.fadebutton( b, dir, inColor, font, txtColor )
 	
 end
 
+
 ---- Color Manipulation ----
 theme.color = {}
 

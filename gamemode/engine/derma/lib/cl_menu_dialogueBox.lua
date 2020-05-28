@@ -14,6 +14,43 @@ local padding_s = 4 * scale
 
 local theme = Quantum.Client.Menu.GetAPI( "theme" )
 
+function log.createDialogueBox( logdata, parent )
+	cinematic = cinematic || true
+	local fw, fh = parent:GetSize()
+	local logtext = logdata["init"].question
+
+	local box = vgui.Create( "DPanel", parent )
+	box:SetSize( 775 * scale, 80 * scale )
+	box.Paint = theme.sharpblurpanel( self ) 
+	box.w, box.h = box:GetSize()
+	box:SetPos( fw/2 - box.w/2, fh*0.7 - box.h/2 ) 
+	box.x, box.y = box:GetPos()
+
+	local scroll = vgui.Create( "DScrollPanel", box )
+	scroll:SetSize( box:GetSize() )
+	scroll.Paint = function( self ) end
+	local sb = scroll:GetVBar()
+	sb.Paint = function( self ) end
+	function sb.btnGrip:Paint() 
+		theme.button( self, Color( 0, 0, 0, 0 ) ) 
+	end
+	sb.btnUp:SetSize(0,0)
+	sb.btnDown:SetSize(0,0)
+	scroll.w, scroll.h = scroll:GetSize()
+
+	local text = vgui.Create( "DLabel", scroll )
+	text:SetText( logtext )
+	text:SetFont( "q_dialogue_question" )
+	text:SetTextColor( Color( 240, 240, 240, 255 ) )
+	text:SetSize( scroll.w * 0.95, scroll.h * 0.95 )
+	text:SetWrap( true )
+
+	text.w, text.h = text:GetSize()
+
+	text:SetPos( scroll.w/2 - text.w/2, 0 )
+
+	return box
+end
 function log.createinfobox( logdata, parent, cinematic )
 	cinematic = cinematic || true
 	local fw, fh = parent:GetSize()

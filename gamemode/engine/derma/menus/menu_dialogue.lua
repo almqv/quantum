@@ -10,6 +10,7 @@ local menu = {}
 local snm = Quantum.Client.Menu.GetAPI( "net" )
 local theme = Quantum.Client.Menu.GetAPI( "theme" )
 local fade = Quantum.Client.Menu.GetAPI( "fade" )
+local log = Quantum.Client.Menu.GetAPI( "dialogue" )
 
 local resScale = Quantum.Client.ResolutionScale
 local sw, sh = ScrW(), ScrH()
@@ -53,10 +54,12 @@ function menu.open( dt )
 		f:SetTitle( "" )
 		f:ShowCloseButton( false )
 		local borderHeight = 90 * resScale
-		f.Paint = function( self, w, h ) 
+		f.Paint = function( self, w, h )
+			--[[
 			surface.SetDrawColor( Color( 20, 20, 20, 255 ) )
 			surface.DrawRect( 0, 0, w, borderHeight )
 			surface.DrawRect( 0, h - borderHeight, w, borderHeight )
+			--]]
 		end
 		f:SetDraggable( false )
 		f:MakePopup()
@@ -78,7 +81,7 @@ function menu.open( dt )
 		f.w, f.h = f:GetSize()
 		
 		f.dialogue = {}
-		local textColor = Color(255, 255, 255, 120)
+		local textColor = Color(255, 255, 255, 220)
 		
 		-- Title is static, can't be changed mid dialogue.
 		local title = vgui.Create( "DLabel", f ) -- dialogue title, useally the npcs name or something
@@ -90,13 +93,7 @@ function menu.open( dt )
 		title:SetPos(padding*2, borderHeight/2 - title.h/2)
 		
 		-- Dialogue question
-		f.dialogue.q = vgui.Create("DLabel", f)
-		f.dialogue.q:SetText(dialogue["init"].question)
-		f.dialogue.q:SetFont("q_dialogue_question")
-		f.dialogue.q:SetTextColor(textColor)
-		f.dialogue.q:SizeToContents()
-		f.dialogue.q.w, f.dialogue.q.h = f.dialogue.q:GetSize()
-		f.dialogue.q:SetPos(padding*2, sh - borderHeight/2 - f.dialogue.q.h)
+		f.dialogue.q = log.createDialogueBox( dialogue, f )
 
 		return f
 	end
