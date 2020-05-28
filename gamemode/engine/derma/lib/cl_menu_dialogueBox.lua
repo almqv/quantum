@@ -5,8 +5,6 @@
 --  \ \   / ____ \| | | | | | | |  __/ (__| | | |  / / 
 --   \_\ /_/    \_\_|_| |_| |_|_|\___|\___|_| |_| /_/  
 
--- This is mainly used for cinematic, do not confuse it with NPC dialogue
-
 local log = {}
 local scale = Quantum.Client.ResolutionScale
 local padding = 10 * scale
@@ -14,18 +12,53 @@ local padding_s = 4 * scale
 
 local theme = Quantum.Client.Menu.GetAPI( "theme" )
 
+function log.genTextLinebreak( txt, font, maxW )
+	local wordlist = string.Split( txt, " " ) -- all words are seperated by spaces
+	local lines = {}
+
+	surface.SetFont(font)
+	for i=1, #wordlist do -- loop through all of the words
+		local str = wordlist[i] -- "workspace string"
+		local wordsUsed = {i}
+		for n=i-1, 1, -1 do -- add all words behind i
+			if(wordlist[n] != nil) then
+				str = wordlist[n] .. " " .. str	
+				table.insert(wordsUsed, n) -- remove them all later from wordlist
+			end
+		end
+		local add = ""
+		if( wordlist[i+1] != nil ) then add = " " .. wordlist[i+1] end
+		if(surface.GetTextSize(str .. add) >= maxW) then 
+			table.insert(lines, str .. "\n")
+			for _, wordI in pairs(wordsUsed) do
+				wordlist[wordI] = nil
+			end
+		end
+	end
+	return lines
+end
+
+function log.appendLinesToStr(tbl)
+	local out = ""
+	for _, l in SortedPairs(tbl) do
+		out = out .. l
+	end
+	return out
+end
+
 function log.createDialogueBox( logdata, parent )
 	cinematic = cinematic || true
 	local fw, fh = parent:GetSize()
 	local logtext = logdata["init"].question
 
 	local box = vgui.Create( "DPanel", parent )
-	box:SetSize( 775 * scale, 80 * scale )
-	box.Paint = theme.sharpblurpanel( self ) 
-	box.w, box.h = box:GetSize()
-	box:SetPos( fw/2 - box.w/2, fh*0.7 - box.h/2 ) 
-	box.x, box.y = box:GetPos()
-
+	local maxW, maxH = 775 * scale, 160 * scale
+	box:SetSize( maxW, maxH )
+	box.Paint = function( self, w, h ) 
+	surface.SetDrawColor( 20, 20, 20, 220 )
+		surface.DrawRect( 0, 0, w, h )
+	end
+	
 	local scroll = vgui.Create( "DScrollPanel", box )
 	scroll:SetSize( box:GetSize() )
 	scroll.Paint = function( self ) end
@@ -36,18 +69,27 @@ function log.createDialogueBox( logdata, parent )
 	end
 	sb.btnUp:SetSize(0,0)
 	sb.btnDown:SetSize(0,0)
+	scroll:SetSize( box:GetSize() )
 	scroll.w, scroll.h = scroll:GetSize()
 
 	local text = vgui.Create( "DLabel", scroll )
-	text:SetText( logtext )
 	text:SetFont( "q_dialogue_question" )
+	text.lines = log.genTextLinebreak( logtext, text:GetFont(), maxW - (padding) )
+	text:SetText(log.appendLinesToStr(text.lines))
 	text:SetTextColor( Color( 240, 240, 240, 255 ) )
-	text:SetSize( scroll.w * 0.95, scroll.h * 0.95 )
-	text:SetWrap( true )
+	text:SetWidth( maxW )
+	text:SizeToContentsY()
 
 	text.w, text.h = text:GetSize()
-
-	text:SetPos( scroll.w/2 - text.w/2, 0 )
+	text:SetPos(padding, padding)
+	
+	box:SizeToChildren( false, true )
+	
+	box.w, box.h = box:GetSize()
+	if( box.h > maxH ) then 
+		box:SetHeight(maxH)
+	end
+	box:SetPos( fw/2 - box.w/2, fh*0.7 )
 
 	return box
 end

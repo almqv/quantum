@@ -32,7 +32,7 @@ function Quantum.Client.Cam.Start( scene, loop, drawviewer )
 
 	hook.Remove( "CalcView", "Quantum_Cinematic" ) -- if a cinematic is already running; cancel it
 
-	hook.Add( "CalcView", "Quantum_Cinematic", function( ply, pos, ang, fov ) 
+	hook.Add( "CalcView", "Quantum_Cinematic", function( ply, pos, ang, fov )
 		time = scene[Quantum.Client.Cam.Temp.scene_index].velocity || 5
 		fov = scene[Quantum.Client.Cam.Temp.scene_index].fov || 20
 		frac = math.Clamp( frac + FrameTime()/time, 0, 1 )

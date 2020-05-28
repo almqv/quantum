@@ -9,7 +9,7 @@
 ---- CREATE DIALOGUE INSTANCES UNDER THIS LINE ----
 Quantum.Dialogue.Create( "npc_generalvendor" )
 
-	Quantum.Dialogue.AddQuestion( "npc_generalvendor", "init", "What do you want?" )
+	Quantum.Dialogue.AddQuestion( "npc_generalvendor", "init", "What do you want? I don't have time for any shenanigans right now! Go away! REEEEEEEEEEEEEE! Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur mi leo, blandit in ullamcorper sit amet, tristique in purus. Morbi vehicula suscipit faucibus. Quisque ultricies nisl magna, quis facilisis sem aliquam id. Integer non est sagittis, laoreet ipsum et, euismod odio. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In sollicitudin turpis eget libero maximus commodo." )
 
 		Quantum.Dialogue.AddResponse( "npc_generalvendor", "init", {
 			text = "To do business.",
