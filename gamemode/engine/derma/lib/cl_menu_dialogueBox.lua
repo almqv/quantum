@@ -56,44 +56,88 @@ function log.setHeightToLines( p, lines, font, add )
 	add = add || 0
 	surface.SetFont(font)
 	local _, h = surface.GetTextSize("Quantum")
-	print(#lines)
-	PrintTable(lines)
 	p:SetHeight((#lines * h) + (#lines * padding_s) + add)
 end
 
-function log.createDialogueBox( logdata, parent )
-	cinematic = cinematic || true
-	local fw, fh = parent:GetSize()
-	local logtext = logdata["init"].question
+local maxW, maxH = 775 * scale, 160 * scale
 
-	local box = vgui.Create( "DPanel", parent )
-	local maxW, maxH = 775 * scale, 160 * scale
-	box:SetSize( maxW, maxH )
-	box.Paint = function( self, w, h )
-		-- background blur
-		theme.renderblur( self, 2, 7 )
+function log.createOptionButton( parent, index, text, font )
+	local btn = parent:Add("DButton")
+	btn:SetContentAlignment(4)
+	btn:SetText(text)
+	btn:SetFont(font)
+	btn:SetTextColor( Color( 255, 255, 255, 200 ) )
+	btn.index = index
+	btn.w, btn.h = maxW - padding*4, 40 * scale
+	btn:SetSize( btn.w, btn.h )
+	btn.Paint = function( self )
+		theme.renderblur( self, 2, 6 )
+		theme.sharpbutton( self, Color( 20, 20, 20, 220) )
+	end
+
+	function btn:UpdateSize( add )
+		local font, lines = self:GetFont(), log.genTextLinebreak( self:GetText(), font, btn.w )
+		self:SetText( log.appendLinesToStr(lines, " ") )
+		log.setHeightToLines(self, lines, font, add)
+		self.w, self.h = self:GetSize()
 		
-		-- background
-		surface.SetDrawColor( 20, 20, 20, 220 )
-		surface.DrawRect( 0, 0, w, h )
+		self:Dock(TOP)
+		self:DockMargin( padding_s*4, 0, padding_s*4, padding_s*2 )
+		return self
+	end
+	return btn
+end
 
-		-- outline
-		surface.SetDrawColor( 220, 220, 220, 100)
-		surface.DrawOutlinedRect( 0, 0, w, h )
+function log.createContainer( parent, hide )
+	local box = vgui.Create( "DPanel", parent )
+	box:SetSize( maxW, maxH )
+	box.Paint = function( self ) 
+		if( !hide ) then
+			theme.dialogueBox(self) 
+		end
+	end
+	box.w, box.h = maxW, maxH
+
+	function box:UpdateSize( lines, font, add )
+		log.setHeightToLines(self, lines, font, add)
+	
+		self.w, self.h = self:GetSize()
+		if( self.h > maxH ) then 
+			self:SetHeight(maxH)
+		end
+		self.w, self.h = self:GetSize()
+
+		return self
 	end
 	
 	local scroll = vgui.Create( "DScrollPanel", box )
 	scroll:SetSize( box:GetSize() )
 	scroll.Paint = function( self ) end
 	local sb = scroll:GetVBar()
-	sb.Paint = function( self ) end
+	sb.Paint = Quantum.EmptyFunction
 	function sb.btnGrip:Paint() 
-		theme.button( self, Color( 0, 0, 0, 0 ) ) 
+		theme.blurpanel(self)
 	end
+	sb:SetWidth(padding)
+
 	sb.btnUp:SetSize(0,0)
+	sb.btnUp.Paint = function(self) end
+
 	sb.btnDown:SetSize(0,0)
+	sb.btnDown.Paint = function(self) end
+
 	scroll:SetSize( box:GetSize() )
 	scroll.w, scroll.h = scroll:GetSize()
+
+	return box, scroll
+end
+
+function log.createQBox( logdata, parent )
+	cinematic = cinematic || true
+	local fw, fh = parent:GetSize()
+	local logtext = logdata["init"].question
+
+	local box, scroll = log.createContainer( parent )
 
 	local text = vgui.Create( "DLabel", scroll )
 	text:SetFont( "q_dialogue_question" )
@@ -106,16 +150,13 @@ function log.createDialogueBox( logdata, parent )
 	text.w, text.h = text:GetSize()
 	text:SetPos(padding, padding)
 	
-	log.setHeightToLines(box, text.lines, text:GetFont(), padding*2)
-	
-	box.w, box.h = box:GetSize()
-	if( box.h > maxH ) then 
-		box:SetHeight(maxH)
-	end
-	box:SetPos( fw/2 - box.w/2, fh*0.7 )
+	box:UpdateSize( text.lines, text:GetFont(), padding*2 )
+	box:SetPos( fw/2 - box.w/2, fh*0.65 )
 
-	return box
+	return box, text
 end
+
+
 function log.createinfobox( logdata, parent, cinematic )
 	cinematic = cinematic || true
 	local fw, fh = parent:GetSize()
@@ -124,7 +165,7 @@ function log.createinfobox( logdata, parent, cinematic )
 
 	local box = vgui.Create( "DPanel", parent )
 	box:SetSize( 775 * scale, 200 * scale )
-	box.Paint = function( self ) theme.sharpblurpanel( self ) end
+	box.Paint = function( self ) theme.dialogueBox( self ) end
 	box.w, box.h = box:GetSize()
 	box:SetPos( fw/2 - box.w/2, fh*0.8 - box.h/2 ) 
 	box.x, box.y = box:GetPos()

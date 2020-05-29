@@ -260,6 +260,19 @@ function theme.fadebutton( b, dir, inColor, font, txtColor )
 	
 end
 
+function theme.dialogueBox( p )
+	local w, h = p:GetSize()
+	-- background blur
+	theme.renderblur( p, 2, 7 )
+		
+	-- background
+	surface.SetDrawColor( 20, 20, 20, 220 )
+	surface.DrawRect( 0, 0, w, h )
+
+	-- outline
+	surface.SetDrawColor( 220, 220, 220, 60)
+	surface.DrawOutlinedRect( 0, 0, w, h )
+end
 
 ---- Color Manipulation ----
 theme.color = {}
