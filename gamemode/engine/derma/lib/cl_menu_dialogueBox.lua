@@ -12,11 +12,12 @@ local padding_s = 4 * scale
 
 local theme = Quantum.Client.Menu.GetAPI( "theme" )
 
-function log.appendLinesToStr(tbl)
+function log.appendLinesToStr(tbl, sep)
+	sep = sep || ""
 	local out = ""
 	for _, l in SortedPairs(tbl) do
 		if(l != nil) then
-			out = out .. l
+			out = out .. l .. sep
 		end
 	end
 	return out
@@ -42,12 +43,11 @@ function log.genTextLinebreak( txt, font, maxW )
 			table.insert(lines, str .. "\n")
 			for _, wordI in pairs(wordsUsed) do
 				wordlist[wordI] = nil
-			end
-		else
-			-- append the last sentence
-			table.insert(lines, log.appendLinesToStr(wordlist))
+			end	
 		end
 	end
+	-- append the last sentence
+	table.insert(lines, log.appendLinesToStr(wordlist, " "))
 	return lines
 end
 
