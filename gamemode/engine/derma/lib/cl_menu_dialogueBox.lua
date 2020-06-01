@@ -61,7 +61,12 @@ end
 
 local maxW, maxH = 775 * scale, 160 * scale
 
-function log.createOptionButton( parent, index, text, font )
+function log.createOptionButton( interface, index, text, font )
+	local parent = interface.contScroll
+	if(parent == nil) then 
+		Quantum.Error("Could not index dialogue interface, failed to create option button.")
+		return 
+	end
 	local btn = parent:Add("DButton")
 	btn:SetContentAlignment(4)
 	btn:SetText(text)
@@ -84,6 +89,10 @@ function log.createOptionButton( parent, index, text, font )
 		self:Dock(TOP)
 		self:DockMargin( padding_s*4, 0, padding_s*4, padding_s*2 )
 		return self
+	end
+
+	btn.DoClick = function(self)
+		log.updateDialogueInterface(i, qID)
 	end
 	return btn
 end
@@ -132,28 +141,36 @@ function log.createContainer( parent, hide )
 	return box, scroll
 end
 
-function log.createQBox( logdata, parent )
+function log.createQBox( logdata, parent, log_cont )
 	cinematic = cinematic || true
 	local fw, fh = parent:GetSize()
-	local logtext = logdata["init"].question
 
 	local box, scroll = log.createContainer( parent )
 
-	local text = vgui.Create( "DLabel", scroll )
-	text:SetFont( "q_dialogue_question" )
-	text.lines = log.genTextLinebreak( logtext, text:GetFont(), maxW - (padding) )
-	text:SetText(log.appendLinesToStr(text.lines))
-	text:SetTextColor( Color( 240, 240, 240, 255 ) )
-	text:SetWidth( maxW )
-	text:SizeToContentsY()	
-
-	text.w, text.h = text:GetSize()
-	text:SetPos(padding, padding)
+	box.text = vgui.Create( "DLabel", scroll )
+	box.text:SetFont( "q_dialogue_question" )
+	box.text:SetTextColor( Color( 240, 240, 240, 255 ) )
 	
-	box:UpdateSize( text.lines, text:GetFont(), padding*2 )
-	box:SetPos( fw/2 - box.w/2, fh*0.65 )
+	function box.text:SetQText(logtext)
+		self.lines = log.genTextLinebreak( logtext, self:GetFont(), maxW - (padding) )
+		self:SetText(log.appendLinesToStr(self.lines))
+		self:SetWidth( maxW )
+		self:SizeToContentsY()	
 
-	return box, text
+		self.w, self.h = self:GetSize()
+		self:SetPos(padding, padding)
+	end
+	
+	function box:UpdateQ(qtext)
+		self.text:SetQText(qtext)
+
+		self:UpdateSize( self.text.lines, self.text:GetFont(), padding*2 )
+		self:SetPos( fw/2 - self.w/2, log_cont.y - self.h - padding*2 )
+	end
+
+	box:UpdateQ(logdata["init"].question)
+
+	return box
 end
 
 
@@ -226,6 +243,62 @@ function log.createinfobox( logdata, parent, cinematic )
 	end
 
 	return box
+end
+
+-- Dialogue stuff
+local btnFont = "q_info"
+
+local function setDialogueOptions( interface, dialogue, qID )
+	if( interface.cont.options != nil ) then
+		for _, option in pairs(interface.cont.options) do
+			option:Remove()
+		end
+	end
+
+	interface.cont.options = {}
+	for i, option in SortedPairs(dialogue[qID].response) do
+		interface.cont.options[i] = log.createOptionButton( interface, i, option.text, btnFont )
+		interface.cont.options[i]:UpdateSize(padding_s)
+	end
+end
+
+function log.createDialogueInterface(f, dialogue)
+	f.dialogue = {}
+	f.dialogue.log = dialogue
+	f.dialogue.cont, f.dialogue.contScroll = log.createContainer( f, true )
+	
+	-- Generate the dialogue options
+	setDialogueOptions( f.dialogue, dialogue, "init" )
+	
+	-- add the goodbye button
+	f.dialogue.cont.options.bye = log.createOptionButton( f.dialogue, #f.dialogue.cont.options + 1, dialogue.bye, btnFont )
+	f.dialogue.cont.options.bye:UpdateSize(padding_s)
+	
+	-- Update the containers pos
+	f.dialogue.cont:SetPos( f.w/2 - f.dialogue.cont.w/2, f.h - f.dialogue.cont.h - padding )
+	f.dialogue.cont.x, f.dialogue.cont.y = f.dialogue.cont:GetPos()
+
+	-- Dialogue question
+	f.dialogue.q = log.createQBox( dialogue, f, f.dialogue.cont )
+	
+
+	return f.dialogue
+end
+
+function log.updateDialogueInterface(i, qID)
+	if(i.cont == nil || i.q == nil) then 
+		Quantum.Error(tostring(i) .. " is not a dialogue interface!")
+		return 
+	end
+
+	local qlog = i.log[qID]
+	
+	-- update the responses
+	genDialogueOptions( i.cont, i.contScroll, i.log, qID )
+
+	-- update the question
+	i.q:UpdateQ(qlog.question)
+	
 end
 
 return log

@@ -80,7 +80,6 @@ function menu.open( dt )
 		end
 		f.w, f.h = f:GetSize()
 		
-		f.dialogue = {}
 		local textColor = Color(255, 255, 255, 220)
 		
 		-- Title is static, can't be changed mid dialogue.
@@ -92,24 +91,8 @@ function menu.open( dt )
 		title.w, title.h = title:GetSize()
 		title:SetPos(padding*2, borderHeight/2 - title.h/2)
 		
-		-- Dialogue options
-		f.dialogue.cont, f.dialogue.contScroll = log.createContainer( f, true )
-		f.dialogue.cont.options = {}
-		local btnFont = "q_info"
-		for i, option in SortedPairs(dialogue["init"].response) do
-			f.dialogue.cont.options[i] = log.createOptionButton( f.dialogue.contScroll, i, option.text, btnFont )
-			f.dialogue.cont.options[i]:UpdateSize(padding_s)
-		end
-		-- add the goodbye button
-		f.dialogue.cont.options.bye = log.createOptionButton( f.dialogue.contScroll, #f.dialogue.cont.options + 1, dialogue.bye, btnFont )
-		f.dialogue.cont.options.bye:UpdateSize(padding_s)
-
-		f.dialogue.cont:SetPos( f.w/2 - f.dialogue.cont.w/2, f.h - f.dialogue.cont.h - padding )
-		f.dialogue.cont.x, f.dialogue.cont.y = f.dialogue.cont:GetPos()
-
-		-- Dialogue question
-		f.dialogue.q, f.dialogue.qtext = log.createQBox( dialogue, f )
-		f.dialogue.q:SetPos( f.w/2 - f.dialogue.q.w/2, f.dialogue.cont.y - f.dialogue.q.h - padding*2 )
+		-- Create the dialogue interface
+		f.dialogue = log.createDialogueInterface(f, dialogue)
 
 		return f
 	end
