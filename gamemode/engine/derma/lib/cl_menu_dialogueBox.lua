@@ -61,15 +61,16 @@ end
 
 local maxW, maxH = 775 * scale, 160 * scale
 
-function log.createOptionButton( interface, index, text, font )
+function log.createOptionButton( interface, index, res, font )
 	local parent = interface.contScroll
 	if(parent == nil) then 
 		Quantum.Error("Could not index dialogue interface, failed to create option button.")
 		return 
 	end
+
 	local btn = parent:Add("DButton")
 	btn:SetContentAlignment(4)
-	btn:SetText(text)
+	btn:SetText(res.text)
 	btn:SetFont(font)
 	btn:SetTextColor( Color( 255, 255, 255, 200 ) )
 	btn.index = index
@@ -92,7 +93,9 @@ function log.createOptionButton( interface, index, text, font )
 	end
 
 	btn.DoClick = function(self)
-		log.updateDialogueInterface(i, qID)
+		if(res.newqID) then
+			log.updateDialogueInterface(interface, res.newqID)
+		end
 	end
 	return btn
 end
@@ -257,7 +260,8 @@ local function setDialogueOptions( interface, dialogue, qID )
 
 	interface.cont.options = {}
 	for i, option in SortedPairs(dialogue[qID].response) do
-		interface.cont.options[i] = log.createOptionButton( interface, i, option.text, btnFont )
+		PrintTable(option)
+		interface.cont.options[i] = log.createOptionButton( interface, i, option, btnFont )
 		interface.cont.options[i]:UpdateSize(padding_s)
 	end
 end
@@ -292,6 +296,10 @@ function log.updateDialogueInterface(i, qID)
 	end
 
 	local qlog = i.log[qID]
+	if(qlog == nil) then
+		Quantum.Error("No such question id. qlog=nil, qID=" .. tostring(qID))
+		return 
+	end
 	
 	-- update the responses
 	genDialogueOptions( i.cont, i.contScroll, i.log, qID )
