@@ -18,11 +18,6 @@ Quantum.Dialogue.Create( "npc_generalvendor" )
 				print("You pressed this response!")
 			end
 		}, 1 )
-		
-		Quantum.Dialogue.AddResponse( "npc_generalvendor", "init", {
-			text = "To take all of your money! Aaaaa aaaa a  aa a a a aa  aa a  aa a a a  aa  aa a a a a aaaaaaaaaaaaaaaaa a a a a aa a a a a  aa  a aa a  aa a a a aaaa a a aa a aa aa aa!"
-
-		}, 2 )
 
 	Quantum.Dialogue.AddQuestion( "npc_generalvendor", "sellorbuy", "What do you have in mind?" )
 		

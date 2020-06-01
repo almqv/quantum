@@ -100,6 +100,9 @@ function menu.open( dt )
 			f.dialogue.cont.options[i] = log.createOptionButton( f.dialogue.contScroll, i, option.text, btnFont )
 			f.dialogue.cont.options[i]:UpdateSize(padding_s)
 		end
+		-- add the goodbye button
+		f.dialogue.cont.options.bye = log.createOptionButton( f.dialogue.contScroll, #f.dialogue.cont.options + 1, dialogue.bye, btnFont )
+		f.dialogue.cont.options.bye:UpdateSize(padding_s)
 
 		f.dialogue.cont:SetPos( f.w/2 - f.dialogue.cont.w/2, f.h - f.dialogue.cont.h - padding )
 		f.dialogue.cont.x, f.dialogue.cont.y = f.dialogue.cont:GetPos()
