@@ -153,6 +153,10 @@ function log.createQBox( logdata, parent, log_cont )
 	box.text = vgui.Create( "DLabel", scroll )
 	box.text:SetFont( "q_dialogue_question" )
 	box.text:SetTextColor( Color( 240, 240, 240, 255 ) )
+	box.text.Paint = function(self, w, h) 
+		surface.SetDrawColor(Color(0, 0, 255, 255)) ---- REMOVE THIS
+		surface.DrawRect(0,0,w,h) ---- REMOVE THIS, ONLY FOR DEBUG
+	end
 	
 	function box.text:SetQText(logtext)
 		self.lines = log.genTextLinebreak( logtext, self:GetFont(), maxW - (padding) )
@@ -166,7 +170,7 @@ function log.createQBox( logdata, parent, log_cont )
 	
 	function box:UpdateQ(qtext)
 		self.text:SetQText(qtext)
-
+		print(#self.text.lines, "lines amt")
 		self:UpdateSize( self.text.lines, self.text:GetFont(), padding*2 )
 		self:SetPos( fw/2 - self.w/2, log_cont.y - self.h - padding*2 )
 	end
@@ -260,7 +264,6 @@ local function setDialogueOptions( interface, dialogue, qID )
 
 	interface.cont.options = {}
 	for i, option in SortedPairs(dialogue[qID].response) do
-		PrintTable(option)
 		interface.cont.options[i] = log.createOptionButton( interface, i, option, btnFont )
 		interface.cont.options[i]:UpdateSize(padding_s)
 	end
