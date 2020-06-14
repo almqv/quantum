@@ -275,7 +275,7 @@ function log.createDialogueInterface(f, dialogue)
 	setDialogueOptions( f.dialogue, dialogue, "init" )
 	
 	-- add the goodbye button
-	f.dialogue.cont.options.bye = log.createOptionButton( f.dialogue, #f.dialogue.cont.options + 1, dialogue.bye, btnFont )
+	f.dialogue.cont.options.bye = log.createOptionButton( f.dialogue, #f.dialogue.cont.options + 1, {text = dialogue.bye}, btnFont )
 	f.dialogue.cont.options.bye:UpdateSize(padding_s)
 	
 	-- Update the containers pos
@@ -302,11 +302,10 @@ function log.updateDialogueInterface(i, qID)
 	end
 	
 	-- update the responses
-	genDialogueOptions( i.cont, i.contScroll, i.log, qID )
+	setDialogueOptions( i, i.log, qID )
 
 	-- update the question
 	i.q:UpdateQ(qlog.question)
-	
 end
 
 return log
