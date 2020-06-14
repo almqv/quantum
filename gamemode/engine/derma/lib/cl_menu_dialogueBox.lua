@@ -56,7 +56,13 @@ function log.setHeightToLines( p, lines, font, add )
 	add = add || 0
 	surface.SetFont(font)
 	local _, h = surface.GetTextSize("Quantum")
-	p:SetHeight((#lines * h) + (#lines * padding_s) + add)
+	local numLines = #lines
+	if(numLines > 1) then
+		p:SetHeight((numLines * h) + (numLines* padding_s) + add)
+	else
+		p:SetHeight(h + add) --container is too big, fix this
+		-- also hello to whoever is reading this. :)
+	end
 end
 
 local maxW, maxH = 775 * scale, 160 * scale
